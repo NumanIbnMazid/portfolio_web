@@ -1,0 +1,31 @@
+{% load static compress %}
+
+{% compress css %}
+
+<!-- Favicons -->
+<link rel='shortcut icon' type='image/x-icon' href="{% static 'brand-logo-icon/favicon/numan-logo-1/favicon.ico' %}" />
+<link rel='apple-touch-icon' href="{% static 'brand-logo-icon/favicon/numan-logo-1/apple-touch-icon.png' %}" />
+
+<!-- Bootstrap core CSS -->
+<link href="{% static 'vendors/bootstrap-5.0.2/css/bootstrap.min.css' %}" rel="stylesheet">
+
+<style>
+    .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+    }
+
+    @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+            font-size: 3.5rem;
+        }
+    }
+</style>
+
+<!-- Custom styles -->
+<link href="{% static 'css/custom.css' %}" rel="stylesheet">
+
+{% endcompress %}

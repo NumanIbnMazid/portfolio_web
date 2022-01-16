@@ -1,0 +1,37 @@
+{% load static compress %}
+
+{% compress js %}
+
+<!-- JQuery -->
+<script src="{% static 'vendors/jQuery/jquery-3.6.0.min.js' %}"></script>
+
+<!-- HTMX -->
+<script src="{% static 'vendors/htmx/htmx.min.js' %}"></script>
+
+<!-- Alpine JS -->
+<script src="{% static 'vendors/alpinejs/alpine.min.js' %}" defer></script>
+
+<!-- Tailwind -->
+<script src="{% static 'vendors/tailwind/tailwind.min.js' %}"></script>
+{% include "vendors/tailwind/tailwind-config-scripts.html" %}
+{% include "vendors/tailwind/tailwind-config-styles.html" %}
+
+<!-- Toastr -->
+<script src="{% static 'vendors/toastr/toastr.min.js' %}"></script>
+<script src="{% static 'vendors/toastr/toastr.config.js' %}"></script>
+
+<!-- jQuery UI -->
+<script src="{% static 'vendors/jquery-ui/jquery-ui.min.js' %}"></script>
+<script src="{% static 'vendors/jquery-ui/jquery-ui-options.js' %}"></script>
+<!-- configuration file remains in the bottom scripts file (scripts.html->jquery-ui.config.js) -->
+
+<!-- JQuery Modal -->
+<script src="{% static 'vendors/jquery-modal/jquery.modal.min.js' %}"></script>
+<script src="{% static 'vendors/jquery-modal/jquery-modal.config.js' %}"></script>
+
+<!-- Core App JS -->
+<script src="{% static 'admin-panel/assets/js/app.js' %}"></script>
+<!-- Custom JS -->
+<script src="{% static 'js/custom.js' %}"></script>
+
+{% endcompress %}

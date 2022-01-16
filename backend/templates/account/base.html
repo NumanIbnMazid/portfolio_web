@@ -1,0 +1,152 @@
+{% load static compress i18n %}
+
+<!DOCTYPE html>
+<html :class="{ 'theme-dark': dark }" x-data="data()" lang="en">
+
+<head>
+  <!-- Meta Tags -->
+  {% include "account/components/meta-tags.html" %}
+  <!-- Title -->
+  <title>{% block head_title %}Authentication{% endblock %} | @Numan Ibn Mazid</title>
+
+  <!-- Favicons -->
+  <link rel='shortcut icon' type='image/x-icon'
+    href="{% static 'brand-logo-icon/favicon/numan-logo-1/favicon.ico' %}" />
+  <link rel='apple-touch-icon' href="{% static 'brand-logo-icon/favicon/numan-logo-1/apple-touch-icon.png' %}" />
+
+  <!-- Styles Section -->
+
+  {% compress css %}
+  <!-- Fontawesome -->
+  <link rel="stylesheet" href="{% static 'vendors/fontawesome/all.min.css' %}" />
+  <!-- Toastr -->
+  <link rel="stylesheet" href="{% static 'vendors/toastr/toastr.min.css' %}" />
+  <!-- jQuery UI -->
+  <link rel="stylesheet" href="{% static 'vendors/jquery-ui/jquery-ui.min.css' %}" />
+  <link rel="stylesheet" href="{% static 'vendors/jquery-ui/jquery-ui.structure.min.css' %}" />
+  <link rel="stylesheet" href="{% static 'vendors/jquery-ui/jquery-ui.theme.min.css' %}" />
+  <link rel="stylesheet" href="{% static 'vendors/jquery-ui/jquery-ui.config.css' %}" />
+  <!-- JQuery Modal -->
+  <link rel="stylesheet" href="{% static 'vendors/jquery-modal/jquery.modal.min.css' %}" />
+  <!-- Theme Styles -->
+  <link rel="stylesheet" href="{% static 'vendors/tailwind/tailwind.output.css' %}" />
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="{% static 'css/custom.css' %}" />
+  <!-- additional styles block -->
+  {% block additional_styles %}{% endblock %}
+  {% endcompress %}
+
+  <!-- Scripts Section -->
+
+  {% compress js %}
+  <!-- JQuery -->
+  <script src="{% static 'vendors/JQuery/jquery-3.6.0.min.js' %}"></script>
+  <!-- Alpine JS -->
+  <script src="{% static 'vendors/alpinejs/alpine.min.js' %}" defer></script>
+  <!-- Tailwind -->
+  <script src="{% static 'vendors/tailwind/tailwind.min.js' %}"></script>
+  {% include "vendors/tailwind/tailwind-config-scripts.html" %}
+  {% include "vendors/tailwind/tailwind-config-styles.html" %}
+  <!-- Toastr -->
+  <script src="{% static 'vendors/toastr/toastr.min.js' %}"></script>
+  <script src="{% static 'vendors/toastr/toastr.config.js' %}"></script>
+  <!-- jQuery UI -->
+  <script src="{% static 'vendors/jquery-ui/jquery-ui.min.js' %}"></script>
+  <!-- configuration file remains in the bottom scripts file (scripts.html->jquery-ui.config.js) -->
+  <!-- JQuery Modal -->
+  <script src="{% static 'vendors/jquery-modal/jquery.modal.min.js' %}"></script>
+  <script src="{% static 'vendors/jquery-modal/jquery-modal.config.js' %}"></script>
+  <!-- Core App JS -->
+  <script src="{% static 'admin-panel/assets/js/app.js' %}"></script>
+  <!-- Custom JS -->
+  <script src="{% static 'js/custom.js' %}"></script>
+  <!-- additional scripts block -->
+  {% block additional_head_scripts %}{% endblock %}
+  {% endcompress %}
+
+  <!-- Extra Head Block -->
+  {% block extra_head %}{% endblock %}
+
+</head>
+
+<body class="dark:bg-gray-800 dark:text-gray-200">
+
+  <!-- Body Block -->
+  {% block body %}
+
+  <!-- Messages Section -->
+  {% include "snippets/messages.html" %}
+
+  <div class="flex items-center min-h-screen p-6 bg-gray-50 dark:bg-gray-900">
+    <div class="flex-1 h-full max-w-4xl mx-auto overflow-hidden bg-white rounded-lg shadow-xl dark:bg-gray-800">
+
+      <!-- Theme toggler -->
+      <div class="text-center mt-5">
+        <button class="rounded-md focus:outline-none focus:shadow-outline-purple" @click="toggleTheme"
+          aria-label="Toggle color mode">
+          <template x-if="!dark">
+            <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+          </template>
+          <template x-if="dark">
+            <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd"
+                d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                clip-rule="evenodd"></path>
+            </svg>
+          </template>
+        </button>
+      </div>
+
+      <div class="flex flex-col overflow-y-auto md:flex-row">
+        <div class="md:h-32 md:h-auto md:w-2/5 md:p-4">
+          <div class="m-2">
+            <img aria-hidden="true" class="block mx-auto h-13 rounded sm:mx-0 sm:shrink-0"
+              src="{% static 'brand-logo-icon/numan-logo-main.png' %}" alt="Numan Ibn Mazid" />
+          </div>
+
+
+          <div class="mt-4 text-center">
+            <a href="{% url 'home' %}" class="text-xl text-theme hover:text-app-color-400">
+              <i class="fas fa-home"></i> {% trans "Home" %}
+            </a>
+            {% if request.user.is_staff %}
+            <a href="{% url 'dashboard' %}" class="text-xl text-theme hover:text-app-color-400 pl-3">
+              <i class="fas fa-tachometer-alt"></i> {% trans "Dashboard" %}
+            </a>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="md:flex items-center md:justify-center md:p-6 sm:p-12 md:w-3/5">
+          <div class="w-full p-4">
+
+            <!-- Main Content Block -->
+            {% block content %}{% endblock %}
+            <!-- End Main Content Block -->
+
+          </div>
+        </div>
+
+        {% endblock %}
+        <!-- End Body Block -->
+
+        <!-- Extra Body Block -->
+        {% block extra_body %}{% endblock %}
+
+        {% compress js %}
+        <!-- jQuery UI -->
+        <script src="{% static 'vendors/jquery-ui/jquery-ui.config.js' %}"></script>
+        {% endcompress %}
+
+        <!-- additional scripts block -->
+        {% block additional_scripts %}{% endblock %}
+
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

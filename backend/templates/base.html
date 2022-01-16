@@ -1,0 +1,89 @@
+{% load i18n %}
+
+{% get_current_language as LANGUAGE_CODE %}
+
+<!doctype html>
+<html lang="{{ LANGUAGE_CODE }}" class="h-100">
+
+<head>
+
+    <!--
+        ======================================
+        *** meta tags ***
+        ======================================
+    -->
+    {% include "components/meta-tags.html" %}
+
+    <!--
+        ======================================
+        *** head title ***
+        ======================================
+    -->
+    <title>
+        {% block head_title %}
+        {% if head_title %}{{ head_title }}{% else %}Django Standard Template{% endif %}
+        {% endblock %} | @Numan Ibn Mazid
+    </title>
+
+    <!--
+        ======================================
+        *** styles ***
+        ======================================
+    -->
+    {% include "components/styles.html" %}
+
+    <!-- additional styles block -->
+    {% block additional_styles %}{% endblock %}
+
+    <!--
+        ======================================
+        *** head scripts ***
+        ======================================
+    -->
+    {% include "components/head-scripts.html" %}
+
+    <!-- additional head scripts block -->
+    {% block additional_head_scripts %}{% endblock %}
+
+</head>
+
+<body class="d-flex h-100 text-center text-white bg-dark">
+
+    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+
+        <!--
+            ======================================
+            *** header ***
+            ======================================
+        -->
+        {% include "components/header.html" %}
+
+        <main class="px-3">
+
+            <!-- *** Main Content Block *** -->
+            {% block content %}{% endblock %}
+
+        </main>
+
+        <!--
+            ======================================
+            *** footer ***
+            ======================================
+        -->
+        {% include "components/footer.html" %}
+
+    </div>
+
+    <!--
+        ======================================
+        *** scripts ***
+        ======================================
+    -->
+    {% include "components/scripts.html" %}
+
+    <!-- additional scripts block -->
+    {% block additional_scripts %}{% endblock %}
+
+</body>
+
+</html>

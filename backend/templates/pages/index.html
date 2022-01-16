@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Django Starter Template</h1>
+<p class="lead">
+    This is an example of a standard django starter template.
+</p>
+<p class="lead">
+    <a href="{% url 'dashboard' %}"
+        class="btn btn-lg btn-secondary fw-bold border-white bg-dark">
+        View Dashboard
+    </a>
+</p>
+
+{% endblock %}

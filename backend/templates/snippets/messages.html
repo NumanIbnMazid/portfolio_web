@@ -1,0 +1,8 @@
+<!-- Django Messages with JQuery Toastr -->
+{% if messages %}
+{% for message in messages %}
+<script type=text/javascript>
+    toastr.{{ message.tags }}('{{ message }}').css("min-width","200px").css("width","350px").css("max-width","100%")
+</script> 
+{% endfor %} 
+{% endif %}

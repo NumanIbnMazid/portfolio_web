@@ -1,0 +1,72 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}{% trans "Login" %}{% endblock %}
+
+
+{% block content %}
+
+<div class="text-center mb-4 text-xl font-semibold text-gray-700 dark:text-gray-200">
+    <h1>{% trans "Login" %}</h1>
+</div>
+
+<form class="login" method="POST" action="{% url 'account_login' %}" autocomplete="off">
+    {% csrf_token %}
+
+    {{ form|crispy }}
+
+    <div class="mb-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <label class="inline-flex items-center cursor-pointer">
+                    <input type="checkbox" name="remember" id="remember_me"
+                        class="form-tick appearance-none h-4 w-4 border border-gray-300 rounded checked:bg-blue-600 checked:border-transparent focus:outline-none">
+                    <span class="text-sm font-normal text-color-2 pl-2">
+                        {% trans 'remember me' %}
+                    </span>
+                </label>
+            </div>
+            <div>
+                <a class="font-bold text-sm text-orange-600 hover:text-orange-800"
+                    href="{% url 'account_reset_password' %}">
+                    {% trans "forgot Password?" %}
+                </a>
+            </div>
+        </div>
+    </div>
+
+    {% if redirect_field_value %}
+    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+    {% endif %}
+
+    <button
+        class="block w-full btn-purple"
+        type="submit">
+        {% trans "Login" %}
+    </button>
+</form>
+
+<hr class="my-8" />
+
+<button
+    class="bg-app-color-200 text-white flex items-center justify-center w-full px-4 py-2 text-sm font-medium leading-5 transition-colors duration-150 border border-gray-300 rounded-lg dark:text-gray-200 active:bg-transparent hover:border-gray-500 focus:border-gray-500 active:text-gray-500 focus:outline-none focus:shadow-outline-gray">
+    <i class="fab fa-github-square px-2 text-xl dark:text-gray-200"></i>
+    {% trans 'Login with Github' %}
+</button>
+<button
+    class="bg-app-color-200 text-white flex items-center justify-center w-full px-4 py-2 mt-4 text-sm font-medium leading-5 transition-colors duration-150 border border-gray-300 rounded-lg dark:text-gray-200 active:bg-transparent hover:border-gray-500 focus:border-gray-500 active:text-gray-500 focus:outline-none focus:shadow-outline-gray">
+    <i class="fab fa-twitter-square px-2 text-xl dark:text-gray-200"></i>
+    {% trans 'Login with Twitter' %}
+</button>
+<p class="mt-4">
+    <p class="text-sm">
+        {% blocktrans %}
+        Don't have an account yet? Please
+        <a href="{{ signup_url }}" class="text-sm font-medium text-purple-600 dark:text-purple-400 hover:underline"><span class="font-bold text-lg">create account</span></a>.
+        {% endblocktrans %}
+    </p>
+</p>
+
+{% endblock %}

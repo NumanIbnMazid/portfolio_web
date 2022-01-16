@@ -1,0 +1,54 @@
+/* dufault custom ui dialog */
+.ui-dialog-custom {
+    width: 767px !important;
+}
+
+@media (max-width: 787px) {
+    .ui-dialog-custom {
+        width: 500px !important;
+    }
+}
+
+@media (max-width: 512px) {
+    .ui-dialog-custom {
+        width: 100% !important;
+    }
+}
+
+/* small custom ui dialog */
+.ui-dialog-sm {
+    width: 400px !important;
+}
+
+@media (max-width: 540px) {
+    .ui-dialog-sm {
+        width: 100% !important;
+    }
+}
+
+/* medium custom ui dialog */
+.ui-dialog-md {
+    width: 500px !important;
+}
+
+@media (max-width: 512px) {
+    .ui-dialog-md {
+        width: 100% !important;
+    }
+}
+
+/* large custom ui dialog */
+.ui-dialog-lg {
+    width: 1024px !important;
+}
+
+@media (max-width: 1027px) {
+    .ui-dialog-lg {
+        width: 100% !important;
+    }
+}
+
+/* full width ui dialog */
+.ui-dialog-full {
+    width: 100% !important;
+}

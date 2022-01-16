@@ -1,0 +1,22 @@
+#!/bin/bash
+
+set -o errexit
+set -o pipefail
+set -o nounset
+
+# setup .env file
+# python utils/generate_env.py # if want to auto generate .env file from .env.example
+
+# migrate database
+python manage.py makemigrations
+python manage.py migrate
+
+# collect static files
+# python manage.py compress # for production mode (django compressor)
+python manage.py collectstatic --noinput
+
+# management commands (create superuser, and initiate site)
+python manage.py initiate_admin && python manage.py initiate_site
+
+# run the project
+uvicorn config.asgi:application --host 0.0.0.0 --reload

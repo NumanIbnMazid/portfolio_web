@@ -1,0 +1,209 @@
+{% extends "admin-panel/base.html" %}
+
+{% block content %}
+
+<div class="bg-gray-100 dark:bg-gray-800" id="user-profile-details">
+  <div class="container mx-auto">
+
+    <div class="md:flex no-wrap md:-mx-2">
+      <!-- Left Side -->
+      <div class="w-full md:w-3/12 md:mx-2">
+        <!-- Profile Card -->
+        <div class="bg-white p-3 border-t-4 border-green-400 dark:bg-gray-700">
+          <div class="image overflow-hidden">
+            <img class="h-auto w-full mx-auto" src="{{ object.get_user_image }}"
+              alt="{{ object.get_dynamic_username }}">
+          </div>
+          <div class="text-center">
+            <h1 class="font-bold text-xl leading-8 my-1">
+              {{ object.get_dynamic_username }}
+            </h1>
+          </div>
+
+          <!-- Company Name -->
+          {% if object.get_user_last_professional_experience %}
+          <div class="text-center">
+            <h3 class="font-lg text-semibold leading-6">
+              {{ object.get_user_last_professional_experience }}
+            </h3>
+          </div>
+          {% endif %}
+
+          <!-- About -->
+          {% if object.about %}
+          <p class="text-sm text-gray-500 hover:text-gray-600 leading-6">
+            {{ object.about|safe|linebreaks }}
+          </p>
+          {% endif %}
+
+          <ul class="bg-gray-100 hover:shadow py-2 px-3 mt-3 divide-y rounded shadow-sm dark:bg-gray-800">
+            <li class="flex items-center py-3">
+              <span>Status</span>
+              <span class="ml-auto">
+                <span
+                  class="{% if object.is_active %}bg-green-500{% else %}bg-red-500{% endif %} py-1 px-2 rounded text-white text-sm">
+                  {% if object.is_active %}Active{% else %}Inactive{% endif %}
+                </span>
+              </span>
+            </li>
+            <li class="flex items-center py-3">
+              <span>Member Since</span>
+              <span class="ml-auto">
+                {{ object.date_joined }}
+              </span>
+            </li>
+          </ul>
+          <a href="{% url 'users:user_profile_update' slug=object.slug %}"
+            class="block w-full btn-primary text-sm text-center font-semibold rounded-lg p-3 my-4">
+            <i class="fas fa-user-edit"></i>
+            Update Profile
+          </a>
+        </div>
+      </div>
+      <!-- Right Side -->
+      <div class="w-full md:w-9/12">
+        <!-- Profile tab -->
+        <!-- About Section -->
+        <div class="bg-white p-3 shadow-sm rounded-sm dark:bg-gray-700">
+          <div class="flex items-center space-x-2 font-semibold leading-8">
+            <span clas="text-green-500">
+              <svg class="h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+            </span>
+            <span class="tracking-wide">About</span>
+          </div>
+          <div class="break-words">
+            <div class="grid md:grid-cols-2 text-sm">
+              <div class="grid grid-cols-2">
+                <div class="px-4 py-2 font-semibold">User Name</div>
+                <div class="px-4 py-2">{{ object.username }}</div>
+              </div>
+              <div class="grid grid-cols-2">
+                <div class="px-4 py-2 font-semibold">Name</div>
+                <div class="px-4 py-2">{{ object.name|default:'-' }}</div>
+              </div>
+              <div class="grid grid-cols-2">
+                <div class="px-4 py-2 font-semibold">Nick Name</div>
+                <div class="px-4 py-2">{{ object.nick_name|default:'-' }}</div>
+              </div>
+              <div class="grid grid-cols-2">
+                <div class="px-4 py-2 font-semibold">Gender</div>
+                <div class="px-4 py-2">{{ object.gender|default:'-' }}</div>
+              </div>
+              <div class="grid grid-cols-2">
+                <div class="px-4 py-2 font-semibold">Account Email</div>
+                <div class="px-4 py-2">
+                  <a href="mailto:{{ object.email }}">
+                    <span class="text-blue-800 dark:text-white">{{ object.email }}</span>
+                  </a>
+                </div>
+              </div>
+              <div class="grid grid-cols-2">
+                <div class="px-4 py-2 font-semibold">Contact Email</div>
+                <div class="px-4 py-2">
+                  <a href="mailto:{{ object.get_contact_email }}">
+                    <span class="text-blue-800 dark:text-white">{{ object.get_contact_email }}</span>
+                  </a>
+                </div>
+              </div>
+              <div class="grid grid-cols-2">
+                <div class="px-4 py-2 font-semibold">Contact No.</div>
+                <div class="px-4 py-2">{{ object.contact|default:'-' }}</div>
+              </div>
+              <div class="grid grid-cols-2">
+                <div class="px-4 py-2 font-semibold">Current Address</div>
+                <div class="px-4 py-2">{{ object.address|default:'-' }}</div>
+              </div>
+              <div class="grid grid-cols-2">
+                <div class="px-4 py-2 font-semibold">Birthday</div>
+                <div class="px-4 py-2">{{ object.dob|default:'-' }}</div>
+              </div>
+            </div>
+          </div>
+          <button
+            class="btn-primary block w-full text-sm font-semibold rounded-lg p-3 my-4 text-center jquery-ui-dialog-opener"
+            data-dialog="modal-form-dialog">
+            <i class="fas fa-user-edit"></i> Update Profile Modal
+          </button>
+        </div>
+        <!-- End of about section -->
+
+        <div class="my-4"></div>
+
+        <!-- Experience and education -->
+        <div class="bg-white p-3 shadow-sm rounded-sm dark:bg-gray-700">
+
+          <div class="grid md:grid-cols-2 sm:grid-cols-1">
+            <div>
+              <div class="flex items-center space-x-2 font-semibold leading-8 mb-3">
+                <span clas="text-green-500">
+                  <svg class="h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                </span>
+                <span class="tracking-wide">Experience</span>
+              </div>
+              <ul class="list-inside space-y-2">
+                {% for experience in object.user_professional_experiences.all|dictsort:"created_at" %}
+                <li>
+                  <div class="text-teal-600">{{ experience.company }}</div>
+                  <div class="text-gray-500 text-xs">{{ experience.start_date|date:'F Y' }} -
+                    {{ experience.get_end_date }}</div>
+                </li>
+                {% empty %}
+                <div
+                  class="bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3 mx-4 text-center rounded relative"
+                  role="alert">
+                  <p class="font-bold">No Data</p>
+                </div>
+                {% endfor %}
+              </ul>
+            </div>
+            <div>
+              <div class="flex items-center space-x-2 font-semibold leading-8 mb-3">
+                <span clas="text-green-500">
+                  <svg class="h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path fill="#fff" d="M12 14l9-5-9-5-9 5 9 5z" />
+                    <path fill="#fff"
+                      d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
+                  </svg>
+                </span>
+                <span class="tracking-wide">Education</span>
+              </div>
+              <ul class="list-inside space-y-2">
+                {% for education in object.user_educations.all|dictsort:"created_at" %}
+                <li>
+                  <div class="text-teal-600">{{ education.degree }} in {{ education.school }}</div>
+                  <div class="text-gray-500 text-xs">{{ education.field_of_study }}</div>
+                  <div class="text-gray-500 text-xs">{{ education.start_date|date:'F Y' }} -
+                    {{ education.get_end_date }}</div>
+                </li>
+                {% empty %}
+                <div
+                  class="bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3 mx-4 text-center rounded relative"
+                  role="alert">
+                  <p class="font-bold">No Data</p>
+                </div>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+          <!-- End of Experience and education grid -->
+        </div>
+        <!-- End of profile tab -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- include modal form -->
+{% include "snippets/modal-form.html" %}
+
+{% endblock %}

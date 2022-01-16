@@ -1,0 +1,11 @@
+{% load static %}
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="msapplication-TileImage" content="{% static 'assets/brand/django.png' %}" />
+<meta name="theme-color" content="#ffffff" />
+<meta name="description" property="og:description"
+    content="{% if meta_description %}{{ meta_description }}{% else %}Standard Django Starter Template Example Email: numanibnmazid@gmail.com{% endif %}" />
+<meta name="keywords"
+    content="{% if meta_keywords %}{{ meta_keywords }}{% else %}numan ibn mazid, website, web application, software development, django, django template, standard django, django best practices, django starter{% endif %}" />
+<meta name="author" content="{% if meta_author %}{{ meta_author }}{% else %}Numan Ibn Mazid{% endif %}" />

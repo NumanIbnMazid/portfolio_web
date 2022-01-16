@@ -1,0 +1,23 @@
+/* ************************** Custom CSS File ************************** */
+
+/* Remove Button outline on focus or active */
+
+.no-outline:focus,
+.no-outline.focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* asteriskField field customization */
+
+.asteriskField {
+    color: rgba(187, 11, 11, 0.788);
+    font-size: 1.2em;
+    margin-left: 4px;
+    margin-right: 4px;
+}
+
+/* custom height */
+.h-full-important {
+    height: 100% !important;
+}

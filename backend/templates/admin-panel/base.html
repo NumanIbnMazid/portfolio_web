@@ -1,0 +1,84 @@
+{% load static i18n %}
+
+{% get_current_language as LANGUAGE_CODE %}
+
+<!DOCTYPE html>
+<html :class="{ 'theme-dark': dark }" x-data="data()" lang="{{ LANGUAGE_CODE }}">
+
+<head>
+  <!-- Meta Tags -->
+  {% include "admin-panel/components/meta-tags.html" %}
+
+  <!-- Title -->
+  <title>
+    {% block head_title %}
+    {% if head_title %}{{ head_title }}{% else %}Dashboard of Numan Ibn Mazid's Portfolio{% endif %}
+    {% endblock %} | @Numan Ibn Mazid
+  </title>
+
+  <!-- styles -->
+  {% include "admin-panel/components/styles.html" %}
+
+  <!-- additional styles block -->
+  {% block additional_styles %}{% endblock %}
+
+  <!-- head scripts -->
+  {% include "admin-panel/components/head-scripts.html" %}
+
+  <!-- additional head scripts block -->
+  {% block additional_head_scripts %}{% endblock %}
+
+</head>
+
+<body class="dark:bg-gray-800 dark:text-gray-200" id="main">
+
+  <!-- Messages Section -->
+  {% include "snippets/messages.html" %}
+
+  <div class="flex h-screen bg-gray-50 dark:bg-gray-900" :class="{ 'overflow-hidden': isSideMenuOpen }">
+
+    <!-- Desktop sidebar -->
+    {% include "admin-panel/components/desktop-sidebar.html" %}
+    <!-- Mobile sidebar -->
+    {% include "admin-panel/components/mobile-sidebar.html" %}
+
+    <div class="flex flex-col flex-1 w-full">
+
+      <!-- header -->
+      {% include "admin-panel/components/header.html" %}
+
+      <main class="h-full overflow-y-auto" id="content-root">
+        <div class="container px-6 mx-auto grid">
+
+          <!-- page title -->
+          <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-white">
+            {% block page_title %}
+            {% if page_title %}{{ page_title }}{% else %}Dashboard{% endif %}
+            {% endblock %}
+          </h2>
+
+          <!-- Main Content Block -->
+          {% block content %}{% endblock %}
+
+          <!-- Modals -->
+          <!-- Logout Modal -->
+          {% include "account/logout-modal.html" %}
+
+        </div>
+
+        <!-- Extra Body Block -->
+        {% block extra_body %}{% endblock %}
+
+      </main>
+    </div>
+  </div>
+
+  <!-- scripts -->
+  {% include "admin-panel/components/scripts.html" %}
+
+  <!-- additional scripts block -->
+  {% block additional_scripts %}{% endblock %}
+
+</body>
+
+</html>

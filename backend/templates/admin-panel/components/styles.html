@@ -1,0 +1,32 @@
+{% load static compress %}
+
+<!-- Favicons -->
+<link rel='shortcut icon' type='image/x-icon' href="{% static 'brand-logo-icon/favicon/numan-logo-1/favicon.ico' %}" />
+<link rel='apple-touch-icon' href="{% static 'brand-logo-icon/favicon/numan-logo-1/apple-touch-icon.png' %}" />
+
+{% compress css %}
+
+<!-- Fontawesome -->
+<link rel="stylesheet" href="{% static 'vendors/fontawesome/all.min.css' %}" />
+
+<!-- Toastr -->
+<link rel="stylesheet" href="{% static 'vendors/toastr/toastr.min.css' %}" />
+
+<!-- jQuery UI -->
+<link rel="stylesheet" href="{% static 'vendors/jquery-ui/jquery-ui.min.css' %}" />
+<link rel="stylesheet" href="{% static 'vendors/jquery-ui/jquery-ui.structure.min.css' %}" />
+<link rel="stylesheet" href="{% static 'vendors/jquery-ui/jquery-ui.theme.min.css' %}" />
+<link rel="stylesheet" href="{% static 'vendors/jquery-ui/jquery-ui.config.css' %}" />
+
+<!-- JQuery Modal -->
+<link rel="stylesheet" href="{% static 'vendors/jquery-modal/jquery.modal.min.css' %}" />
+<link rel="stylesheet" href="{% static 'vendors/jquery-modal/jquery-modal-custom.css' %}" />
+
+<!-- Theme Styles -->
+<link rel="stylesheet" href="{% static 'admin-panel/assets/fonts/fonts.css' %}" />
+<link rel="stylesheet" href="{% static 'vendors/tailwind/tailwind.output.css' %}" />
+
+<!-- Custom Styles -->
+<link rel="stylesheet" href="{% static 'css/custom.css' %}" />
+
+{% endcompress %}

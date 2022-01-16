@@ -1,0 +1,10 @@
+{% load static compress %}
+
+{% compress js %}
+
+{# Placed at the top of the document so pages load faster with defer #}
+
+<script defer src="{% static 'vendors/bootstrap-5.0.2/js/bootstrap.bundle.min.js' %}"></script>
+<script defer src="{% static 'vendors/jQuery/jquery-3.6.0.min.js' %}"></script>
+
+{% endcompress %}

@@ -1,0 +1,175 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&family=Raleway&family=Squada+One&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .sidebar::after {
+    width: 1px;
+    height: 100px;
+    /* show for screen size > lg */
+    display: none;
+    content: '';
+    @apply bg-gray-400;
+  }
+  .typewriter > * {
+    display: inline-block;
+  }
+  @variants hover, focus {
+    .tab-button-glow {
+      outline: none;
+      @apply text-secondary bg-dark-light bg-opacity-40;
+    }
+  }
+  @variants hover, focus, group-hover {
+    .footer-credits-glow {
+      outline: none;
+      @apply text-secondary;
+    }
+  }
+}
+
+@layer components {
+  .btn {
+    @apply rounded cursor-pointer sm:px-7 sm:py-3 px-4 py-2;
+  }
+  .btn-small {
+    @apply px-4 py-2;
+  }
+  .btn-secondary-outline {
+    @apply text-secondary  border-secondary hover:bg-secondary-slate2 border-1 transition duration-150 ease-linear;
+  }
+  .intro-name {
+    @apply cursor-default text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl;
+  }
+  .typewriter {
+    @apply cursor-default text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl;
+  }
+  .border-1 {
+    border-width: 1px;
+  }
+  .social-icons {
+    @apply text-gray-400 lg:mb-4;
+  }
+  .social-icon {
+    @apply inline-block transition duration-150 ease-linear transform hover:-translate-y-1 hover:text-secondary focus:-translate-y-1 focus:text-secondary lg:mx-0 mx-2;
+  }
+  .section-heading {
+    @apply flex items-center mt-2 mb-10 text-3xl md:text-5xl lg:text-6xl font-display text-secondary whitespace-nowrap;
+  }
+  .after-h-line::after {
+    width: 100%;
+    height: 1px;
+    display: block;
+    content: '';
+    position: relative;
+    @apply ml-5 bg-gray-400;
+  }
+  .tab-list {
+    @apply relative flex p-0 m-0 overflow-x-auto list-none w-full sm:w-max sm:block sm:overflow-visible;
+  }
+  .tab-button {
+    @apply flex items-center w-full px-5 pb-1 text-left bg-transparent border-b-2 h-11 whitespace-nowrap border-dark-light text-sm md:text-base;
+  }
+  .tab-panels {
+    @apply relative w-full mt-8 md:mt-0;
+  }
+  .tab-panel {
+    @apply h-auto leading-5 w-full px-2 py-1 max-w-lg text-justify;
+  }
+  .jorr-list > ul {
+    @apply p-0 m-0 list-none text-gray-300 text-sm md:text-base;
+  }
+  .jorr-list > ul li {
+    @apply mb-4 relative pl-7;
+  }
+  .jorr-list > ul li::before {
+    content: '▹';
+    @apply absolute left-0 text-secondary;
+  }
+  .tech-list {
+    @apply flex justify-start flex-wrap list-none;
+  }
+  .tech-list-item {
+    @apply mr-5 leading-4 text-gray-400 mb-2 font-medium text-sm sm:text-base;
+  }
+  .project-links {
+    @apply flex flex-wrap;
+  }
+  .project-link {
+    @apply mr-4 text-gray-200 hover:text-secondary focus:text-secondary transition ease-linear;
+  }
+  .footer-credits {
+    @apply text-gray-200;
+    @apply transition duration-150 ease-linear;
+  }
+  .nav-links {
+    @apply items-center justify-between w-full h-full max-w-4xl mx-auto flex;
+  }
+  .nav-link {
+    @apply p-2 relative my-4 sm:mx-1 sm:my-0;
+  }
+  .nav-link > a {
+    @apply hover:text-secondary focus:text-secondary transition duration-150 ease-linear;
+  }
+  .trans-img-container {
+    @apply transition duration-150 ease-linear bg-secondary-slate hover:bg-transparent focus:bg-transparent;
+  }
+  .trans-img {
+    @apply filter grayscale transition ease-linear duration-150 contrast-100 mix-blend-multiply brightness-50 hover:mix-blend-normal focus:mix-blend-normal hover:filter-none focus:filter-none;
+  }
+}
+
+@screen sm {
+  .tab-button {
+    @apply text-center border-b-0 border-l-2;
+  }
+  .tab-panels {
+    @apply ml-5;
+  }
+}
+
+@screen md {
+  .after-h-line::after {
+    width: 300px;
+  }
+}
+
+@screen lg {
+  .project-content {
+    grid-column: 1 / 9;
+  }
+  .sidebar::after {
+    display: block;
+  }
+}
+
+html {
+  scrollbar-width: thin;
+  scrollbar-color: theme('colors.dark.light');
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100%;
+  width: 100%;
+  @apply bg-dark sm:overflow-auto;
+}
+body::-webkit-scrollbar {
+  width: 12px;
+}
+body::-webkit-scrollbar-track {
+  background: theme('colors.dark.DEFAULT');
+}
+body::-webkit-scrollbar-thumb {
+  background-color: theme('colors.dark.light');
+  border: 3px solid theme('colors.dark.DEFAULT');
+  border-radius: 10px;
+}
+#root {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: 1fr auto;
+  @apply font-body text-gray-200;
+}

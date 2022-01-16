@@ -1,0 +1,12 @@
+{% load static %}
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="msapplication-TileImage"
+  content="{% static 'brand-logo-icon/favicon/numan-logo-1/android-chrome-192x192.png' %}" />
+<meta name="theme-color" content="#ffffff" />
+<meta name="description" property="og:description"
+  content="{% if meta_description %}{{ meta_description }}{% else %}numanibnmazid.com: Portfolio of Numan Ibn Mazid. A professional Software Engineer who enjoys developing innovative software solutions that are tailored to customer desirability and usability. Email: numanibnmazid@gmail.com{% endif %}" />
+<meta name="keywords"
+  content="{% if meta_keywords %}{{ meta_keywords }}{% else %}numan ibn mazid, portfolio, website, web application, software development, software developer, singer, musician, youtuber, django, django rest framework, python, data structure and algorithms{% endif %}" />
+<meta name="author" content="{% if meta_author %}{{ meta_author }}{% else %}Numan Ibn Mazid{% endif %}" />

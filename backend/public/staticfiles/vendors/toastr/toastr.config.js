@@ -1,0 +1,21 @@
+toastr.options = {
+    "closeButton": true,
+    "closeHtml": "<button class='no-outline'><i class='fas fa-times-circle'></i></button>",
+    "newestOnTop": true,
+    "progressBar": true,
+    "positionClass": "toast-top-center",
+    "preventDuplicates": false,
+    "onclick": null,
+    "showDuration": "786",
+    "hideDuration": "1000",
+    "timeOut": "5000",
+    "extendedTimeOut": "3000",
+    "showEasing": "swing",
+    "closeEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "slideDown",
+    "hideMethod": "slideUp",
+    "closeMethod": "fadeOut",
+    "rtl": false,
+    "tapToDismiss": false
+}
