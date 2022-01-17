@@ -1,4 +1,4 @@
-{% load static i18n %}
+{% load i18n %}
 
 {% get_current_language as LANGUAGE_CODE %}
 
@@ -12,7 +12,7 @@
   <!-- Title -->
   <title>
     {% block head_title %}
-    {% if head_title %}{{ head_title }}{% else %}Dashboard of Numan Ibn Mazid's Portfolio{% endif %}
+    {% if head_title %}{{ head_title }}{% else %}{% trans "Dashboard of Numan Ibn Mazid's Portfolio" %}{% endif %}
     {% endblock %} | @Numan Ibn Mazid
   </title>
 
@@ -50,6 +50,9 @@
       <main class="h-full overflow-y-auto" id="content-root">
         <div class="container px-6 mx-auto grid">
 
+          <!-- loader indicator -->
+          {% include "snippets/loader-indicator.html" %}
+
           <!-- page title -->
           <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-white">
             {% block page_title %}
@@ -57,8 +60,10 @@
             {% endblock %}
           </h2>
 
-          <!-- Main Content Block -->
-          {% block content %}{% endblock %}
+          <div id="content-block">
+            <!-- Main Content Block -->
+            {% block content %}{% endblock %}
+          </div>
 
           <!-- Modals -->
           <!-- Logout Modal -->

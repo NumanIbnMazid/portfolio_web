@@ -26,8 +26,6 @@
   <link rel="stylesheet" href="{% static 'vendors/jquery-ui/jquery-ui.structure.min.css' %}" />
   <link rel="stylesheet" href="{% static 'vendors/jquery-ui/jquery-ui.theme.min.css' %}" />
   <link rel="stylesheet" href="{% static 'vendors/jquery-ui/jquery-ui.config.css' %}" />
-  <!-- JQuery Modal -->
-  <link rel="stylesheet" href="{% static 'vendors/jquery-modal/jquery.modal.min.css' %}" />
   <!-- Theme Styles -->
   <link rel="stylesheet" href="{% static 'vendors/tailwind/tailwind.output.css' %}" />
   <!-- Custom Styles -->
@@ -52,10 +50,8 @@
   <script src="{% static 'vendors/toastr/toastr.config.js' %}"></script>
   <!-- jQuery UI -->
   <script src="{% static 'vendors/jquery-ui/jquery-ui.min.js' %}"></script>
+  <script src="{% static 'vendors/jquery-ui/jquery-ui-options.js' %}"></script>
   <!-- configuration file remains in the bottom scripts file (scripts.html->jquery-ui.config.js) -->
-  <!-- JQuery Modal -->
-  <script src="{% static 'vendors/jquery-modal/jquery.modal.min.js' %}"></script>
-  <script src="{% static 'vendors/jquery-modal/jquery-modal.config.js' %}"></script>
   <!-- Core App JS -->
   <script src="{% static 'admin-panel/assets/js/app.js' %}"></script>
   <!-- Custom JS -->
@@ -69,7 +65,7 @@
 
 </head>
 
-<body class="dark:bg-gray-800 dark:text-gray-200">
+<body class="dark:bg-gray-800 dark:text-gray-200" id="main">
 
   <!-- Body Block -->
   {% block body %}

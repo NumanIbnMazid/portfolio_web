@@ -57,6 +57,6 @@ function data() {
         closeModal() {
             this.isModalOpen = false
             this.trapCleanup()
-        },
+        }
     }
 }

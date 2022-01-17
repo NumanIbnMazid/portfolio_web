@@ -1,0 +1,13 @@
+{% load static i18n %}
+
+<div id="htmxLoaderIndicator" class="relative my-2 htmx-indicator" x-show.transition.opacity.duration.700ms="open">
+  <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-transparent mx-auto
+              my-auto h-full rounded-lg rounded-t-none">
+    <img src="{% static 'images/loader.gif' %}" alt="loading" style="height: 50px; width: 50px;" />
+    <div class="mt-1 justify-start">
+      <span class="text-app-color font-extrabold -ml-5">
+        {% trans "Please wait..." %}
+      </span>
+    </div>
+  </div>
+</div>

@@ -1,22 +1,40 @@
 {% load i18n crispy_forms_tags %}
 
-<div class="bg-white w-full dark:bg-gray-700 jquery-ui-dialog" id="modal-form-dialog">
+{% block additional_styles %}
 
-  <div class="bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all dark:bg-gray-800">
+<style>
+  /* style of a tag (E.X. Current image in form), select pointer */
+  .ui-widget-content a,
+  .pointer-events-none {
+    color: rgb(83, 172, 255) !important;
+  }
+
+</style>
+
+{% endblock %}
+
+<div class="bg-white w-full dark:bg-gray-700 hidden jquery-ui-dialog" id="modal-form-dialog">
+
+  <div
+    class="bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all dark:bg-gray-800 dark:text-gray-200">
+
+    <!-- main form -->
     <form id="djangoForm" class="p-7" method="POST" autocomplete="off" enctype='multipart/form-data'
       hx-encoding="multipart/form-data">
+
       {% csrf_token %}
+
       <!-- modal header -->
       <div class="border-b px-4 py-2 flex justify-between items-center">
         <h3 class="font-semibold text-lg dark:text-white">{% if page_title %}{{ page_title }}{% else %}Form{% endif %}
         </h3>
-        <h1>{{ form_submit_url }}</h1>
       </div>
+
       <!-- Modal Body -->
       <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 dark:bg-gray-700">
         <div class="container">
           <div class="flex items-center">
-            <div class="flex-1 h-full max-w-4xl mx-auto overflow-hidden bg-white rounded-lg shadow-xl">
+            <div class="flex-1 h-full max-w-4xl mx-auto overflow-hidden bg-white dark:bg-gray-700 rounded-lg shadow-xl">
               <div class="flex items-center bg-blue-500 text-white text-sm font-bold px-4 py-3" role="alert">
                 <svg class="fill-current w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                   <path
@@ -51,18 +69,22 @@
         {% if form_submit_url and form_submit_url_slug %}
         <button class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 ml-2 border-b-4 border-blue-700
           hover:border-blue-500 rounded" type="submit" hx-post="{% url form_submit_url slug=form_submit_url_slug %}"
-          hx-trigger="click" hx-target="#main">
+          hx-trigger="click" hx-target="#main" hx-indicator="#htmxLoaderIndicator"
+          x-on:click="closeJqueryModal('modal-form-dialog')" hx-swap="outerHTML swap:0.3s">
           {% trans 'Submit' %}
         </button>
         {% elif form_submit_url and form_submit_url_id %}
         <button class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 ml-2 border-b-4 border-blue-700
           hover:border-blue-500 rounded" type="submit" hx-post="{% url form_submit_url id=form_submit_url_id %}"
-          hx-trigger="click" hx-target="#main">
+          hx-trigger="click" hx-target="#main" hx-indicator="#htmxLoaderIndicator"
+          x-on:click="closeJqueryModal('modal-form-dialog')" hx-swap="outerHTML swap:0.3s">
           {% trans 'Submit' %}
         </button>
         {% else %}
         <button class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 ml-2 border-b-4 border-blue-700
-          hover:border-blue-500 rounded" type="submit" hx-trigger="click" hx-target="#main">
+          hover:border-blue-500 rounded" type="submit" hx-trigger="click" hx-target="#main"
+          hx-indicator="#htmxLoaderIndicator" x-on:click="closeJqueryModal('modal-form-dialog')" hx-swap="outerHTML swap:0.3s"
+          hx-swap="outerHTML swap:1s">
           {% trans 'Submit' %}
         </button>
         {% endif %}
@@ -70,9 +92,10 @@
         {# end submit button #}
 
         <button class="jquery-ui-dialog-closer bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 ml-2 border-b-4
-          border-red-700 hover:border-red-500 rounded" id="xxx">
+          border-red-700 hover:border-red-500 rounded">
           Cancel
         </button>
+
       </div>
     </form>
   </div>
@@ -82,11 +105,14 @@
 {% block additional_head_scripts %}
 
 <script>
+
   // document ready function
   $(function () {
 
     $("#datepicker").datepicker({
-      inline: true
+      inline: true,
+      maxDate: new Date($.now()),
+      dateFormat: "yy-mm-dd"
     });
 
 
@@ -104,18 +130,8 @@
 {% if form.errors %}
 
 <script>
-  var dialogElement = $("#modal-form-dialog")
-
-  // get the jquery ui dialog class name
-  dialogClassName = dialogElement.attr("class").split(" ").filter(function (item) {
-    return item.includes("jquery-ui-dialog")
-  })[0]
-
-  // get jquery ui dialog options
-  var UIoptions = getJqueryUIoption(dialogClassName)
-
-  // open the dialog
-  dialogElement.dialog(UIoptions).dialog("open");
+  // open modal
+  openJqueryModal("modal-form-dialog")
 
 </script>
 

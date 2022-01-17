@@ -17,7 +17,46 @@
     margin-right: 4px;
 }
 
-/* custom height */
-.h-full-important {
-    height: 100% !important;
+/* Custom Animations */
+
+.c-animate-slide-in {
+    animation: slide-in 0.5s both;
+}
+
+@keyframes slide-in {
+    0% {
+        transform: translateY(-1000px);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
+
+.c-animate-resize {
+    animation: scale 1.5s both;
+}
+
+@keyframes scale {
+    50% {
+        transform: scale(0.5);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.c-animate-moving {
+    animation: slide-in 0.7s both;
+}
+
+@keyframes slide-in {
+    0% {
+        transform: translateY(-1000px);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
 }

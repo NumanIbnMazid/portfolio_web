@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<div class="bg-gray-100 dark:bg-gray-800" id="user-profile-details">
+<div class="bg-gray-100 dark:bg-gray-800">
   <div class="container mx-auto">
 
     <div class="md:flex no-wrap md:-mx-2">
@@ -124,7 +124,7 @@
           </div>
           <button
             class="btn-primary block w-full text-sm font-semibold rounded-lg p-3 my-4 text-center jquery-ui-dialog-opener"
-            data-dialog="modal-form-dialog">
+            x-on:click="openJqueryModal('modal-form-dialog')">
             <i class="fas fa-user-edit"></i> Update Profile Modal
           </button>
         </div>

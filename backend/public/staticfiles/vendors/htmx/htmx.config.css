@@ -1,0 +1,36 @@
+.htmx-swapping {
+    opacity: 0.5;
+    transition: opacity 1s ease-out;
+}
+.htmx-request {
+    opacity: 0.5;
+    transition: opacity 1s ease-out;
+}
+.htmx-added {
+    opacity: 0.5;
+    transition: opacity 1s ease-out;
+}
+.htmx-settling {
+    opacity: 0.5;
+    transition: opacity 1s ease-out;
+}
+
+@keyframes slide-in {
+    0% {
+        transform: translateY(-1000px);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
+
+@keyframes scale {
+    50% {
+        transform: scale(0.5);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
