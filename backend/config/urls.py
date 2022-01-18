@@ -16,6 +16,7 @@ ADMIN_PANEL_URL_PATTERNS = [
 
 APP_URL_PATTERNS = [
     path("users/", include(("users.urls", "users"), namespace="users")),
+    path("portfolios/", include(("portfolios.urls", "portfolios"), namespace="portfolios")),
 ] + ADMIN_PANEL_URL_PATTERNS
 
 urlpatterns = [
@@ -35,17 +36,17 @@ if settings.DEBUG:
         path(
             "400/",
             default_views.bad_request,
-            kwargs={"exception": Exception("Bad Request!")},
+            kwargs={"exception": Exception("Bad Request!")}, name="URL_400",
         ),
         path(
             "403/",
             default_views.permission_denied,
-            kwargs={"exception": Exception("Permission Denied")},
+            kwargs={"exception": Exception("Permission Denied")}, name="URL_403",
         ),
         path(
             "404/",
             default_views.page_not_found,
-            kwargs={"exception": Exception("Page not Found")},
+            kwargs={"exception": Exception("Page not Found")}, name="URL_404",
         ),
-        path("500/", default_views.server_error),
+        path("500/", default_views.server_error, name="URL_500"),
     ]

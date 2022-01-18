@@ -1,4 +1,3 @@
-from random import choice
 from django.db import models
 from safedelete.models import SafeDeleteModel, SOFT_DELETE_CASCADE
 from django.db.models.signals import pre_save
@@ -10,7 +9,6 @@ from utils.snippets import autoslugFromUUID, generate_unique_username_from_email
 from users.file_upload_helpers import upload_user_image
 from django.utils.translation import gettext_lazy as _
 from django.templatetags.static import static
-from django.conf import settings
 
 
 class UserManager(BaseUserManager):
@@ -125,10 +123,6 @@ class User(SafeDeleteModel, AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.get_dynamic_username()
-
-    def get_field_type(self):
-        print("***************")
-        return None
 
     def get_dynamic_username(self):
         """ Get a dynamic username for a specific user instance. if the user has a name then returns the name, if the user does not have a name but has a username then return username, otherwise returns email as username """

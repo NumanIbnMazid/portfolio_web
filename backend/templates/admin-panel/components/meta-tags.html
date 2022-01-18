@@ -8,4 +8,11 @@
     content="{% if meta_description %}{{ meta_description }}{% else %}numanibnmazid.com: Portfolio of Numan Ibn Mazid. A professional Software Engineer who enjoys developing innovative software solutions that are tailored to customer desirability and usability. Email: numanibnmazid@gmail.com{% endif %}" />
 <meta name="keywords"
     content="{% if meta_keywords %}{{ meta_keywords }}{% else %}numan ibn mazid, portfolio, website, web application, software development, software developer, singer, musician, youtuber, django, django rest framework, python, data structure and algorithms{% endif %}" />
-<meta name="author" content="{% if meta_author %}{{ meta_author }}{% else %}Numan Ibn Mazid{% endif %}" />
+<meta name="author"
+  content="{% if meta_author %}{{ meta_author }}{% else %}Numan Ibn Mazid{% endif %}" />
+<meta name="copyright"
+  content="{% if meta_copyright %}{{ meta_copyright }}{% else %}Numan Ibn Mazid, {% now "jS Y" %}{% endif %}" />
+<meta name="robots"
+  content="{% if meta_robots %}{{ meta_robots }}{% else %}index, follow{% endif %}" />
+<meta name="googlebot"
+  content="{% if meta_googlebot %}{{ meta_googlebot }}{% else %}index, follow{% endif %}" />

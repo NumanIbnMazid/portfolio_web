@@ -83,8 +83,8 @@
         {% else %}
         <button class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 ml-2 border-b-4 border-blue-700
           hover:border-blue-500 rounded" type="submit" hx-trigger="click" hx-target="#main"
-          hx-indicator="#htmxLoaderIndicator" x-on:click="closeJqueryModal('modal-form-dialog')" hx-swap="outerHTML swap:0.3s"
-          hx-swap="outerHTML swap:1s">
+          hx-post="{{ request.get_full_path }}"
+          hx-indicator="#htmxLoaderIndicator" x-on:click="closeJqueryModal('modal-form-dialog')" hx-swap="outerHTML swap:0.3s">
           {% trans 'Submit' %}
         </button>
         {% endif %}
@@ -125,7 +125,7 @@
 
 </script>
 
-{# keep modal/dialog open if there remains form error #}
+{# keep modal/dialog open if there remains form errors #}
 
 {% if form.errors %}
 

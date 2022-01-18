@@ -4,7 +4,6 @@ from django.contrib.auth import get_user_model
 from django.conf import settings
 import os
 from django.core.files.uploadedfile import UploadedFile
-from django.db.models.fields.files import ImageFieldFile
 from django.template.defaultfilters import filesizeformat
 
 
@@ -46,21 +45,18 @@ class UserProfileForm(forms.ModelForm):
         fields = (
             'name', 'nick_name', 'gender', 'image', 'dob', 'website', 'contact', 'contact_email', 'address', 'about'
         )
-        # widgets = {
-        #     'dob': forms.DateInput(
-        #         format=('%Y-%m-%d'),
-        #         attrs={
-        #             'class': 'form-control',
-        #             'placeholder': 'Select a date',
-        #             'type': 'date'
-        #         }
-        #     ),
-        # }
         widgets = {
             'dob': forms.TextInput(
                 attrs={
                     'class': 'form-control',
                     'id': 'datepicker',
+                }
+            ),
+            'about': forms.Textarea(
+                attrs={
+                    'class': 'form-control',
+                    'rows': 3,
+                    'cols': 3,
                 }
             ),
         }

@@ -1,4 +1,5 @@
 from django.db import models
+from django.http import Http404
 from django.contrib.auth import get_user_model
 from utils.snippets import autoslugFromUUID, autoslugWithFieldAndUUID
 from django.utils.translation import gettext_lazy as _
@@ -9,6 +10,34 @@ from portfolios.file_upload_helpers import (
 
 """ *************** Skill *************** """
 
+class SkillManager(models.Manager):
+
+    def all(self):
+        return self.get_queryset()
+
+    def get_by_id(self, id):
+        try:
+            instance = self.get_queryset().get(id=id)
+        except Skill.DoesNotExist:
+            raise Http404("Not Found !!!")
+        except Skill.MultipleObjectsReturned:
+            qs = self.get_queryset().filter(id=id)
+            instance = qs.first()
+        except:
+            raise Http404("Something went wrong !!!")
+        return instance
+
+    def get_by_slug(self, slug):
+        try:
+            instance = self.get_queryset().get(slug=slug)
+        except Skill.DoesNotExist:
+            raise Http404("Not Found !!!")
+        except Skill.MultipleObjectsReturned:
+            qs = self.get_queryset().filter(slug=slug)
+            instance = qs.first()
+        except:
+            raise Http404("Something went wrong !!!")
+        return instance
 
 @autoslugWithFieldAndUUID(fieldname="title")
 class Skill(models.Model):
@@ -21,6 +50,9 @@ class Skill(models.Model):
     image = models.ImageField(upload_to=upload_skill_icon, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    # custom model manager
+    objects = SkillManager()
 
     class Meta:
         verbose_name = 'Skill'

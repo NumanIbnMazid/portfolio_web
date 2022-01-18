@@ -7,13 +7,9 @@
 <!-- jQuery UI -->
 <script src="{% static 'vendors/jquery-ui/jquery-ui.config.js' %}"></script>
 
-{# csrf token for HTMX #}
-<script>
-  document.body.addEventListener(
-    'htmx:configRequest', (event) => {
-      event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
-    })
+{# HTMX Event Listeners #}
 
-</script>
+<!-- HTMX -->
+<script src="{% static 'vendors/htmx/htmx.config.js' %}"></script>
 
 {% endcompress %}
