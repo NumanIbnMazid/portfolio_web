@@ -4,36 +4,49 @@
 
 <!-- Skills Add Button -->
 <button class="btn-primary block text-sm font-semibold rounded-lg p-3 my-4 text-center jquery-ui-dialog-opener"
-  x-on:click="openJqueryModal('modal-form-dialog')">
+  hx-get="{% url 'portfolios:skill_create' %}" hx-trigger="click" hx-target="#main"
+  hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML swap:0.3s">
   <i class="fas fa-plus"></i> Add Skill
 </button>
 
 <!-- Skill Cards -->
 
-<div class="grid gap-4 mb-8 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4">
-  {% for object in object_list %}
-  <!-- Card -->
-  <div class="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
-    <div class="p-3 mr-4 text-orange-500 dark:text-orange-100 dark:bg-orange-500">
-      {% if object.image %}
-      <img src="{{ object.image.url }}" alt="{{ object.title }}" height="30" width="30">
-      {% else %}
-      <i class="fas fa-briefcase mr-1"></i>
-      {% endif %}
+<div class="flex flex-col space-y-2">
+  <div class="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
+
+    {% for object in object_list %}
+    <div class="m-auto px-3 py-3 bg-gradient-to-r from-sky-300 to-indigo-300 rounded-full">
+      <div class="flex items-center rounded-lg">
+        <div>
+          {% if object.image %}
+          <img src="{{ object.image.url }}" alt="{{ object.title }}" height="30" width="30">
+          {% else %}
+          <i class="fas fa-briefcase mr-1"></i>
+          {% endif %}
+        </div>
+        <div class="ml-2">
+          <span class="font-semibold shadow-lg p-1 rounded-md text-gray-700 dark:text-gray-200">
+            {{ object.title }}
+          </span>
+          <span class="ml-2">
+            <i class="fas fa-minus-circle text-danger text-xl cursor-pointer"></i>
+          </span>
+          <span class="ml-1">
+            <i class="fas fa-edit text-primary text-xl cursor-pointer"
+              hx-get="{% url 'portfolios:skill_update' slug=object.slug %}" hx-trigger="click" hx-target="#main"
+              hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML swap:0.3s"></i>
+          </span>
+        </div>
+      </div>
     </div>
-    <div>
-      <p class="font-semibold text-gray-700 dark:text-gray-200">
-        {{ object.title }}
-        <span><i class="fas fa-minus-circle text-danger ml-1"></i></span>
-      </p>
+    {% empty %}
+    <div class="bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3 mx-4 text-center rounded relative"
+      role="alert">
+      <p class="font-bold">No Data</p>
     </div>
+    {% endfor %}
+
   </div>
-  {% empty %}
-  <div class="bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3 mx-4 text-center rounded relative"
-    role="alert">
-    <p class="font-bold">No Data</p>
-  </div>
-  {% endfor %}
 </div>
 
 <!-- include modal form -->

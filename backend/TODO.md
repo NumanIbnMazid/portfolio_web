@@ -4,3 +4,5 @@
 * Form Feedback realtime rather than form sbmit like file size or type, already data exists etc.
 * Form valid for create and update
 * Unique validation for create and update
+* Add Translation
+* Form validation if skill title none then redirect page qs is empty

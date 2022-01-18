@@ -41,8 +41,8 @@ class ContextMixinView(ContextMixin):
             # meta googlebot
             "meta_googlebot": "index, follow",
             # page contexts
-            "head_title": "Home",
-            "page_title": "Home",
+            "head_title": f"{str(self.model.__name__).title()} {self.action.title()}" if self.action else "Home",
+            "page_title": f"{str(self.model.__name__).title()} {self.action.title()}" if self.action else "Home",
         }
 
         # synchornize the default app context with the context
@@ -61,7 +61,7 @@ class ContextMixinView(ContextMixin):
         return context
 
 
-class CustomViewSetMixin(TemplateView, ListView, CreateView, UpdateView, DetailView, ContextMixinView, View):
+class CustomViewSetMixin(UpdateView, DetailView, ListView, CreateView, TemplateView, ContextMixinView, View):
 
     # default messages
     success_message = None
@@ -70,47 +70,48 @@ class CustomViewSetMixin(TemplateView, ListView, CreateView, UpdateView, DetailV
     object = None
     object_list = None
 
+    # action (expected to be passed in as_view() method from urls.py)
+    action = None
+
     def get_success_url(self):
         look_up_field = self.look_up_field if hasattr(self, 'look_up_field') else None
         return reverse(self.success_url, kwargs={look_up_field: getattr(self.object, look_up_field)} if look_up_field else None)
-
-    def get_for_queryset(self):
-        self.object_list = self.get_queryset()
-        allow_empty = self.get_allow_empty()
-
-        if not allow_empty:
-            # When pagination is enabled and object_list is a queryset,
-            # it's better to do a cheap query than to load the unpaginated
-            # queryset in memory.
-            if self.get_paginate_by(self.object_list) is not None and hasattr(self.object_list, 'exists'):
-                is_empty = not self.object_list.exists()
-            else:
-                is_empty = not self.object_list
-            if is_empty:
-                raise Http404(_('Empty list and “%(class_name)s.allow_empty” is False.') % {
-                    'class_name': self.__class__.__name__,
-                })
-        context = self.get_context_data()
-        return self.render_to_response(context)
 
     def get(self, request, *args, **kwargs):
         try:
             if self.get_object():
                 self.object = self.get_object()
-                return super().get(request, *args, **kwargs)
-            else:
-                return self.get_for_queryset()
         except:
-            return self.get_for_queryset()
+            # pass except block
+            pass
+        # do the rest in finally block
+        finally:
+            self.object_list = self.get_queryset()
+            allow_empty = self.get_allow_empty()
+
+            if not allow_empty:
+                # When pagination is enabled and object_list is a queryset,
+                # it's better to do a cheap query than to load the unpaginated
+                # queryset in memory.
+                if self.get_paginate_by(self.object_list) is not None and hasattr(self.object_list, 'exists'):
+                    is_empty = not self.object_list.exists()
+                else:
+                    is_empty = not self.object_list
+                if is_empty:
+                    raise Http404(_('Empty list and “%(class_name)s.allow_empty” is False.') % {
+                        'class_name': self.__class__.__name__,
+                    })
+
+            # update action method in context data to pass in view
+            if self.action:
+                # update kwargs to pass in context data
+                kwargs.update({
+                    f"{self.action}_view": True,
+                })
+
+            return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        action = "create" if request.method == "POST" else "update" if request.method == "PUT" else request.method
-        success_message = self.success_message if self.success_message else f"{action.title()}d successfully" if action else "SUCCESS"
-        error_message = self.error_message if self.error_message else f"Failed to {action.title()}" if action else "FAILED"
-
-        if not request.user.is_authenticated:
-            return HttpResponseForbidden()
-
         try:
             self.object = self.get_object()
         # bypass
@@ -121,18 +122,40 @@ class CustomViewSetMixin(TemplateView, ListView, CreateView, UpdateView, DetailV
 
         if form.is_valid():
             messages.add_message(
-                self.request, messages.SUCCESS, success_message
+                self.request, messages.SUCCESS, self.get_success_message()
             )
             return self.form_valid(form)
         else:
             messages.add_message(
-                self.request, messages.ERROR, error_message
+                self.request, messages.ERROR, self.get_error_message()
             )
             return self.form_invalid(form)
 
     def form_valid(self, form):
         return super().form_valid(form)
 
+    def form_invalid(self, form):
+        return super().form_invalid(form)
+
+    def get_success_message(self):
+        if self.action and hasattr(self, f"{self.action}_success_message"):
+            return getattr(self, f"{self.action}_success_message", "SUCCESS")
+        elif self.success_message:
+            return self.success_message
+        elif self.action:
+            return f"{str(self.model.__name__).title()} {self.action.lower().title()}d successfully"
+        else:
+            return "SUCCESS"
+
+    def get_error_message(self):
+        if self.action and hasattr(self, f"{self.action}_error_message"):
+            return getattr(self, f"{self.action}_error_message", "ERROR")
+        elif self.error_message:
+            return self.error_message
+        elif self.action:
+            return f"Failed to {self.action} {str(self.model.__name__).title()}"
+        else:
+            return "ERROR"
 
 class UpdateDetailMixinView(UpdateView, DetailView):
 

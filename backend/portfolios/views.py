@@ -15,6 +15,8 @@ class SkillView(CustomViewSetMixin):
     model = Skill
     form_class = SkillForm
     success_url = 'portfolios:skills'
+    lookup_field = 'slug'
+    update_success_message = "Skill has been updated successfully."
 
     def get_queryset(self):
         return Skill.objects.all()
@@ -29,8 +31,7 @@ class SkillView(CustomViewSetMixin):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["head_title"] = context["page_title"] = "Skills"
-        context["form_submit_url"] = 'users:user_profile_update' if getattr(context.get("object", None), "slug", None) else None
+        context["form_submit_url"] = 'portfolios:skill_update' if getattr(context.get("object", None), "slug", None) else None
         context["form_submit_url_slug"] = getattr(
             context.get("object", None), "slug", None)
         return context
