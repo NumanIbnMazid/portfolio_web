@@ -1,6 +1,5 @@
 import re
 from django import template
-from django.db.models.fields.files import ImageFieldFile, ImageField, FieldFile, FileField
 
 numeric_test = re.compile("^\d+$")
 register = template.Library()
