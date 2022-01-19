@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django import forms
 from portfolios.models import Skill
 from portfolios.forms import SkillForm
 from utils.mixins import CustomViewSetMixin
@@ -27,11 +27,17 @@ class SkillView(CustomViewSetMixin):
     def form_valid(self, form):
         # assign user to the form
         form.instance.user = self.request.user
+        # validate unique skill title
+        qs = Skill.objects.filter(user=self.request.user, title=form.cleaned_data.get('title')).exclude(slug__iexact=self.kwargs.get('slug'))
+        if qs:
+            form.add_error(
+                "title", forms.ValidationError(
+                    f"This skill already exists!"
+                )
+            )
         return super().form_valid(form)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["form_submit_url"] = 'portfolios:skill_update' if getattr(context.get("object", None), "slug", None) else None
-        context["form_submit_url_slug"] = getattr(
-            context.get("object", None), "slug", None)
-        return context
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context["display_fields"] = Skill._meta.get_fields()
+    #     return context

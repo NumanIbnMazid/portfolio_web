@@ -1,8 +1,8 @@
 # ToDo List for Backend
 
 * Image Preview
-* Form Feedback realtime rather than form sbmit like file size or type, already data exists etc.
-* Form valid for create and update
-* Unique validation for create and update
+* Form Feedback realtime rather than form submit like file size or type, already data exists etc.
 * Add Translation
-* Form validation if skill title none then redirect page qs is empty
+* Detail View Modal
+* pagination
+* common url list in sidebar (fix sidebar open if form error)

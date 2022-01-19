@@ -1,9 +1,8 @@
 from django.views.generic.base import ContextMixin
-from django.views.generic import UpdateView, DetailView, View, TemplateView, ListView, CreateView
-from django.http import Http404
+from django.views.generic import UpdateView, DetailView, View, TemplateView, ListView, CreateView, DeleteView
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, HttpResponseRedirect, Http404
 from django.contrib import messages
 from utils.helpers import now
 
@@ -41,8 +40,10 @@ class ContextMixinView(ContextMixin):
             # meta googlebot
             "meta_googlebot": "index, follow",
             # page contexts
-            "head_title": f"{str(self.model.__name__).title()} {self.action.title()}" if self.action else "Home",
-            "page_title": f"{str(self.model.__name__).title()} {self.action.title()}" if self.action else "Home",
+            "display_fields": self.model._meta.get_fields(),
+            "action": self.action if self.action else None,
+            "head_title": f"{getattr(self.model._meta, 'verbose_name_plural', f'{self.model.__name__} List')}" if self.action and self.action == "list" else f"{getattr(self.model._meta, 'verbose_name', f'{self.model.__name__}')} Detail" if self.action and self.action == "detail" else f"{self.action.title()} {str(self.model.__name__).title()}" if self.action else "Home",
+            "page_title": f"{getattr(self.model._meta, 'verbose_name_plural', f'{self.model.__name__} List')}" if self.action and self.action == "list" else f"{getattr(self.model._meta, 'verbose_name', f'{self.model.__name__}')} Detail" if self.action and self.action == "detail" else f"{self.action.title()} {str(self.model.__name__).title()}" if self.action else "Home",
         }
 
         # synchornize the default app context with the context
@@ -61,7 +62,7 @@ class ContextMixinView(ContextMixin):
         return context
 
 
-class CustomViewSetMixin(UpdateView, DetailView, ListView, CreateView, TemplateView, ContextMixinView, View):
+class CustomViewSetMixin(UpdateView, DetailView, ListView, TemplateView, ContextMixinView):
 
     # default messages
     success_message = None
@@ -102,13 +103,6 @@ class CustomViewSetMixin(UpdateView, DetailView, ListView, CreateView, TemplateV
                         'class_name': self.__class__.__name__,
                     })
 
-            # update action method in context data to pass in view
-            if self.action:
-                # update kwargs to pass in context data
-                kwargs.update({
-                    f"{self.action}_view": True,
-                })
-
             return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
@@ -120,21 +114,51 @@ class CustomViewSetMixin(UpdateView, DetailView, ListView, CreateView, TemplateV
 
         form = self.get_form()
 
+        # assign object_list
+        self.object_list = self.get_queryset()
+
+        if self.action and self.object and self.action == "delete":
+            # call delete method
+            return self.delete(request, *args, **kwargs)
+
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    def delete(self, request, *args, **kwargs):
+        """
+        Call the delete() method on the fetched object and then redirect to the
+        success URL.
+        """
+        success_url = self.get_success_url()
+        try:
+            self.object = self.get_object()
+            if self.object:
+                self.object.delete()
+                messages.add_message(
+                    self.request, messages.SUCCESS, self.get_success_message()
+                )
+            else:
+                raise Http404(_("Object not found!"))
+        except:
+            messages.add_message(
+                self.request, messages.ERROR, self.get_error_message()
+            )
+        return HttpResponseRedirect(success_url)
+
+    def form_valid(self, form):
         if form.is_valid():
             messages.add_message(
                 self.request, messages.SUCCESS, self.get_success_message()
             )
-            return self.form_valid(form)
-        else:
-            messages.add_message(
-                self.request, messages.ERROR, self.get_error_message()
-            )
-            return self.form_invalid(form)
-
-    def form_valid(self, form):
-        return super().form_valid(form)
+            return super().form_valid(form)
+        return super().form_invalid(form)
 
     def form_invalid(self, form):
+        messages.add_message(
+            self.request, messages.ERROR, self.get_error_message()
+        )
         return super().form_invalid(form)
 
     def get_success_message(self):

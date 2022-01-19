@@ -12,8 +12,8 @@ class SkillForm(forms.ModelForm):
         model = Skill
         fields = ('title', 'image')
         # widgets = {
-        #     'name': forms.TextInput(attrs={'class': 'form-control'}),
-        #     'description': forms.TextInput(attrs={'class': 'form-control'}),
-        #     'image': forms.FileInput(attrs={'class': 'form-control'}),
-        #     'slug': forms.TextInput(attrs={'class': 'form-control'}),
+            # 'title': forms.TextInput(attrs={'class': 'form-control'}),
+            # 'description': forms.TextInput(attrs={'class': 'form-control'}),
+            # 'image': forms.FileInput(attrs={'class': 'form-control'}),
+            # 'slug': forms.TextInput(attrs={'class': 'form-control'}),
         # }

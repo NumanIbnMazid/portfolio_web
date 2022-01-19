@@ -20,8 +20,6 @@ class UserProfileView(CustomViewSetMixin):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["head_title"] = context["page_title"] = "User Profile Update"
-        context["form_submit_url"] = 'users:user_profile_update'
-        context["form_submit_url_slug"] = getattr(context.get("object", None), "slug", None)
         return context
 
 # @method_decorator(user_profile_decorators, name='dispatch')

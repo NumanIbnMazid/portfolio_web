@@ -15,8 +15,9 @@
   <div class="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
 
     {% for object in object_list %}
-    <div class="m-auto px-3 py-3 bg-gradient-to-r from-sky-300 to-indigo-300 rounded-full">
-      <div class="flex items-center rounded-lg">
+    <div
+      class="m-auto px-3 py-3 bg-light dark:bg-gray-700 rounded-full">
+      <div class="flex items-center rounded-lg text-gray-700 dark:text-gray-200">
         <div>
           {% if object.image %}
           <img src="{{ object.image.url }}" alt="{{ object.title }}" height="30" width="30">
@@ -25,15 +26,22 @@
           {% endif %}
         </div>
         <div class="ml-2">
-          <span class="font-semibold shadow-lg p-1 rounded-md text-gray-700 dark:text-gray-200">
+          <span class="font-semibold shadow-lg p-1 rounded-md">
             {{ object.title }}
           </span>
           <span class="ml-2">
-            <i class="fas fa-minus-circle text-danger text-xl cursor-pointer"></i>
+            <i class="fas fa-minus-circle text-danger text-xl cursor-pointer"
+              hx-get="{% url 'portfolios:skill_delete' slug=object.slug %}" hx-trigger="click" hx-target="#main"
+              hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML swap:0.3s"></i>
           </span>
           <span class="ml-1">
             <i class="fas fa-edit text-primary text-xl cursor-pointer"
               hx-get="{% url 'portfolios:skill_update' slug=object.slug %}" hx-trigger="click" hx-target="#main"
+              hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML swap:0.3s"></i>
+          </span>
+          <span class="ml-1">
+            <i class="fas fa-eye text-info text-xl cursor-pointer"
+              hx-get="{% url 'portfolios:skill_detail' slug=object.slug %}" hx-trigger="click" hx-target="#main"
               hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML swap:0.3s"></i>
           </span>
         </div>
@@ -50,6 +58,7 @@
 </div>
 
 <!-- include modal form -->
-{% include "snippets/modal-form.html" %}
+{% include "snippets/form-modal.html" %}
+{% include "snippets/detail-modal.html" %}
 
 {% endblock %}
