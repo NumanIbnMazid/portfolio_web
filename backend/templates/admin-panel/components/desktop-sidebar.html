@@ -42,9 +42,9 @@
       </li>
     </ul>
     <ul
-      {% if current_url in 'skills, skill_update' %}x-data={isPagesMenuOpen:true}{% else %}x-data={isPagesMenuOpen:false}{% endif %}>
+      {% if current_url in portfolio_urls %}x-data={isPagesMenuOpen:true}{% else %}x-data={isPagesMenuOpen:false}{% endif %}>
       <li class="relative px-6 py-3">
-        {% if current_url in 'skills' %}
+        {% if current_url in portfolio_urls %}
         <span class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"></span>
         {% endif %}
         <button
@@ -52,7 +52,7 @@
           @click="isPagesMenuOpen=!isPagesMenuOpen" aria-haspopup="true">
           <span class="inline-flex items-center">
             <i class="fas fa-id-card"></i>
-            <span class="ml-4 {% if current_url in 'skills, skill_update' %}font-extrabold text-gray-800
+            <span class="ml-4 {% if current_url in portfolio_urls %}font-extrabold text-gray-800
           dark:text-gray-200{% endif %}">Portfolio</span>
           </span>
           <svg class="w-4 h-4" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
@@ -69,15 +69,16 @@
             x-transition:leave-start="opacity-100 max-h-xl" x-transition:leave-end="opacity-0 max-h-0"
             class="p-2 mt-2 space-y-2 overflow-hidden text-sm font-medium text-gray-500 rounded-md shadow-inner bg-gray-50 dark:text-gray-400 dark:bg-gray-900"
             aria-label="submenu">
+            <!-- Skill -->
             <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-              {% if current_url in 'skills, skill_update' %}
+              {% if current_url in skill_urls %}
               <span class="relative inset-y-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg text-white mr-1"
                 aria-hidden="true"><span class="text-xs">|</span></span>
               {% endif %}
               <a class="w-full cursor-pointer" hx-trigger="click" hx-target="#main" hx-indicator="#htmxLoaderIndicator"
                 hx-swap="outerHTML swap:0.2s" hx-get="{% url 'portfolios:skills' %}"
                 hx-push-url="{% url 'portfolios:skills' %}">
-                <span class="{% if current_url in 'skills, skill_update' %}font-extrabold text-gray-800
+                <span class="{% if current_url in skill_urls %}font-extrabold text-gray-800
                   dark:text-gray-200{% endif %} hover:text-gray-800
                   dark:hover:text-gray-200">
                   <i class="fas fa-briefcase mr-1"></i>

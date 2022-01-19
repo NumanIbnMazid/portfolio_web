@@ -24,7 +24,8 @@ class ContextMixinView(ContextMixin):
             context = super().get_context_data(**kwargs)
         except:
             context = {}
-
+        # define urls
+        skill_urls = ["skills", "skill_create", "skill_detail", "skill_update", "skill_delete"]
         # default app contexts
         default_app_contexts = {
             # meta description
@@ -40,6 +41,8 @@ class ContextMixinView(ContextMixin):
             # meta googlebot
             "meta_googlebot": "index, follow",
             # page contexts
+            "skill_urls": skill_urls,
+            "portfolio_urls": skill_urls,
             "display_fields": self.model._meta.get_fields(),
             "action": self.action if self.action else None,
             "head_title": f"{getattr(self.model._meta, 'verbose_name_plural', f'{self.model.__name__} List')}" if self.action and self.action == "list" else f"{getattr(self.model._meta, 'verbose_name', f'{self.model.__name__}')} Detail" if self.action and self.action == "detail" else f"{self.action.title()} {str(self.model.__name__).title()}" if self.action else "Home",

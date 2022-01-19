@@ -132,21 +132,9 @@
 
 </script>
 
-{# keep modal/dialog open if there remains form errors #}
+{# keep modal/dialog open if if there remains form errors or action in create, update or delete #}
 
-{% if form.errors %}
-
-<script>
-  // open modal
-  openJqueryModal("form-modal-dialog")
-
-</script>
-
-{% endif %}
-
-{# keep modal/dialog open if action in create, update or delete #}
-
-{% if action in "create, update, delete" %}
+{% if form.errors or action in "create, update, delete" %}
 
 <script>
   // open modal

@@ -36,8 +36,3 @@ class SkillView(CustomViewSetMixin):
                 )
             )
         return super().form_valid(form)
-
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context["display_fields"] = Skill._meta.get_fields()
-    #     return context
