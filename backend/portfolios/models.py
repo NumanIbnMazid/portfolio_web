@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from utils.snippets import autoslugFromUUID, autoslugWithFieldAndUUID
 from django.utils.translation import gettext_lazy as _
 from portfolios.file_upload_helpers import (
-    upload_skill_icon, upload_professional_experience_media, upload_education_media, upload_certification_media, upload_project_media, upload_interest_icon, upload_testimonial_image
+    skill_icon_path, professional_experience_media_path, education_media_path, certification_media_path, project_media_path, interest_icon_path, testimonial_image_path
 )
 
 
@@ -47,7 +47,7 @@ class Skill(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="user_skills")
     slug = models.SlugField(max_length=255, unique=True)
     title = models.CharField(max_length=150)
-    image = models.ImageField(upload_to=upload_skill_icon, blank=True, null=True)
+    image = models.ImageField(upload_to=skill_icon_path, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -55,12 +55,27 @@ class Skill(models.Model):
     objects = SkillManager()
 
     class Meta:
+        db_table = 'skill'
         verbose_name = 'Skill'
         verbose_name_plural = 'Skills'
         ordering = ['-created_at']
+        get_latest_by = "created_at"
+        unique_together = (('user', 'title',),)
 
     def __str__(self):
         return self.title
+
+    def unique_error_message(self, model_class, unique_check):
+        """ custom `unique_error_message` for `unique_together` validation """
+
+        unique_error_message_map = {
+            ('user', 'title',): f"{model_class.__name__} `{self.title}` already exists.",
+        }
+
+        if unique_check in unique_error_message_map:
+            return unique_error_message_map[unique_check]
+
+        return super().unique_error_message(model_class, unique_check)
 
 
 """ *************** Professional Experience *************** """
@@ -92,9 +107,11 @@ class ProfessionalExperience(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        db_table = 'professional_experience'
         verbose_name = 'Professional Experience'
         verbose_name_plural = 'Professional Experiences'
         ordering = ['-created_at']
+        get_latest_by = "created_at"
 
     def __str__(self):
         return self.company
@@ -110,15 +127,17 @@ class ProfessionalExperience(models.Model):
 class ProfessionalExperienceMedia(models.Model):
     professional_experience = models.ForeignKey(ProfessionalExperience, on_delete=models.CASCADE, related_name="professional_experience_media")
     slug = models.SlugField(max_length=255, unique=True)
-    file = models.FileField(upload_to=upload_professional_experience_media)
+    file = models.FileField(upload_to=professional_experience_media_path)
     description = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        db_table = 'professional_experience_media'
         verbose_name = 'Professional Experience Media'
         verbose_name_plural = 'Professional Experience Media'
-        ordering = ['-created_at']
+        get_latest_by = "created_at"
+        order_with_respect_to = 'professional_experience'
 
     def __str__(self):
         return self.professional_experience.__str__()
@@ -145,9 +164,11 @@ class Education(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        db_table = 'education'
         verbose_name = 'Education'
         verbose_name_plural = 'Educations'
         ordering = ['-created_at']
+        get_latest_by = "created_at"
 
     def __str__(self):
         return self.degree
@@ -164,15 +185,17 @@ class Education(models.Model):
 class EducationMedia(models.Model):
     education = models.ForeignKey(Education, on_delete=models.CASCADE, related_name="education_media")
     slug = models.SlugField(max_length=255, unique=True)
-    file = models.FileField(upload_to=upload_education_media)
+    file = models.FileField(upload_to=education_media_path)
     description = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        db_table = 'education_media'
         verbose_name = 'Education Media'
         verbose_name_plural = 'Education Media'
-        ordering = ['-created_at']
+        get_latest_by = "created_at"
+        order_with_respect_to = 'education'
 
     def __str__(self):
         return self.education.__str__()
@@ -198,9 +221,11 @@ class Certification(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        db_table = 'certification'
         verbose_name = 'Certification'
         verbose_name_plural = 'Certifications'
         ordering = ['-created_at']
+        get_latest_by = "created_at"
 
     def __str__(self):
         return self.name
@@ -210,15 +235,17 @@ class Certification(models.Model):
 class CertificationMedia(models.Model):
     certification = models.ForeignKey(Certification, on_delete=models.CASCADE, related_name="certification_media")
     slug = models.SlugField(max_length=255, unique=True)
-    file = models.FileField(upload_to=upload_certification_media)
+    file = models.FileField(upload_to=certification_media_path)
     description = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        db_table = 'certification_media'
         verbose_name = 'Certification Media'
         verbose_name_plural = 'Certification Media'
-        ordering = ['-created_at']
+        get_latest_by = "created_at"
+        order_with_respect_to = 'certification'
 
     def __str__(self):
         return self.certification.__str__()
@@ -243,9 +270,11 @@ class Project(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        db_table = 'project'
         verbose_name = 'Project'
         verbose_name_plural = 'Projects'
         ordering = ['-created_at']
+        get_latest_by = "created_at"
 
     def __str__(self):
         return self.title
@@ -255,15 +284,17 @@ class Project(models.Model):
 class ProjectMedia(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="project_media")
     slug = models.SlugField(max_length=255, unique=True)
-    file = models.FileField(upload_to=upload_project_media)
+    file = models.FileField(upload_to=project_media_path)
     description = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        db_table = 'project_media'
         verbose_name = 'Project Media'
         verbose_name_plural = 'Project Media'
-        ordering = ['-created_at']
+        get_latest_by = "created_at"
+        order_with_respect_to = 'project'
 
     def __str__(self):
         return self.project.__str__()
@@ -277,15 +308,17 @@ class Interest(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="user_interests")
     slug = models.SlugField(max_length=255, unique=True)
     title = models.CharField(max_length=200)
-    icon = models.ImageField(upload_to=upload_interest_icon, blank=True, null=True)
+    icon = models.ImageField(upload_to=interest_icon_path, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        db_table = 'interest'
         verbose_name = 'Interest'
         verbose_name_plural = 'Interests'
         ordering = ['-created_at']
+        get_latest_by = "created_at"
 
     def __str__(self):
         return self.title
@@ -300,15 +333,17 @@ class Testimonial(models.Model):
     slug = models.SlugField(max_length=255, unique=True)
     name = models.CharField(max_length=150)
     designation = models.CharField(max_length=150)
-    image = models.ImageField(upload_to=upload_testimonial_image, blank=True, null=True)
+    image = models.ImageField(upload_to=testimonial_image_path, blank=True, null=True)
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        db_table = 'testimonial'
         verbose_name = 'Testimonial'
         verbose_name_plural = 'Testimonials'
         ordering = ['-created_at']
+        get_latest_by = "created_at"
 
     def __str__(self):
         return self.name

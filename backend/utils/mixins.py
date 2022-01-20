@@ -1,5 +1,6 @@
+from django.core.exceptions import ValidationError
 from django.views.generic.base import ContextMixin
-from django.views.generic import UpdateView, DetailView, View, TemplateView, ListView, CreateView, DeleteView
+from django.views.generic import UpdateView, DetailView, TemplateView, ListView
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
 from django.http import HttpResponseForbidden, HttpResponseRedirect, Http404
@@ -29,13 +30,13 @@ class ContextMixinView(ContextMixin):
         # default app contexts
         default_app_contexts = {
             # meta description
-            "meta_description": "numanibnmazid.com: Portfolio of Numan Ibn Mazid. A professional Software Engineer who enjoys developing innovative software solutions that are tailored to customer desirability and usability. Email: numanibnmazid@gmail.com",
+            "meta_description": _("numanibnmazid.com: Portfolio of Numan Ibn Mazid. A professional Software Engineer who enjoys developing innovative software solutions that are tailored to customer desirability and usability. Email: numanibnmazid@gmail.com"),
             # meta keywords
-            "meta_keywords": "numan ibn mazid, portfolio, website, web application, software development, software developer, singer, musician, youtuber, django, django rest framework, python, data structure and algorithms",
+            "meta_keywords": _("numan ibn mazid, portfolio, website, web application, software development, software developer, singer, musician, youtuber, django, django rest framework, python, data structure and algorithms"),
             # meta author
-            "meta_author": "Numan Ibn Mazid",
+            "meta_author": _("Numan Ibn Mazid"),
             # meta copyright
-            "meta_copyright": f"Numan Ibn Mazid, {now().year}",
+            "meta_copyright": _(f"Numan Ibn Mazid, {now().year}"),
             # meta robots
             "meta_robots": "index, follow",
             # meta googlebot
@@ -45,8 +46,8 @@ class ContextMixinView(ContextMixin):
             "portfolio_urls": skill_urls,
             "display_fields": self.model._meta.get_fields(),
             "action": self.action if self.action else None,
-            "head_title": f"{getattr(self.model._meta, 'verbose_name_plural', f'{self.model.__name__} List')}" if self.action and self.action == "list" else f"{getattr(self.model._meta, 'verbose_name', f'{self.model.__name__}')} Detail" if self.action and self.action == "detail" else f"{self.action.title()} {str(self.model.__name__).title()}" if self.action else "Home",
-            "page_title": f"{getattr(self.model._meta, 'verbose_name_plural', f'{self.model.__name__} List')}" if self.action and self.action == "list" else f"{getattr(self.model._meta, 'verbose_name', f'{self.model.__name__}')} Detail" if self.action and self.action == "detail" else f"{self.action.title()} {str(self.model.__name__).title()}" if self.action else "Home",
+            "head_title": _(f"{getattr(self.model._meta, 'verbose_name_plural', f'{self.model.__name__} List')}" if self.action and self.action == "list" else f"{getattr(self.model._meta, 'verbose_name', f'{self.model.__name__}')} Detail" if self.action and self.action == "detail" else f"{self.action.title()} {str(self.model.__name__).title()}" if self.action else "Home"),
+            "page_title": _(f"{getattr(self.model._meta, 'verbose_name_plural', f'{self.model.__name__} List')}" if self.action and self.action == "list" else f"{getattr(self.model._meta, 'verbose_name', f'{self.model.__name__}')} Detail" if self.action and self.action == "detail" else f"{self.action.title()} {str(self.model.__name__).title()}" if self.action else "Home"),
         }
 
         # synchornize the default app context with the context
@@ -151,11 +152,22 @@ class CustomViewSetMixin(UpdateView, DetailView, ListView, TemplateView, Context
         return HttpResponseRedirect(success_url)
 
     def form_valid(self, form):
-        if form.is_valid():
-            messages.add_message(
-                self.request, messages.SUCCESS, self.get_success_message()
-            )
-            return super().form_valid(form)
+        try:
+            if form.is_valid():
+                # call model's full_clean method to validate required additional validations
+                form.instance.full_clean()
+                # If the form is valid, save the associated model.
+                self.object = form.save()
+
+                messages.add_message(
+                    self.request, messages.SUCCESS, self.get_success_message()
+                )
+                return super().form_valid(form)
+
+        except Exception as exception:
+            self.get_exception_message(form=form, exception=exception)
+            return super().form_invalid(form)
+
         return super().form_invalid(form)
 
     def form_invalid(self, form):
@@ -164,15 +176,42 @@ class CustomViewSetMixin(UpdateView, DetailView, ListView, TemplateView, Context
         )
         return super().form_invalid(form)
 
+    def get_exception_message(self, form, exception):
+        # check if the exception is a django.core.exceptions.ValidationError
+        if isinstance(exception, ValidationError):
+            # check if error is dict
+            if isinstance(exception.message_dict, dict):
+                for key, value in exception.message_dict.items():
+                    # check if the key is in the form
+                    if key in form.fields or key in ["__all__"]:
+                        # check if value is a list
+                        if isinstance(value, list):
+                            for message in value:
+                                messages.add_message(
+                                    self.request, messages.ERROR, message
+                                )
+                        else:
+                            messages.add_message(
+                                self.request, messages.ERROR, value
+                            )
+            else:
+                messages.add_message(
+                    self.request, messages.ERROR, exception.message
+                )
+        else:
+            messages.add_message(
+                self.request, messages.ERROR, self.get_error_message()
+            )
+
     def get_success_message(self):
         if self.action and hasattr(self, f"{self.action}_success_message"):
             return getattr(self, f"{self.action}_success_message", "SUCCESS")
         elif self.success_message:
             return self.success_message
         elif self.action:
-            return f"{str(self.model.__name__).title()} {self.action.lower().title()}d successfully"
+            return _(f"{str(self.model.__name__).title()} {self.action.lower().title()}d successfully")
         else:
-            return "SUCCESS"
+            return _("SUCCESS")
 
     def get_error_message(self):
         if self.action and hasattr(self, f"{self.action}_error_message"):
@@ -180,14 +219,14 @@ class CustomViewSetMixin(UpdateView, DetailView, ListView, TemplateView, Context
         elif self.error_message:
             return self.error_message
         elif self.action:
-            return f"Failed to {self.action} {str(self.model.__name__).title()}"
+            return _(f"Failed to {self.action} {str(self.model.__name__).title()}")
         else:
-            return "ERROR"
+            return _("ERROR")
 
 class UpdateDetailMixinView(UpdateView, DetailView):
 
-    success_message = "Updated Successfully"
-    error_message = "Failed to Update"
+    success_message = _("Updated Successfully")
+    error_message = _("Failed to Update")
 
     def get_success_url(self):
         look_up_field = self.look_up_field if hasattr(self, 'look_up_field') else None

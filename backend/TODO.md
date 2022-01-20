@@ -7,3 +7,4 @@
 * pagination (lazy loading)
 * common url list in sidebar (fix sidebar open if form error)
 * fix image upload bug for long file name
+* Django Factory Boy

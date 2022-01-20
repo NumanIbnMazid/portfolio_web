@@ -1,5 +1,6 @@
 from django import forms
 from portfolios.models import Skill
+from django.core.exceptions import NON_FIELD_ERRORS
 
 
 # ----------------------------------------------------

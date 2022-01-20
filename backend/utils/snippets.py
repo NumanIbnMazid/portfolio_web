@@ -143,7 +143,7 @@ def autoslugWithFieldAndUUID(fieldname):
             if not raw and not instance.slug:
                 source = getattr(instance, fieldname)
                 try:
-                    slug = slugify(source)[:123] + "-" + str(uuid.uuid4())
+                    slug = slugify(source[:23]) + "-" + str(uuid.uuid4())
                     Klass = instance.__class__
                     qs_exists = Klass.objects.filter(slug=slug).exists()
                     if qs_exists:

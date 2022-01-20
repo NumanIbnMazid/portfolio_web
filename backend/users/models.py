@@ -42,6 +42,15 @@ class UserManager(BaseUserManager):
 
         return self._create_user(email, password, **extra_fields)
 
+    def create_staff(self, email, password, **extra_fields):
+        extra_fields.setdefault('is_superuser', False)
+        extra_fields.setdefault('is_staff', True)
+
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('Staff must have is_staff=True.')
+
+        return self._create_user(email, password, **extra_fields)
+
     def all(self):
         return self.get_queryset()
 
@@ -111,6 +120,7 @@ class User(SafeDeleteModel, AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     class Meta:
+        db_table = 'user'
         verbose_name = ("User")
         verbose_name_plural = ("Users")
         ordering = ["-date_joined"]

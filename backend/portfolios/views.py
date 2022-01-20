@@ -28,11 +28,11 @@ class SkillView(CustomViewSetMixin):
         # assign user to the form
         form.instance.user = self.request.user
         # validate unique skill title
-        qs = Skill.objects.filter(user=self.request.user, title=form.cleaned_data.get('title')).exclude(slug__iexact=self.kwargs.get('slug'))
-        if qs:
-            form.add_error(
-                "title", forms.ValidationError(
-                    f"This skill already exists!"
-                )
-            )
+        # qs = Skill.objects.filter(user=self.request.user, title=form.cleaned_data.get('title')).exclude(slug__iexact=self.kwargs.get('slug'))
+        # if qs:
+        #     form.add_error(
+        #         "title", forms.ValidationError(
+        #             f"This skill already exists!"
+        #         )
+        #     )
         return super().form_valid(form)
