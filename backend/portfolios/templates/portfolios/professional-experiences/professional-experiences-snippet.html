@@ -1,0 +1,34 @@
+{% block additional_head_scripts %}
+
+<script>
+  // document ready function
+  $(function () {
+
+    $("#start_date").datepicker({
+      inline: true,
+      maxDate: new Date($.now()),
+      dateFormat: "yy-mm-dd",
+      onSelect: function (date) {
+
+        var selectedDate = new Date(date);
+        var msecsInADay = 86400000;
+        var endDate = new Date(selectedDate.getTime() + msecsInADay);
+
+        //Set Minimum Date of EndDatePicker After Selected Date of StartDatePicker
+        $("#end_date").datepicker("option", "minDate", endDate);
+        // $("#end_date").datepicker("option", "maxDate", '+2y');
+
+      }
+    });
+
+    $("#end_date").datepicker({
+      inline: true,
+      maxDate: new Date($.now()),
+      dateFormat: "yy-mm-dd"
+    });
+
+  })
+
+</script>
+
+{% endblock %}

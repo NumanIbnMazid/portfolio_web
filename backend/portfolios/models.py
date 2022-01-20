@@ -60,25 +60,55 @@ class Skill(models.Model):
         verbose_name_plural = 'Skills'
         ordering = ['-created_at']
         get_latest_by = "created_at"
-        unique_together = (('user', 'title',),)
+        unique_together = (('user', 'title'),)
 
     def __str__(self):
         return self.title
 
     def unique_error_message(self, model_class, unique_check):
         """ custom `unique_error_message` for `unique_together` validation """
-
+        # custom error message map
         unique_error_message_map = {
             ('user', 'title',): f"{model_class.__name__} `{self.title}` already exists.",
         }
-
+        # get custom error message from map
         if unique_check in unique_error_message_map:
             return unique_error_message_map[unique_check]
-
+        # default error message
         return super().unique_error_message(model_class, unique_check)
 
 
 """ *************** Professional Experience *************** """
+
+
+class ProfessionalExperienceManager(models.Manager):
+
+    def all(self):
+        return self.get_queryset()
+
+    def get_by_id(self, id):
+        try:
+            instance = self.get_queryset().get(id=id)
+        except ProfessionalExperience.DoesNotExist:
+            raise Http404("Not Found !!!")
+        except ProfessionalExperience.MultipleObjectsReturned:
+            qs = self.get_queryset().filter(id=id)
+            instance = qs.first()
+        except:
+            raise Http404("Something went wrong !!!")
+        return instance
+
+    def get_by_slug(self, slug):
+        try:
+            instance = self.get_queryset().get(slug=slug)
+        except ProfessionalExperience.DoesNotExist:
+            raise Http404("Not Found !!!")
+        except ProfessionalExperience.MultipleObjectsReturned:
+            qs = self.get_queryset().filter(slug=slug)
+            instance = qs.first()
+        except:
+            raise Http404("Something went wrong !!!")
+        return instance
 
 
 @autoslugWithFieldAndUUID(fieldname="company")
@@ -105,6 +135,9 @@ class ProfessionalExperience(models.Model):
     description = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    # custom model manager
+    objects = ProfessionalExperienceManager()
 
     class Meta:
         db_table = 'professional_experience'

@@ -25,8 +25,6 @@ class ContextMixinView(ContextMixin):
             context = super().get_context_data(**kwargs)
         except:
             context = {}
-        # define urls
-        skill_urls = ["skills", "skill_create", "skill_detail", "skill_update", "skill_delete"]
         # default app contexts
         default_app_contexts = {
             # meta description
@@ -42,12 +40,13 @@ class ContextMixinView(ContextMixin):
             # meta googlebot
             "meta_googlebot": "index, follow",
             # page contexts
-            "skill_urls": skill_urls,
-            "portfolio_urls": skill_urls,
+            "snippet_template": self.snippet_template if hasattr(self, "snippet_template") else None,
+            f"{self.model.__name__}_url_list": self.url_list if hasattr(self, "url_list") else [],
+            "url_list": self.url_list if hasattr(self, "url_list") else [],
             "display_fields": self.model._meta.get_fields(),
             "action": self.action if self.action else None,
-            "head_title": _(f"{getattr(self.model._meta, 'verbose_name_plural', f'{self.model.__name__} List')}" if self.action and self.action == "list" else f"{getattr(self.model._meta, 'verbose_name', f'{self.model.__name__}')} Detail" if self.action and self.action == "detail" else f"{self.action.title()} {str(self.model.__name__).title()}" if self.action else "Home"),
-            "page_title": _(f"{getattr(self.model._meta, 'verbose_name_plural', f'{self.model.__name__} List')}" if self.action and self.action == "list" else f"{getattr(self.model._meta, 'verbose_name', f'{self.model.__name__}')} Detail" if self.action and self.action == "detail" else f"{self.action.title()} {str(self.model.__name__).title()}" if self.action else "Home"),
+            "head_title": _(f"{getattr(self.model._meta, 'verbose_name_plural', f'{self.model.__name__} List')}" if self.action and self.action == "list" else f"{getattr(self.model._meta, 'verbose_name', f'{self.model.__name__}')} Detail" if self.action and self.action == "detail" else f"{self.action.title()} {getattr(self.model._meta, 'verbose_name', {self.model.__name__})}" if self.action else "Home"),
+            "page_title": _(f"{getattr(self.model._meta, 'verbose_name_plural', f'{self.model.__name__} List')}" if self.action and self.action == "list" else f"{getattr(self.model._meta, 'verbose_name', f'{self.model.__name__}')} Detail" if self.action and self.action == "detail" else f"{self.action.title()} {getattr(self.model._meta, 'verbose_name', {self.model.__name__})}" if self.action else "Home"),
         }
 
         # synchornize the default app context with the context
@@ -77,6 +76,9 @@ class CustomViewSetMixin(UpdateView, DetailView, ListView, TemplateView, Context
 
     # action (expected to be passed in as_view() method from urls.py)
     action = None
+
+    # page specific snippets
+    snippet_template = None
 
     def get_success_url(self):
         look_up_field = self.look_up_field if hasattr(self, 'look_up_field') else None
@@ -154,17 +156,19 @@ class CustomViewSetMixin(UpdateView, DetailView, ListView, TemplateView, Context
     def form_valid(self, form):
         try:
             if form.is_valid():
-                # call model's full_clean method to validate required additional validations
-                form.instance.full_clean()
+                # call model's `validate_unique()` method to validate `unique_together`
+                # this will also raise a `ValidationError` instead of default `IntegrityError`
+                form.instance.validate_unique()
                 # If the form is valid, save the associated model.
                 self.object = form.save()
-
+                # add success message
                 messages.add_message(
                     self.request, messages.SUCCESS, self.get_success_message()
                 )
                 return super().form_valid(form)
 
         except Exception as exception:
+            # call custom exception message handler to generate message
             self.get_exception_message(form=form, exception=exception)
             return super().form_invalid(form)
 
@@ -190,18 +194,21 @@ class CustomViewSetMixin(UpdateView, DetailView, ListView, TemplateView, Context
                                 messages.add_message(
                                     self.request, messages.ERROR, message
                                 )
+                                return
                         else:
                             messages.add_message(
                                 self.request, messages.ERROR, value
                             )
+                            return
             else:
                 messages.add_message(
                     self.request, messages.ERROR, exception.message
                 )
-        else:
-            messages.add_message(
-                self.request, messages.ERROR, self.get_error_message()
-            )
+                return
+        messages.add_message(
+            self.request, messages.ERROR, self.get_error_message()
+        )
+        return
 
     def get_success_message(self):
         if self.action and hasattr(self, f"{self.action}_success_message"):
@@ -209,7 +216,7 @@ class CustomViewSetMixin(UpdateView, DetailView, ListView, TemplateView, Context
         elif self.success_message:
             return self.success_message
         elif self.action:
-            return _(f"{str(self.model.__name__).title()} {self.action.lower().title()}d successfully")
+            return _(f"{getattr(self.model._meta, 'verbose_name', {self.model.__name__}).title()} {self.action.title()}d Successfully")
         else:
             return _("SUCCESS")
 
@@ -219,7 +226,7 @@ class CustomViewSetMixin(UpdateView, DetailView, ListView, TemplateView, Context
         elif self.error_message:
             return self.error_message
         elif self.action:
-            return _(f"Failed to {self.action} {str(self.model.__name__).title()}")
+            return _(f"Failed to {self.action.title()} {getattr(self.model._meta, 'verbose_name', {self.model.__name__}).title()}")
         else:
             return _("ERROR")
 

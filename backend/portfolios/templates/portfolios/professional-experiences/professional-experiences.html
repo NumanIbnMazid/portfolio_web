@@ -1,12 +1,15 @@
 {% extends "admin-panel/base.html" %}
 
+{% load custom_tags %}
+
 {% block content %}
 
 <!-- Skills Add Button -->
 <button class="btn-primary block text-sm font-semibold rounded-lg p-3 my-4 text-center jquery-ui-dialog-opener"
-  hx-get="{% url 'portfolios:skill_create' %}" hx-trigger="click" hx-target="#main" hx-indicator="#htmxLoaderIndicator"
+  hx-get="{% url 'portfolios:professional_experience_create' %}" hx-trigger="click" hx-target="#main"
+  hx-indicator="#htmxLoaderIndicator"
   hx-swap="outerHTML swap:0.3s">
-  <i class="fas fa-plus"></i> Add Skill
+  <i class="fas fa-plus"></i> Add Professional Experience
 </button>
 
 
@@ -26,22 +29,22 @@
     </div>
     <div class="flex flex-wrap">
       <div class="font-semibold shadow-lg p-1 rounded-md">
-        {{ object.title }}
+        {{ object.company }}
       </div>
       <div>
         <span class="ml-2">
           <i class="fas fa-minus-circle text-danger text-xl cursor-pointer"
-            hx-get="{% url 'portfolios:skill_delete' slug=object.slug %}" hx-trigger="click" hx-target="#main"
+            hx-get="{% url 'portfolios:professional_experience_delete' slug=object.slug %}" hx-trigger="click" hx-target="#main"
             hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML swap:0.3s"></i>
         </span>
         <span class="ml-1">
           <i class="fas fa-edit text-primary text-xl cursor-pointer"
-            hx-get="{% url 'portfolios:skill_update' slug=object.slug %}" hx-trigger="click" hx-target="#main"
+            hx-get="{% url 'portfolios:professional_experience_update' slug=object.slug %}" hx-trigger="click" hx-target="#main"
             hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML swap:0.3s"></i>
         </span>
         <span class="ml-1">
           <i class="fas fa-eye text-info text-xl cursor-pointer"
-            hx-get="{% url 'portfolios:skill_detail' slug=object.slug %}" hx-trigger="click" hx-target="#main"
+            hx-get="{% url 'portfolios:professional_experience_detail' slug=object.slug %}" hx-trigger="click" hx-target="#main"
             hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML swap:0.3s"></i>
         </span>
       </div>
@@ -60,5 +63,21 @@
 <!-- include modal form -->
 {% include "snippets/form-modal.html" %}
 {% include "snippets/detail-modal.html" %}
+
+{# include page specific snippet template #}
+
+{% if snippet_template %}
+
+{% if snippet_template|get_type == 'list' %}
+
+{% for template in snippet_template %}
+{% include template %}
+{% endfor %}
+
+{% else %}
+{% include snippet_template %}
+{% endif %}
+
+{% endif %}
 
 {% endblock %}

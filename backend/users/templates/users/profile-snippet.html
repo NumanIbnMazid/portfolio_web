@@ -1,0 +1,15 @@
+{% block additional_head_scripts %}
+
+<script>
+  // document ready function
+  $(function () {
+
+    $("#datepicker").datepicker({
+      inline: true,
+      maxDate: new Date($.now()),
+      dateFormat: "yy-mm-dd"
+    });
+  })
+</script>
+
+{% endblock %}

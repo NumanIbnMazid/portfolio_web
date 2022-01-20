@@ -1,6 +1,5 @@
 from django import forms
-from portfolios.models import Skill
-from django.core.exceptions import NON_FIELD_ERRORS
+from portfolios.models import Skill, ProfessionalExperience
 
 
 # ----------------------------------------------------
@@ -12,9 +11,12 @@ class SkillForm(forms.ModelForm):
     class Meta:
         model = Skill
         fields = ('title', 'image')
-        # widgets = {
-            # 'title': forms.TextInput(attrs={'class': 'form-control'}),
-            # 'description': forms.TextInput(attrs={'class': 'form-control'}),
-            # 'image': forms.FileInput(attrs={'class': 'form-control'}),
-            # 'slug': forms.TextInput(attrs={'class': 'form-control'}),
-        # }
+
+class ProfessionalExperienceForm(forms.ModelForm):
+    class Meta:
+        model = ProfessionalExperience
+        fields = ('company', 'address', 'designation', 'job_type', 'start_date', 'end_date', 'currently_working', 'description')
+        widgets = {
+            'start_date': forms.TextInput(attrs={'class': 'form-control', 'id': 'start_date'}),
+            'end_date': forms.TextInput(attrs={'class': 'form-control', 'id': 'end_date'}),
+        }

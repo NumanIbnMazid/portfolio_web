@@ -1,5 +1,7 @@
 {% extends "admin-panel/base.html" %}
 
+{% load custom_tags %}
+
 {% block content %}
 
 <div class="bg-gray-100 dark:bg-gray-800">
@@ -222,7 +224,24 @@
   </div>
 </div>
 
-<!-- include modal form -->
+{# include modal form #}
+
 {% include "snippets/form-modal.html" %}
+
+{# include page specific snippet template #}
+
+{% if snippet_template %}
+
+{% if snippet_template|get_type == 'list' %}
+
+{% for template in snippet_template %}
+{% include template %}
+{% endfor %}
+
+{% else %}
+{% include snippet_template %}
+{% endif %}
+
+{% endif %}
 
 {% endblock %}
