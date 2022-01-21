@@ -5,7 +5,7 @@ from utils.mixins import CustomViewSetMixin
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
-skill_decorators = [login_required]
+skill_decorators = professional_experience_decorators= [login_required]
 
 
 
@@ -39,11 +39,13 @@ class SkillView(CustomViewSetMixin):
         return super().form_valid(form)
 
 
+@method_decorator(professional_experience_decorators, name='dispatch')
 class ProfessionalExperienceView(CustomViewSetMixin):
     template_name = "portfolios/professional-experiences/professional-experiences.html"
     snippet_template = "portfolios/professional-experiences/professional-experiences-snippet.html"
     model = ProfessionalExperience
     form_class = ProfessionalExperienceForm
+    paginate_by = 4
     success_url = 'portfolios:professional_experiences'
     lookup_field = 'slug'
     url_list = ["professional_experiences", "professional_experience_create", "professional_experience_detail", "professional_experience_update", "professional_experience_delete"]

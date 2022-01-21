@@ -47,7 +47,7 @@
                 {% if field.get_internal_type in "FileField" and object|getattribute:field.name is not None %}
                 <img src="{{ object|getattribute:field.name }}" alt="{{ object|getattribute:field.name }}">
                 {% else %}
-                <span>{{ object|getattribute:field.name|default:"---" }}</span>
+                <span>{{ object|getattribute:field.name|default:"---"|safe|linebreaks }}</span>
                 {% endif %}
               </p>
             </div>

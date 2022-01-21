@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from utils.snippets import autoslugFromUUID, autoslugWithFieldAndUUID
 from django.utils.translation import gettext_lazy as _
 from portfolios.file_upload_helpers import (
-    skill_icon_path, professional_experience_media_path, education_media_path, certification_media_path, project_media_path, interest_icon_path, testimonial_image_path
+    skill_icon_path, professional_experience_company_image_path, professional_experience_media_path, education_media_path, certification_media_path, project_media_path, interest_icon_path, testimonial_image_path
 )
 
 
@@ -126,7 +126,8 @@ class ProfessionalExperience(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="user_professional_experiences")
     slug = models.SlugField(max_length=255, unique=True)
     company = models.CharField(max_length=150)
-    address = models.CharField(max_length=254)
+    company_image = models.ImageField(upload_to=professional_experience_company_image_path, blank=True, null=True)
+    address = models.CharField(max_length=254, blank=True, null=True)
     designation = models.CharField(max_length=150)
     job_type = models.CharField(max_length=20, choices=JobType.choices, default=JobType.FULL_TIME)
     start_date = models.DateField()
@@ -143,7 +144,7 @@ class ProfessionalExperience(models.Model):
         db_table = 'professional_experience'
         verbose_name = 'Professional Experience'
         verbose_name_plural = 'Professional Experiences'
-        ordering = ['-created_at']
+        ordering = ('-currently_working', '-start_date')
         get_latest_by = "created_at"
 
     def __str__(self):

@@ -1,56 +1,74 @@
 {% extends "admin-panel/base.html" %}
 
-{% load custom_tags %}
+{% load i18n custom_tags %}
 
 {% block content %}
 
 <!-- Skills Add Button -->
 <button class="btn-primary block text-sm font-semibold rounded-lg p-3 my-4 text-center jquery-ui-dialog-opener"
   hx-get="{% url 'portfolios:professional_experience_create' %}" hx-trigger="click" hx-target="#main"
-  hx-indicator="#htmxLoaderIndicator"
-  hx-swap="outerHTML swap:0.3s">
+  hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML swap:0.3s">
   <i class="fas fa-plus"></i> Add Professional Experience
 </button>
 
-
-<div class="flex flex-wrap flex-row items-center content-center space-x-4">
+<div class="grid gap-6 mb-8 sm:grid-cols-1 md:grid-cols-2" id="professional-experiences">
 
   {% for object in object_list %}
+  <div class="h-fit p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800" id="professional-experience-item">
 
-  <!-- skill card -->
-  <div class="flex flex-wrap items-center content-center p-4 m-4 bg-light hover:bg-slate-300 dark:hover:bg-gray-800 dark:bg-gray-700 text-gray-700
-      dark:text-gray-200 rounded-lg">
-    <div class="mr-2">
-      {% if object.image %}
-      <img src="{{ object.image.url }}" class="float-left" alt="{{ object.title }}" height="30" width="30">
-      {% else %}
-      <i class="fas fa-briefcase mr-1"></i>
-      {% endif %}
-    </div>
-    <div class="flex flex-wrap">
-      <div class="font-semibold shadow-lg p-1 rounded-md">
-        {{ object.company }}
+    <!-- company name and image -->
+    <div class="flex flex-wrap flex-row space-x-4">
+      <div class="md:w-1/12">
+        {% if object.company_image %}
+        <img src="{{ object.company_image.url }}" class="float-left" alt="{{ object.title }}" height="30" width="30">
+        {% else %}
+        <i class="fas fa-briefcase mr-1"></i>
+        {% endif %}
       </div>
-      <div>
+      <div class="md:w-8/12">
+        <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
+          {{forloop.counter}}. {{ object.company }}
+        </h4>
+      </div>
+      <div class="md:w-2/12 text-right">
         <span class="ml-2">
           <i class="fas fa-minus-circle text-danger text-xl cursor-pointer"
-            hx-get="{% url 'portfolios:professional_experience_delete' slug=object.slug %}" hx-trigger="click" hx-target="#main"
-            hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML swap:0.3s"></i>
+            hx-get="{% url 'portfolios:professional_experience_delete' slug=object.slug %}" hx-trigger="click"
+            hx-target="#main" hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML swap:0.3s"></i>
         </span>
         <span class="ml-1">
           <i class="fas fa-edit text-primary text-xl cursor-pointer"
-            hx-get="{% url 'portfolios:professional_experience_update' slug=object.slug %}" hx-trigger="click" hx-target="#main"
-            hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML swap:0.3s"></i>
+            hx-get="{% url 'portfolios:professional_experience_update' slug=object.slug %}" hx-trigger="click"
+            hx-target="#main" hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML swap:0.3s"></i>
         </span>
         <span class="ml-1">
           <i class="fas fa-eye text-info text-xl cursor-pointer"
-            hx-get="{% url 'portfolios:professional_experience_detail' slug=object.slug %}" hx-trigger="click" hx-target="#main"
-            hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML swap:0.3s"></i>
+            hx-get="{% url 'portfolios:professional_experience_detail' slug=object.slug %}" hx-trigger="click"
+            hx-target="#main" hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML swap:0.3s"></i>
         </span>
       </div>
     </div>
-  </div>
 
+    <!-- designation -->
+    <h4 class="font-semibold text-gray-600 dark:text-gray-300">{{ object.designation }}</h4>
+
+    <!-- job type and job duration -->
+    <div class="grid my-2 sm:grid-cols-1 md:grid-cols-2 text-slate-500 font-bold">
+      <div>
+        {{ object.start_date }} - {{ object.get_end_date }}
+      </div>
+      <div class="md:text-right w-11/12">
+        {{ object.job_type|default:'-' }}
+      </div>
+    </div>
+
+    <h6 class="text-sm text-slate-500">{{ object.address|default:'-' }}</h6>
+
+    <p class="my-2 text-gray-600 dark:text-gray-400">
+      {{ object.description|linebreaks|safe }}
+    </p>
+
+  </div>
   {% empty %}
   <div class="bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3 mx-4 text-center rounded relative"
     role="alert">
@@ -58,6 +76,33 @@
   </div>
   {% endfor %}
 
+</div>
+
+<div class="pagination text-center p-4">
+  <span class="step-links">
+    {% if page_obj.has_previous %}
+    <button class="btn-primary" hx-get="{% url 'portfolios:professional_experiences' %}?page=1" hx-trigger="click"
+      hx-target="#main" hx-swap="outerHTML swap:0.3s" hx-indicator="#htmxLoaderIndicator">&laquo; first</button>
+    <button class="btn-primary"
+      hx-get="{% url 'portfolios:professional_experiences' %}?page={{ page_obj.previous_page_number }}"
+      hx-trigger="click" hx-target="#main" hx-swap="outerHTML swap:0.3s"
+      hx-indicator="#htmxLoaderIndicator">previous</button>
+    {% endif %}
+
+    <span class="current">
+      Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+    </span>
+
+    {% if page_obj.has_next %}
+    <button class="btn-primary"
+      hx-get="{% url 'portfolios:professional_experiences' %}?page={{ page_obj.next_page_number }}" hx-trigger="click"
+      hx-target="#main" hx-swap="outerHTML swap:0.3s" hx-indicator="#htmxLoaderIndicator">next</button>
+    <button class="btn-primary" href="?page={{ page_obj.paginator.num_pages }}"
+      hx-get="{% url 'portfolios:professional_experiences' %}?page={{ page_obj.paginator.num_pages }}"
+      hx-trigger="click" hx-target="#main" hx-swap="outerHTML swap:0.3s" hx-indicator="#htmxLoaderIndicator">last
+      &raquo;</button>
+    {% endif %}
+  </span>
 </div>
 
 <!-- include modal form -->
