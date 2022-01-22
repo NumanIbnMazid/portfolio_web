@@ -6,8 +6,8 @@
 
 <!-- Skills Add Button -->
 <button class="btn-primary block text-sm font-semibold rounded-lg p-3 my-4 text-center jquery-ui-dialog-opener"
-  hx-get="{% url 'portfolios:professional_experience_create' %}" hx-trigger="click" hx-target="#main"
-  hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML swap:0.3s">
+  hx-get="{% url 'portfolios:professional_experience_create' %}?page={{ page_obj.number }}" hx-trigger="click"
+  hx-target="#main" hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML swap:0.3s">
   <i class="fas fa-plus"></i> Add Professional Experience
 </button>
 
@@ -27,24 +27,24 @@
       </div>
       <div class="md:w-8/12">
         <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
-          {{forloop.counter}}. {{ object.company }}
+          {{ object.company }}
         </h4>
       </div>
       <div class="md:w-2/12 text-right">
         <span class="ml-2">
           <i class="fas fa-minus-circle text-danger text-xl cursor-pointer"
-            hx-get="{% url 'portfolios:professional_experience_delete' slug=object.slug %}" hx-trigger="click"
-            hx-target="#main" hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML swap:0.3s"></i>
+            hx-get="{% url 'portfolios:professional_experience_delete' slug=object.slug %}?page={{ page_obj.number }}"
+            hx-trigger="click" hx-target="#main" hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML swap:0.3s"></i>
         </span>
         <span class="ml-1">
           <i class="fas fa-edit text-primary text-xl cursor-pointer"
-            hx-get="{% url 'portfolios:professional_experience_update' slug=object.slug %}" hx-trigger="click"
-            hx-target="#main" hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML swap:0.3s"></i>
+            hx-get="{% url 'portfolios:professional_experience_update' slug=object.slug %}?page={{ page_obj.number }}"
+            hx-trigger="click" hx-target="#main" hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML swap:0.3s"></i>
         </span>
         <span class="ml-1">
           <i class="fas fa-eye text-info text-xl cursor-pointer"
-            hx-get="{% url 'portfolios:professional_experience_detail' slug=object.slug %}" hx-trigger="click"
-            hx-target="#main" hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML swap:0.3s"></i>
+            hx-get="{% url 'portfolios:professional_experience_detail' slug=object.slug %}?page={{ page_obj.number }}"
+            hx-trigger="click" hx-target="#main" hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML swap:0.3s"></i>
         </span>
       </div>
     </div>
@@ -81,10 +81,12 @@
 <div class="pagination text-center p-4">
   <span class="step-links">
     {% if page_obj.has_previous %}
-    <button class="btn-primary" hx-get="{% url 'portfolios:professional_experiences' %}?page=1" hx-trigger="click"
-      hx-target="#main" hx-swap="outerHTML swap:0.3s" hx-indicator="#htmxLoaderIndicator">&laquo; first</button>
+    <button class="btn-primary" hx-get="{% url 'portfolios:professional_experiences' %}?page=1"
+      hx-push-url="{% url 'portfolios:professional_experiences' %}?page=1" hx-trigger="click" hx-target="#main"
+      hx-swap="outerHTML swap:0.3s" hx-indicator="#htmxLoaderIndicator">&laquo; first</button>
     <button class="btn-primary"
       hx-get="{% url 'portfolios:professional_experiences' %}?page={{ page_obj.previous_page_number }}"
+      hx-push-url="{% url 'portfolios:professional_experiences' %}?page={{ page_obj.previous_page_number }}"
       hx-trigger="click" hx-target="#main" hx-swap="outerHTML swap:0.3s"
       hx-indicator="#htmxLoaderIndicator">previous</button>
     {% endif %}
@@ -95,10 +97,13 @@
 
     {% if page_obj.has_next %}
     <button class="btn-primary"
-      hx-get="{% url 'portfolios:professional_experiences' %}?page={{ page_obj.next_page_number }}" hx-trigger="click"
-      hx-target="#main" hx-swap="outerHTML swap:0.3s" hx-indicator="#htmxLoaderIndicator">next</button>
-    <button class="btn-primary" href="?page={{ page_obj.paginator.num_pages }}"
+      hx-get="{% url 'portfolios:professional_experiences' %}?page={{ page_obj.next_page_number }}"
+      hx-push-url="{% url 'portfolios:professional_experiences' %}?page={{ page_obj.next_page_number }}"
+      hx-trigger="click" hx-target="#main" hx-swap="outerHTML swap:0.3s"
+      hx-indicator="#htmxLoaderIndicator">next</button>
+    <button class="btn-primary"
       hx-get="{% url 'portfolios:professional_experiences' %}?page={{ page_obj.paginator.num_pages }}"
+      hx-push-url="{% url 'portfolios:professional_experiences' %}?page={{ page_obj.paginator.num_pages }}"
       hx-trigger="click" hx-target="#main" hx-swap="outerHTML swap:0.3s" hx-indicator="#htmxLoaderIndicator">last
       &raquo;</button>
     {% endif %}

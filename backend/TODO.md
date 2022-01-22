@@ -5,4 +5,4 @@
 * Add Translation
 * pagination (lazy loading)
 * Django Factory Boy
-* Fix paginator page number while updating content
+* Multi Item Delete

@@ -26,6 +26,7 @@ class ContextMixinView(ContextMixin):
             context = super().get_context_data(**kwargs)
         except:
             context = {}
+
         # default app contexts
         default_app_contexts = {
             # meta description
@@ -68,6 +69,9 @@ class ContextMixinView(ContextMixin):
 
 class CustomViewSetMixin(UpdateView, DetailView, ListView, TemplateView, ContextMixinView):
 
+    success_url = None
+    lookup_field = 'pk'
+
     # default messages
     success_message = None
     error_message = None
@@ -83,7 +87,10 @@ class CustomViewSetMixin(UpdateView, DetailView, ListView, TemplateView, Context
 
     def get_success_url(self):
         look_up_field = self.look_up_field if hasattr(self, 'look_up_field') else None
-        return reverse(self.success_url, kwargs={look_up_field: getattr(self.object, look_up_field)} if look_up_field else None)
+        URL = reverse(self.success_url, kwargs={look_up_field: getattr(self.object, look_up_field)} if look_up_field else None)
+        if 'page' in self.request.GET:
+            URL += f"?page={self.request.GET['page']}"
+        return URL
 
     def get(self, request, *args, **kwargs):
         try:
@@ -95,6 +102,15 @@ class CustomViewSetMixin(UpdateView, DetailView, ListView, TemplateView, Context
         # do the rest in finally block
         finally:
             self.object_list = self.get_queryset()
+
+            # print(self.request.GET.get("page"), "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
+            # self.kwargs.update({"page": self.request.GET.get("page"), "is_paginated": True})
+            # self.success_url = self.get_success_url() + "?page=2"
+            # print(self.get_success_url(), "YYYYYYYYYYYYYYYYYYYYYYYYYY")
+            # page = self.kwargs.get(self.page_kwarg) or self.request.GET.get(self.page_kwarg) or self.request.POST.get("page") or 1
+            # self.kwargs.update({self.page_kwarg: page})
+            # print(self.kwargs, '2222**************************')
+
             return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
