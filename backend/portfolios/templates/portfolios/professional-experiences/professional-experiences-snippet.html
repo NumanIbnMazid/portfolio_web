@@ -1,3 +1,5 @@
+{% load static %}
+
 {% block extra_body %}
 
 {# Professional Experiene Media File Data #}
@@ -6,7 +8,7 @@
 <div id="fileData" class="hidden p-4 mt-2">
   {% for media in object.professional_experience_media.all %}
   <li class="text-primary p-1">
-    {{ media.file.url }}
+    <a href="{{ media.file.url }}" target="_blank">{{ media.file.url }}</a>
     <span class="ml-2">
       <i class="fas fa-minus-circle text-danger text-xl cursor-pointer"
         hx-get="{% url 'portfolios:professional_experience_media_delete' slug=media.slug %}?page={{ page_obj.number }}"

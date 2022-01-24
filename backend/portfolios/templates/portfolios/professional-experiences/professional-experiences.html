@@ -78,37 +78,9 @@
 
 </div>
 
-<div class="pagination text-center p-4">
-  <span class="step-links">
-    {% if page_obj.has_previous %}
-    <button class="btn-primary" hx-get="{% url 'portfolios:professional_experiences' %}?page=1"
-      hx-push-url="{% url 'portfolios:professional_experiences' %}?page=1" hx-trigger="click" hx-target="#main"
-      hx-swap="outerHTML swap:0.3s" hx-indicator="#htmxLoaderIndicator">&laquo; first</button>
-    <button class="btn-primary"
-      hx-get="{% url 'portfolios:professional_experiences' %}?page={{ page_obj.previous_page_number }}"
-      hx-push-url="{% url 'portfolios:professional_experiences' %}?page={{ page_obj.previous_page_number }}"
-      hx-trigger="click" hx-target="#main" hx-swap="outerHTML swap:0.3s"
-      hx-indicator="#htmxLoaderIndicator">previous</button>
-    {% endif %}
-
-    <span class="current">
-      Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-    </span>
-
-    {% if page_obj.has_next %}
-    <button class="btn-primary"
-      hx-get="{% url 'portfolios:professional_experiences' %}?page={{ page_obj.next_page_number }}"
-      hx-push-url="{% url 'portfolios:professional_experiences' %}?page={{ page_obj.next_page_number }}"
-      hx-trigger="click" hx-target="#main" hx-swap="outerHTML swap:0.3s"
-      hx-indicator="#htmxLoaderIndicator">next</button>
-    <button class="btn-primary"
-      hx-get="{% url 'portfolios:professional_experiences' %}?page={{ page_obj.paginator.num_pages }}"
-      hx-push-url="{% url 'portfolios:professional_experiences' %}?page={{ page_obj.paginator.num_pages }}"
-      hx-trigger="click" hx-target="#main" hx-swap="outerHTML swap:0.3s" hx-indicator="#htmxLoaderIndicator">last
-      &raquo;</button>
-    {% endif %}
-  </span>
-</div>
+{# PAGINATION #}
+<!-- pagination template -->
+{% include "snippets/pagination.html" %}
 
 <!-- include modal form -->
 {% include "snippets/form-modal.html" %}

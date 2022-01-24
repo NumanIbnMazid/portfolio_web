@@ -24,8 +24,7 @@
     class="bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all dark:bg-gray-800 dark:text-gray-200">
 
     <!-- main form -->
-    <form id="djangoForm" method="POST" autocomplete="off" enctype='multipart/form-data'
-      hx-encoding="multipart/form-data">
+    <form id="djangoForm" method="POST" autocomplete="off" enctype='multipart/form-data' hx-encoding="multipart/form-data">
 
       {% csrf_token %}
 
@@ -75,8 +74,9 @@
           <div class="flex items-center mb-5">
             <div class="flex-1 h-full max-w-4xl mx-auto overflow-hidden rounded-lg shadow-xl p-4">
 
-
+              {# START DJANGO FORM #}
               {{ form|crispy }}
+              {# END DJANGO FORM #}
 
 
             </div>

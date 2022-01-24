@@ -1,10 +1,6 @@
 from django import forms
 from portfolios.models import Skill, ProfessionalExperience, ProfessionalExperienceMedia
-from django.conf import settings
-import os
-from django.core.files.uploadedfile import UploadedFile
-from django.template.defaultfilters import filesizeformat
-from utils.multiforms import MultiModelForm
+from utils.validators import get_validated_file, get_validated_image
 
 
 # ----------------------------------------------------
@@ -17,9 +13,16 @@ class SkillForm(forms.ModelForm):
         model = Skill
         fields = ('title', 'image')
 
+    def clean_image(self):
+        image = self.cleaned_data.get('image')
+        return get_validated_image(image)
+
+
+# ----------------------------------------------------
+# *** Professional Experience Forms ***
+# ----------------------------------------------------
+
 class ProfessionalExperienceForm(forms.ModelForm):
-    # multiple file form field
-    # media = forms.FileField(required=False, widget=forms.ClearableFileInput(attrs={'multiple': True}))
     class Meta:
         model = ProfessionalExperience
         fields = ['company', 'company_image', 'address', 'designation', 'job_type',
@@ -36,6 +39,15 @@ class ProfessionalExperienceForm(forms.ModelForm):
             ),
         }
 
+    def clean(self):
+        if self.cleaned_data.get('end_date', None) is None and not self.cleaned_data.get('currently_working', None):
+            self.add_error('end_date', "End date is required if you are not currently working here.")
+        elif self.cleaned_data.get('end_date') is not None and self.cleaned_data.get('currently_working'):
+            self.add_error('end_date', "End date is not required if you are currently working here.")
+            self.add_error('currently_working', "Currently working is not required if you provide an end date.")
+            raise forms.ValidationError("Conflicting with `End date` and `Currently working`. Please specify only one.")
+        return self.cleaned_data
+
     def clean_end_date(self):
         end_date = self.cleaned_data.get('end_date')
         if end_date and end_date <= self.cleaned_data.get('start_date'):
@@ -44,16 +56,7 @@ class ProfessionalExperienceForm(forms.ModelForm):
 
     def clean_company_image(self):
         company_image = self.cleaned_data.get('company_image')
-        if company_image and isinstance(company_image, UploadedFile):
-            file_extension = os.path.splitext(company_image.name)[1]
-            allowed_image_types = settings.ALLOWED_IMAGE_TYPES
-            if not file_extension in allowed_image_types:
-                raise forms.ValidationError("Only %s file formats are supported! Current image format is %s" % (
-                    allowed_image_types, file_extension))
-            if company_image.size > settings.MAX_UPLOAD_SIZE:
-                raise forms.ValidationError("Please keep filesize under %s. Current filesize %s" % (
-                    filesizeformat(settings.MAX_UPLOAD_SIZE), filesizeformat(company_image.size)))
-        return company_image
+        return get_validated_image(company_image)
 
 class ProfessionalExperienceMediaForm(forms.ModelForm):
     class Meta:
@@ -61,8 +64,14 @@ class ProfessionalExperienceMediaForm(forms.ModelForm):
         fields = ("file",)
 
 class ProfessionalExperienceWithMediaForm(ProfessionalExperienceForm):
+    """ ProfessionalExperienceWithMediaForm = ProfessionalExperienceForm + ProfessionalExperienceMediaForm """
+
     # multiple file form field
     file = forms.FileField(required=False, widget=forms.ClearableFileInput(attrs={'multiple': True}))
 
     class Meta(ProfessionalExperienceForm.Meta):
         fields = ProfessionalExperienceForm.Meta.fields + ['file',]
+
+    def clean_file(self):
+        file = self.cleaned_data.get('file')
+        return get_validated_file(file)

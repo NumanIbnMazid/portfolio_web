@@ -32,21 +32,23 @@ if settings.DEBUG:
         static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
     # This allows the error pages to be debugged during development
-    urlpatterns += [
-        path(
-            "400/",
-            default_views.bad_request,
-            kwargs={"exception": Exception("Bad Request!")}, name="URL_400",
-        ),
-        path(
-            "403/",
-            default_views.permission_denied,
-            kwargs={"exception": Exception("Permission Denied")}, name="URL_403",
-        ),
-        path(
-            "404/",
-            default_views.page_not_found,
-            kwargs={"exception": Exception("Page not Found")}, name="URL_404",
-        ),
-        path("500/", default_views.server_error, name="URL_500"),
-    ]
+
+    # TODO: active Exception handler URLs and also active htmx redirection from htmx.config.js
+    # urlpatterns += [
+    #     path(
+    #         "400/",
+    #         default_views.bad_request,
+    #         kwargs={"exception": Exception("Bad Request!")}, name="URL_400",
+    #     ),
+    #     path(
+    #         "403/",
+    #         default_views.permission_denied,
+    #         kwargs={"exception": Exception("Permission Denied")}, name="URL_403",
+    #     ),
+    #     path(
+    #         "404/",
+    #         default_views.page_not_found,
+    #         kwargs={"exception": Exception("Page not Found")}, name="URL_404",
+    #     ),
+    #     path("500/", default_views.server_error, name="URL_500"),
+    # ]

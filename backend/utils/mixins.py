@@ -3,10 +3,10 @@ from django.views.generic.base import ContextMixin
 from django.views.generic import UpdateView, TemplateView, ListView
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
-from django.http import HttpResponseForbidden, HttpResponseRedirect, Http404
+from django.http import HttpResponseRedirect, Http404
+from django.core.exceptions import ImproperlyConfigured
 from django.contrib import messages
 from utils.helpers import now
-from django.core.exceptions import ImproperlyConfigured
 
 
 """
@@ -21,6 +21,10 @@ class ContextMixinView(ContextMixin):
 
     def get_context_data(self, **kwargs):
         """Insert custom contexts into the context dict."""
+
+        # Assuring if defined success_url as it has other dependencies
+        if self.success_url is None:
+            raise ImproperlyConfigured("Requires either a definition of `success_url`")
 
         try:
             context = super().get_context_data(**kwargs)
@@ -47,8 +51,11 @@ class ContextMixinView(ContextMixin):
             "url_list": self.url_list if hasattr(self, "url_list") else [],
             "display_fields": self.model._meta.get_fields(),
             "action": self.action if self.action else None,
+            # head & page title
             "head_title": _(f"{getattr(self.model._meta, 'verbose_name_plural', f'{self.model.__name__} List')}" if self.action and self.action == "list" else f"{getattr(self.model._meta, 'verbose_name', f'{self.model.__name__}')} Detail" if self.action and self.action == "detail" else f"{self.action.title()} {getattr(self.model._meta, 'verbose_name', {self.model.__name__})}" if self.action else "Home"),
             "page_title": _(f"{getattr(self.model._meta, 'verbose_name_plural', f'{self.model.__name__} List')}" if self.action and self.action == "list" else f"{getattr(self.model._meta, 'verbose_name', f'{self.model.__name__}')} Detail" if self.action and self.action == "detail" else f"{self.action.title()} {getattr(self.model._meta, 'verbose_name', {self.model.__name__})}" if self.action else "Home"),
+            # Object List URL
+            "object_list_url": self.success_url,
         }
 
         # synchornize the default app context with the context
@@ -110,7 +117,18 @@ class CustomViewSetMixin(UpdateView, ListView, TemplateView, ContextMixinView):
         # do the rest in finally block
         finally:
             self.object_list = self.get_queryset()
-            return super().get(request, *args, **kwargs)
+            try:
+                return super().get(request, *args, **kwargs)
+            except Exception as exception:
+                if "That page contains no results" in str(exception):
+                    return HttpResponseRedirect(reverse(self.success_url))
+                print("**************************************** EXCEPTION ****************************************")
+                print(exception)
+                print("**************************************** EXCEPTION ****************************************")
+                messages.add_message(
+                    self.request, messages.ERROR, "Something went wrong. Please try again later."
+                )
+                return HttpResponseRedirect(reverse('home'))
 
     def post(self, request, *args, **kwargs):
         # handle actions

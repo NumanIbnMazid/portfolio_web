@@ -81,7 +81,6 @@ class ProfessionalExperienceView(CustomViewSetMixin):
 
     def media_delete(self, request, *args, **kwargs):
         qs = ProfessionalExperienceMedia.objects.filter(slug=self.kwargs.get('slug'))
-        experience_object = qs.first().professional_experience
         if qs:
             # delete object
             qs.delete()

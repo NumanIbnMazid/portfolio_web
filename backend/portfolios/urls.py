@@ -4,6 +4,7 @@ from portfolios.views import (
 )
 
 urlpatterns = [
+
     # ----------------------------------------------------
     # *** Skill ***
     # ----------------------------------------------------
@@ -12,6 +13,7 @@ urlpatterns = [
     path("skills/<slug>/detail/", SkillView.as_view(action="detail"), name="skill_detail"),
     path("skills/<slug>/update/", SkillView.as_view(action="update"), name="skill_update"),
     path("skills/<slug>/delete/", SkillView.as_view(action="delete"), name="skill_delete"),
+
     # ----------------------------------------------------
     # *** Professional Experience ***
     # ----------------------------------------------------
