@@ -4,6 +4,9 @@ from .models import (
     Skill, ProfessionalExperience, ProfessionalExperienceMedia, Education, EducationMedia, Certification, CertificationMedia, Project, ProjectMedia, Interest, Testimonial
 )
 
+# ----------------------------------------------------
+# *** Skill ***
+# ----------------------------------------------------
 
 class SkillAdmin(CustomModelAdminMixin, admin.ModelAdmin):
     pass
@@ -15,8 +18,15 @@ class SkillAdmin(CustomModelAdminMixin, admin.ModelAdmin):
 admin.site.register(Skill, SkillAdmin)
 
 
+# ----------------------------------------------------
+# *** Professional Experience ***
+# ----------------------------------------------------
+
+class ProfessionalExperienceMediaAdmin(admin.StackedInline):
+    model = ProfessionalExperienceMedia
+
 class ProfessionalExperienceAdmin(CustomModelAdminMixin, admin.ModelAdmin):
-    pass
+    inlines = [ProfessionalExperienceMediaAdmin]
 
     class Meta:
         model = ProfessionalExperience
@@ -25,18 +35,15 @@ class ProfessionalExperienceAdmin(CustomModelAdminMixin, admin.ModelAdmin):
 admin.site.register(ProfessionalExperience, ProfessionalExperienceAdmin)
 
 
-class ProfessionalExperienceMediaAdmin(CustomModelAdminMixin, admin.ModelAdmin):
-    pass
+# ----------------------------------------------------
+# *** Education ***
+# ----------------------------------------------------
 
-    class Meta:
-        model = ProfessionalExperienceMedia
-
-
-admin.site.register(ProfessionalExperienceMedia, ProfessionalExperienceMediaAdmin)
-
+class EducationMediaAdmin(admin.StackedInline):
+    model = EducationMedia
 
 class EducationAdmin(CustomModelAdminMixin, admin.ModelAdmin):
-    pass
+    inlines = [EducationMediaAdmin]
 
     class Meta:
         model = Education
@@ -45,18 +52,15 @@ class EducationAdmin(CustomModelAdminMixin, admin.ModelAdmin):
 admin.site.register(Education, EducationAdmin)
 
 
-class EducationMediaAdmin(CustomModelAdminMixin, admin.ModelAdmin):
-    pass
+# ----------------------------------------------------
+# *** Certification ***
+# ----------------------------------------------------
 
-    class Meta:
-        model = EducationMedia
-
-
-admin.site.register(EducationMedia, EducationMediaAdmin)
-
+class CertificationMediaAdmin(admin.StackedInline):
+    model = CertificationMedia
 
 class CertificationAdmin(CustomModelAdminMixin, admin.ModelAdmin):
-    pass
+    inlines = [CertificationMediaAdmin]
 
     class Meta:
         model = Certification
@@ -65,18 +69,15 @@ class CertificationAdmin(CustomModelAdminMixin, admin.ModelAdmin):
 admin.site.register(Certification, CertificationAdmin)
 
 
-class CertificationMediaAdmin(CustomModelAdminMixin, admin.ModelAdmin):
-    pass
+# ----------------------------------------------------
+# *** Project ***
+# ----------------------------------------------------
 
-    class Meta:
-        model = CertificationMedia
-
-
-admin.site.register(CertificationMedia, CertificationMediaAdmin)
-
+class ProjectMediaAdmin(admin.StackedInline):
+    model = ProjectMedia
 
 class ProjectAdmin(CustomModelAdminMixin, admin.ModelAdmin):
-    pass
+    inlines = [ProjectMediaAdmin]
 
     class Meta:
         model = Project
@@ -85,15 +86,9 @@ class ProjectAdmin(CustomModelAdminMixin, admin.ModelAdmin):
 admin.site.register(Project, ProjectAdmin)
 
 
-class ProjectMediaAdmin(CustomModelAdminMixin, admin.ModelAdmin):
-    pass
-
-    class Meta:
-        model = ProjectMedia
-
-
-admin.site.register(ProjectMedia, ProjectMediaAdmin)
-
+# ----------------------------------------------------
+# *** Interest ***
+# ----------------------------------------------------
 
 class InterestAdmin(CustomModelAdminMixin, admin.ModelAdmin):
     pass
@@ -104,6 +99,10 @@ class InterestAdmin(CustomModelAdminMixin, admin.ModelAdmin):
 
 admin.site.register(Interest, InterestAdmin)
 
+
+# ----------------------------------------------------
+# *** Testimonial ***
+# ----------------------------------------------------
 
 class TestimonialAdmin(CustomModelAdminMixin, admin.ModelAdmin):
     pass

@@ -259,6 +259,14 @@ python-versions = "*"
 Django = "*"
 
 [[package]]
+name = "django-utils-six"
+version = "2.0"
+description = "Forward compatibility django.utils.six for Django 3"
+category = "main"
+optional = false
+python-versions = ">=3.6,<4.0"
+
+[[package]]
 name = "h11"
 version = "0.12.0"
 description = "A pure-Python, bring-your-own-I/O implementation of HTTP/1.1"
@@ -470,7 +478,7 @@ brotli = ["brotli"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "d5e88c53e0847f1a804c10b1806d84ffe5934ec467a2ab1df149e870d4d4862f"
+content-hash = "2970816941ff90ac8e74d06b5d1cc128660bde9a42dde49f7478c097f9e7a858"
 
 [metadata.files]
 argon2-cffi = [
@@ -658,6 +666,10 @@ django-environ = [
 django-safedelete = [
     {file = "django-safedelete-1.1.2.tar.gz", hash = "sha256:d675db57c98a8068b40dedcf802d13c1b8e85287806f79d80049d62c359ca872"},
     {file = "django_safedelete-1.1.2-py3-none-any.whl", hash = "sha256:36581eb9d18e1cf9c3f25cd63c2d5833096a627234850e4c1dccfd3bece71d29"},
+]
+django-utils-six = [
+    {file = "django-utils-six-2.0.tar.gz", hash = "sha256:4ef9d20de679a5b2448429476452493661fe08f23d6e788a8e9816ec05e3c5b0"},
+    {file = "django_utils_six-2.0-py3-none-any.whl", hash = "sha256:8f0e77289d911069a6a15bab5a25ccf2c0fcb8fc4177461dd17470cfdeb94aa6"},
 ]
 h11 = [
     {file = "h11-0.12.0-py3-none-any.whl", hash = "sha256:36a3cb8c0a032f56e2da7084577878a035d3b61d104230d4bd49c0c6b555a9c6"},

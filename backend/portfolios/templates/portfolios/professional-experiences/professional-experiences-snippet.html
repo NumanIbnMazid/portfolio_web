@@ -1,3 +1,24 @@
+{% block extra_body %}
+
+{# Professional Experiene Media File Data #}
+
+{% if object.professional_experience_media %}
+<div id="fileData" class="hidden p-4 mt-2">
+  {% for media in object.professional_experience_media.all %}
+  <li class="text-primary p-1">
+    {{ media.file.url }}
+    <span class="ml-2">
+      <i class="fas fa-minus-circle text-danger text-xl cursor-pointer"
+        hx-get="{% url 'portfolios:professional_experience_media_delete' slug=media.slug %}?page={{ page_obj.number }}"
+        hx-trigger="click" hx-target="#main" hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML swap:0.3s"></i>
+    </span>
+  </li>
+  {% endfor %}
+</div>
+{% endif %}
+
+{% endblock %}
+
 {% block additional_head_scripts %}
 
 <script>
@@ -26,6 +47,26 @@
       maxDate: new Date($.now()),
       dateFormat: "yy-mm-dd"
     });
+
+    function populateProfessionalExperienceMediaData() {
+      // media file input
+      let fileInputDiv = $('#div_id_file');
+
+      if (fileInputDiv.length) {
+        try {
+          // append html to file input div
+          fileInputDiv.append($("#fileData").html())
+
+          // process htmx
+          htmx.process(document.querySelector('#div_id_file'))
+        } catch (error) {
+          console.log(error)
+        }
+      }
+    }
+
+    // populate professional experience media file data
+    populateProfessionalExperienceMediaData()
 
   })
 

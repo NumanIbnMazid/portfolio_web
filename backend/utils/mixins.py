@@ -1,6 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.views.generic.base import ContextMixin
-from django.views.generic import UpdateView, DetailView, TemplateView, ListView
+from django.views.generic import UpdateView, TemplateView, ListView
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
 from django.http import HttpResponseForbidden, HttpResponseRedirect, Http404
@@ -60,6 +60,13 @@ class ContextMixinView(ContextMixin):
             for key, value in additional_context_data.items():
                 context[key] = value
 
+        # look up for custom action method's context data
+        if self.action and hasattr(self, f"get_{self.action}_context_data"):
+            # call action method
+            action_context_data = getattr(self, f"get_{self.action}_context_data")(**kwargs)
+            for key, value in action_context_data.items():
+                context[key] = value
+
         # synchroneize the kwargs with the default app context
         context.update(kwargs)
 
@@ -67,7 +74,7 @@ class ContextMixinView(ContextMixin):
         return context
 
 
-class CustomViewSetMixin(UpdateView, DetailView, ListView, TemplateView, ContextMixinView):
+class CustomViewSetMixin(UpdateView, ListView, TemplateView, ContextMixinView):
 
     success_url = None
     lookup_field = 'pk'
@@ -88,6 +95,7 @@ class CustomViewSetMixin(UpdateView, DetailView, ListView, TemplateView, Context
     def get_success_url(self):
         look_up_field = self.look_up_field if hasattr(self, 'look_up_field') else None
         URL = reverse(self.success_url, kwargs={look_up_field: getattr(self.object, look_up_field)} if look_up_field else None)
+        # add pagination data with url if any
         if 'page' in self.request.GET:
             URL += f"?page={self.request.GET['page']}"
         return URL
@@ -102,18 +110,20 @@ class CustomViewSetMixin(UpdateView, DetailView, ListView, TemplateView, Context
         # do the rest in finally block
         finally:
             self.object_list = self.get_queryset()
-
-            # print(self.request.GET.get("page"), "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
-            # self.kwargs.update({"page": self.request.GET.get("page"), "is_paginated": True})
-            # self.success_url = self.get_success_url() + "?page=2"
-            # print(self.get_success_url(), "YYYYYYYYYYYYYYYYYYYYYYYYYY")
-            # page = self.kwargs.get(self.page_kwarg) or self.request.GET.get(self.page_kwarg) or self.request.POST.get("page") or 1
-            # self.kwargs.update({self.page_kwarg: page})
-            # print(self.kwargs, '2222**************************')
-
             return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
+        # handle actions
+        # handle delete action
+        if self.action and self.object and self.action == "delete":
+            # call delete method
+            return self.delete(request, *args, **kwargs)
+
+        # handle custom action method
+        elif self.action and hasattr(self, f"{self.action}"):
+            # call action method
+            return getattr(self, f"{self.action}")(request, *args, **kwargs)
+
         try:
             self.object = self.get_object()
         # bypass
@@ -124,10 +134,6 @@ class CustomViewSetMixin(UpdateView, DetailView, ListView, TemplateView, Context
 
         # assign object_list
         self.object_list = self.get_queryset()
-
-        if self.action and self.object and self.action == "delete":
-            # call delete method
-            return self.delete(request, *args, **kwargs)
 
         if form.is_valid():
             return self.form_valid(form)
@@ -170,6 +176,10 @@ class CustomViewSetMixin(UpdateView, DetailView, ListView, TemplateView, Context
                 return super().form_valid(form)
 
         except Exception as exception:
+            print("**************************************** EXCEPTION ****************************************")
+            print(exception)
+            print("**************************************** EXCEPTION ****************************************")
+
             # call custom exception message handler to generate message
             self.get_exception_message(form=form, exception=exception)
             return super().form_invalid(form)
@@ -231,34 +241,6 @@ class CustomViewSetMixin(UpdateView, DetailView, ListView, TemplateView, Context
             return _(f"Failed to {self.action.title()} {getattr(self.model._meta, 'verbose_name', {self.model.__name__}).title()}")
         else:
             return _("ERROR")
-
-class UpdateDetailMixinView(UpdateView, DetailView):
-
-    success_message = _("Updated Successfully")
-    error_message = _("Failed to Update")
-
-    def get_success_url(self):
-        look_up_field = self.look_up_field if hasattr(self, 'look_up_field') else None
-        return reverse(self.success_url, kwargs={look_up_field: getattr(self.object, look_up_field)} if look_up_field else None)
-
-    def post(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            return HttpResponseForbidden()
-        self.object = self.get_object()
-        form = self.get_form()
-        if form.is_valid():
-            messages.add_message(
-                self.request, messages.SUCCESS, self.success_message
-            )
-            return self.form_valid(form)
-        else:
-            messages.add_message(
-                self.request, messages.ERROR, self.error_message
-            )
-            return self.form_invalid(form)
-
-    def form_valid(self, form):
-        return super().form_valid(form)
 
 
 """

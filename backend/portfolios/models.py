@@ -157,14 +157,46 @@ class ProfessionalExperience(models.Model):
             return self.end_date.strftime("%B %Y")
         return _('Not Specified')
 
+class ProfessionalExperienceMediaManager(models.Manager):
+
+    def all(self):
+        return self.get_queryset()
+
+    def get_by_id(self, id):
+        try:
+            instance = self.get_queryset().get(id=id)
+        except ProfessionalExperienceMedia.DoesNotExist:
+            raise Http404("Not Found !!!")
+        except ProfessionalExperienceMedia.MultipleObjectsReturned:
+            qs = self.get_queryset().filter(id=id)
+            instance = qs.first()
+        except:
+            raise Http404("Something went wrong !!!")
+        return instance
+
+    def get_by_slug(self, slug):
+        try:
+            instance = self.get_queryset().get(slug=slug)
+        except ProfessionalExperienceMedia.DoesNotExist:
+            raise Http404("Not Found !!!")
+        except ProfessionalExperienceMedia.MultipleObjectsReturned:
+            qs = self.get_queryset().filter(slug=slug)
+            instance = qs.first()
+        except:
+            raise Http404("Something went wrong !!!")
+        return instance
+
 @autoslugFromUUID()
 class ProfessionalExperienceMedia(models.Model):
     professional_experience = models.ForeignKey(ProfessionalExperience, on_delete=models.CASCADE, related_name="professional_experience_media")
     slug = models.SlugField(max_length=255, unique=True)
-    file = models.FileField(upload_to=professional_experience_media_path)
+    file = models.FileField(upload_to=professional_experience_media_path, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    # custom model manager
+    objects = ProfessionalExperienceMediaManager()
 
     class Meta:
         db_table = 'professional_experience_media'

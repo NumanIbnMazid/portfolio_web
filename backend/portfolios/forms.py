@@ -1,9 +1,10 @@
 from django import forms
-from portfolios.models import Skill, ProfessionalExperience
+from portfolios.models import Skill, ProfessionalExperience, ProfessionalExperienceMedia
 from django.conf import settings
 import os
 from django.core.files.uploadedfile import UploadedFile
 from django.template.defaultfilters import filesizeformat
+from utils.multiforms import MultiModelForm
 
 
 # ----------------------------------------------------
@@ -17,10 +18,12 @@ class SkillForm(forms.ModelForm):
         fields = ('title', 'image')
 
 class ProfessionalExperienceForm(forms.ModelForm):
+    # multiple file form field
+    # media = forms.FileField(required=False, widget=forms.ClearableFileInput(attrs={'multiple': True}))
     class Meta:
         model = ProfessionalExperience
-        fields = ('company', 'company_image', 'address', 'designation', 'job_type',
-                  'start_date', 'end_date', 'currently_working', 'description')
+        fields = ['company', 'company_image', 'address', 'designation', 'job_type',
+                  'start_date', 'end_date', 'currently_working', 'description']
         widgets = {
             'start_date': forms.TextInput(attrs={'class': 'form-control', 'id': 'start_date'}),
             'end_date': forms.TextInput(attrs={'class': 'form-control', 'id': 'end_date'}),
@@ -51,3 +54,15 @@ class ProfessionalExperienceForm(forms.ModelForm):
                 raise forms.ValidationError("Please keep filesize under %s. Current filesize %s" % (
                     filesizeformat(settings.MAX_UPLOAD_SIZE), filesizeformat(company_image.size)))
         return company_image
+
+class ProfessionalExperienceMediaForm(forms.ModelForm):
+    class Meta:
+        model = ProfessionalExperienceMedia
+        fields = ("file",)
+
+class ProfessionalExperienceWithMediaForm(ProfessionalExperienceForm):
+    # multiple file form field
+    file = forms.FileField(required=False, widget=forms.ClearableFileInput(attrs={'multiple': True}))
+
+    class Meta(ProfessionalExperienceForm.Meta):
+        fields = ProfessionalExperienceForm.Meta.fields + ['file',]

@@ -6,3 +6,6 @@
 * pagination (lazy loading)
 * Django Factory Boy
 * Multi Item Delete
+* Multiple file show in form initial data Professional Experience (File Preview, File Validation)
+* Handle Currently Working and End Date Conflict
+* Bulk Delete
