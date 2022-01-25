@@ -27,6 +27,11 @@
   // document ready function
   $(function () {
 
+    // add custom styling for currently working select input
+    // remove current classes and add custom classes to currently_working_select_div
+    $('#div_id_currently_working').addClass('flex items-center justify-start -space-y-2 space-x-4')
+
+    // date picker for start date
     $("#start_date").datepicker({
       inline: true,
       maxDate: new Date($.now()),
@@ -44,12 +49,14 @@
       }
     });
 
+    // date picker for end date
     $("#end_date").datepicker({
       inline: true,
       maxDate: new Date($.now()),
       dateFormat: "yy-mm-dd"
     });
 
+    // professional experience media populator function
     function populateProfessionalExperienceMediaData() {
       // media file input
       let fileInputDiv = $('#div_id_file');

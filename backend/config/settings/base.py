@@ -171,13 +171,23 @@ EMAIL_TIMEOUT = 5
 # ----------------------------------------------------
 # *** Internationalization ***
 # ----------------------------------------------------
+LANGUAGES = [
+    ('en', 'English'),
+    ('bn', 'Bengali')
+]
 
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
+USE_L10N = True
 USE_TZ = True
 
 LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale')]
+
+# Locale Middleware
+if not "django.middleware.locale.LocaleMiddleware" in MIDDLEWARE:
+    # insert after SessionMiddleware
+    MIDDLEWARE.insert(MIDDLEWARE.index('django.contrib.sessions.middleware.SessionMiddleware') + 1, "django.middleware.locale.LocaleMiddleware")
 
 # ----------------------------------------------------
 # *** Other Definition ***
@@ -191,8 +201,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 30  # One month
 # Default URL's
 HOME_URL = "/"
-ADMIN_LOGIN_URL = "/accounts/login/"
-LOGIN_URL = ADMIN_LOGIN_URL
+ADMIN_LOGIN_URL = "/admin/login/"
+LOGIN_URL = "/accounts/login/"
+DECORATOR_REDIRECT_URL = HOME_URL
 SITE_DOMAIN = "numanibnmazid.com"
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#form-renderer
@@ -317,6 +328,7 @@ CRISPY_CLASS_CONVERTERS = {
     "textarea": "textarea bg-white dark:bg-gray-700 focus:border-app-theme-400 dark:focus:border-app-theme dark:focus:border-app-theme focus:outline-none focus:shadow-outline-app-theme dark:focus:shadow-outline-app-theme-200 dark:text-white dark:focus:shadow-outline-app-theme form-input",
     "emailinput": "emailinput bg-white dark:bg-gray-700 focus:border-app-theme-400 dark:focus:border-app-theme dark:focus:border-app-theme focus:outline-none focus:shadow-outline-app-theme dark:focus:shadow-outline-app-theme-200 dark:text-white dark:focus:shadow-outline-app-theme form-input",
     "clearablefileinput": "clearablefileinput bg-white dark:bg-gray-700 focus:border-app-theme-400 dark:focus:border-app-theme dark:focus:border-app-theme focus:outline-none focus:shadow-outline-app-theme dark:focus:shadow-outline-app-theme-200 dark:text-white dark:focus:shadow-outline-app-theme form-input",
+    "checkboxinput": "checkboxinput w-5 h-5",
 }
 
 
@@ -341,3 +353,13 @@ ACCOUNT_EMAIL_SUBJECT_PREFIX = 'Account Confirmation'
 ACCOUNT_FORMS = {
     'login': 'users.forms.CustomLoginForm'
 }
+
+
+# ----------------------------------------------------
+# *** Django Rosetta ***
+# ----------------------------------------------------
+
+# https://django-rosetta.readthedocs.io/installation.html#install-rosetta
+INSTALLED_APPS.extend(["rosetta"])
+# https://django-rosetta.readthedocs.io/settings.html#settings
+ROSETTA_SHOW_AT_ADMIN_PANEL = True

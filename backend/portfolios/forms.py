@@ -1,4 +1,5 @@
 from django import forms
+from django.utils.translation import gettext_lazy as _
 from portfolios.models import Skill, ProfessionalExperience, ProfessionalExperienceMedia
 from utils.validators import get_validated_file, get_validated_image
 
@@ -40,18 +41,19 @@ class ProfessionalExperienceForm(forms.ModelForm):
         }
 
     def clean(self):
-        if self.cleaned_data.get('end_date', None) is None and not self.cleaned_data.get('currently_working', None):
-            self.add_error('end_date', "End date is required if you are not currently working here.")
-        elif self.cleaned_data.get('end_date') is not None and self.cleaned_data.get('currently_working'):
-            self.add_error('end_date', "End date is not required if you are currently working here.")
-            self.add_error('currently_working', "Currently working is not required if you provide an end date.")
-            raise forms.ValidationError("Conflicting with `End date` and `Currently working`. Please specify only one.")
-        return self.cleaned_data
+        cleaned_data = super(ProfessionalExperienceForm, self).clean()
+        if cleaned_data.get('end_date', None) is None and not cleaned_data.get('currently_working', None):
+            self.add_error('end_date', _("End date is required if you are not currently working here."))
+        elif cleaned_data.get('end_date') is not None and cleaned_data.get('currently_working'):
+            self.add_error('end_date', _("End date is not required if you are currently working here."))
+            self.add_error('currently_working', _("Currently working is not required if you provide an end date."))
+            raise forms.ValidationError(_("Conflicting with `End date` and `Currently working`. Please specify only one."))
+        return cleaned_data
 
     def clean_end_date(self):
         end_date = self.cleaned_data.get('end_date')
         if end_date and end_date <= self.cleaned_data.get('start_date'):
-            raise forms.ValidationError("End date must be greater than start date")
+            raise forms.ValidationError(_("End date must be greater than start date"))
         return end_date
 
     def clean_company_image(self):

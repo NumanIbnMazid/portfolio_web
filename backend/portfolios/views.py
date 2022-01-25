@@ -12,7 +12,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib import messages
 from django.http import HttpResponseRedirect, Http404
-from django.shortcuts import render
+from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 
 skill_decorators = professional_experience_decorators= [login_required]
@@ -29,7 +29,7 @@ class SkillView(CustomViewSetMixin):
     form_class = SkillForm
     success_url = 'portfolios:skills'
     lookup_field = 'slug'
-    update_success_message = "Skill has been updated successfully."
+    update_success_message = _("Skill has been updated successfully.")
     url_list = ["skills", "skill_create", "skill_detail", "skill_update", "skill_delete"]
 
     def get_queryset(self):
@@ -75,7 +75,7 @@ class ProfessionalExperienceView(CustomViewSetMixin):
 
     def get_media_delete_context_data(self, **kwargs):
         context = {}
-        context["page_title"] = context["head_title"] = "Delete Professional Experience Media"
+        context["page_title"] = context["head_title"] = _("Delete Professional Experience Media")
         context["action"] = "delete"
         return context
 
@@ -86,12 +86,12 @@ class ProfessionalExperienceView(CustomViewSetMixin):
             qs.delete()
             # add success message
             messages.add_message(
-                self.request, messages.SUCCESS, "Media Deleted Successfully!"
+                self.request, messages.SUCCESS, _("Media Deleted Successfully!")
             )
             return HttpResponseRedirect(self.get_success_url())
         else:
             messages.add_message(
-                self.request, messages.ERROR, "Media not found!"
+                self.request, messages.ERROR, _("Media not found!")
             )
             raise Http404(_("Object not found!"))
 
@@ -106,7 +106,7 @@ class ProfessionalExperienceView(CustomViewSetMixin):
             if qs:
                 form.add_error(
                     "title", forms.ValidationError(
-                        f"This company already exists!"
+                        _("This company already exists!")
                     )
                 )
                 return super().form_invalid(form)
@@ -118,15 +118,18 @@ class ProfessionalExperienceView(CustomViewSetMixin):
             files = self.request.FILES.getlist('file')
 
             # save professional experience media files to the database if any
-            if len(files) > 0:
-                for file in files:
-                    professional_experience_media_form = ProfessionalExperienceMediaForm(self.request.POST, self.request.FILES)
-                    if professional_experience_media_form.is_valid():
-                        professional_experience_media_form.instance.professional_experience = self.object
-                        # save the form
-                        professional_experience_media_form.save()
+            professional_experience_media_form = ProfessionalExperienceMediaForm(self.request.POST, self.request.FILES)
+            # check if the form is valid and form has files
+            if professional_experience_media_form.is_valid() and len(files) >= 1:
+                with transaction.atomic(): # ensure that all objects are saved otherwise rollback
+                    for file in files:
+                        ProfessionalExperienceMedia.objects.update_or_create(
+                            professional_experience=self.object,
+                            file = file
+                        )
 
-        return super().form_valid(form)
+            return super().form_valid(form)
+        return super().form_invalid(form)
 
 
 # ----------------------------------------------------

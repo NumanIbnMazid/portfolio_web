@@ -33,6 +33,30 @@
       </div>
     </div>
     <ul class="flex items-center flex-shrink-0 space-x-6">
+
+      <!-- Language Manager -->
+      <!-- Start Language Switcher -->
+      <form name="languageForm" method="POST">
+        {% csrf_token %}
+        <select name="language"
+          class="shadow appearance-none border rounded-lg py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="language-select"
+          hx-post="{% url 'set_language' %}?page={{ page_obj.number }}"
+          hx-push-url="true"
+          hx-target="#main" hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML swap:0.3s"
+        >
+          {% get_current_language as LANGUAGE_CODE %}
+          {% get_available_languages as LANGUAGES %}
+          {% get_language_info_list for LANGUAGES as languages %}
+          {% for language in languages %}
+          <option value="{{ language.code }}" {% if language.code == LANGUAGE_CODE %} selected{% endif %}>
+            {{ language.name_local }} ({{ language.code }})
+          </option>
+          {% endfor %}
+        </select>
+      </form>
+      <!-- End Language Switcher -->
+
       <!-- Theme toggler -->
       <li class="flex">
         <button class="rounded-md focus:outline-none focus:shadow-outline-purple" @click="toggleTheme"

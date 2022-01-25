@@ -1,4 +1,4 @@
-{% load static %}
+{% load i18n static %}
 
 <aside class="z-20 hidden w-64 overflow-y-auto bg-white dark:bg-gray-800 md:block flex-shrink-0">
   {% with current_url=request.resolver_match.url_name %}
@@ -20,9 +20,9 @@
           hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-400 focus:outline-none
           {% if current_url == 'dashboard' %}font-extrabold text-gray-800
           dark:text-gray-200{% endif %}" hx-trigger="click" hx-target="#main" hx-indicator="#htmxLoaderIndicator"
-          hx-swap="outerHTML swap:0.2s" hx-get="{% url 'dashboard' %}" hx-push-url="{% url 'dashboard' %}">
+          hx-swap="outerHTML swap:0.2s" hx-get="{% url 'dashboard' %}" hx-push-url="true">
           <i class="fas fa-home"></i>
-          <span class="ml-4">Dashboard</span>
+          <span class="ml-4">{% trans "Dashboard" %}</span>
         </button>
       </li>
       <li class="relative px-6 py-3">
@@ -34,10 +34,10 @@
         <button class="inline-flex items-center w-full text-sm text-gray-800 transition-colors duration-150
           hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-400 focus:outline-none" hx-trigger="click"
           hx-target="#main" hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML swap:0.2s"
-          hx-get="{% url 'users:user_profile' %}" hx-push-url="{% url 'users:user_profile' %}">
+          hx-get="{% url 'users:user_profile' %}" hx-push-url="true">
           <i class="fas fa-user-circle"></i>
           <span class="ml-4 {% if current_url in 'user_profile, user_profile_update' %}font-extrabold text-gray-800
-          dark:text-gray-200{% endif %}">Profile</span>
+          dark:text-gray-200{% endif %}">{% trans "Profile" %}</span>
         </button>
       </li>
     </ul>
@@ -53,7 +53,7 @@
           <span class="inline-flex items-center">
             <i class="fas fa-id-card"></i>
             <span class="ml-4 {% if current_url in url_list %}font-extrabold text-gray-800
-          dark:text-gray-200{% endif %}">Portfolio</span>
+          dark:text-gray-200{% endif %}">{% trans "Portfolio" %}</span>
           </span>
           <svg class="w-4 h-4" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
             <path fill-rule="evenodd"
@@ -77,12 +77,12 @@
               {% endif %}
               <a class="w-full cursor-pointer" hx-trigger="click" hx-target="#main" hx-indicator="#htmxLoaderIndicator"
                 hx-swap="outerHTML swap:0.2s" hx-get="{% url 'portfolios:skills' %}"
-                hx-push-url="{% url 'portfolios:skills' %}">
+                hx-push-url="true">
                 <span class="{% if current_url in Skill_url_list %}font-extrabold text-gray-800
                   dark:text-gray-200{% endif %} hover:text-gray-800
                   dark:hover:text-gray-200">
                   <i class="fas fa-briefcase mr-1"></i>
-                  Skill
+                  {% trans "Skill" %}
                 </span>
               </a>
             </li>
@@ -94,42 +94,60 @@
               {% endif %}
               <a class="w-full cursor-pointer" hx-trigger="click" hx-target="#main" hx-indicator="#htmxLoaderIndicator"
                 hx-swap="outerHTML swap:0.2s" hx-get="{% url 'portfolios:professional_experiences' %}"
-                hx-push-url="{% url 'portfolios:professional_experiences' %}">
+                hx-push-url="true">
                 <span class="{% if current_url in ProfessionalExperience_url_list %}font-extrabold text-gray-800
                   dark:text-gray-200{% endif %} hover:text-gray-800
                   dark:hover:text-gray-200">
                   <i class="fas fa-briefcase mr-1"></i>
-                  Professional Experience
+                  {% trans "Professional Experience" %}
                 </span>
               </a>
             </li>
             <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
               <a class="w-full" href="#">
-                Education
+                {% trans "Education" %}
               </a>
             </li>
             <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-              <a class="w-full" href="#">Certification</a>
+              <a class="w-full" href="#">{% trans "Certification" %}</a>
             </li>
             <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-              <a class="w-full" href="#">Project</a>
+              <a class="w-full" href="#">{% trans "Project" %}</a>
             </li>
             <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-              <a class="w-full" href="#">Interest</a>
+              <a class="w-full" href="#">{% trans "Interest" %}</a>
             </li>
             <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-              <a class="w-full" href="#">Testimonial</a>
+              <a class="w-full" href="#">{% trans "Testimonial" %}</a>
             </li>
           </ul>
         </div>
       </li>
     </ul>
-    <div class="px-6 my-6">
+    <div class="px-6 my-2">
       <a href="{% url 'home' %}"
         class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
         <span>
           <i class="fas fa-eye"></i>
-          View Site
+          {% trans "View Site" %}
+        </span>
+      </a>
+    </div>
+    <div class="px-6 my-2">
+      <a href="/admin/"
+        class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+        <span>
+          <i class="fas fa-eye"></i>
+          {% trans "View Admin Site" %}
+        </span>
+      </a>
+    </div>
+    <div class="px-6 my-2">
+      <a href="/translations/"
+        class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+        <span>
+          <i class="fas fa-eye"></i>
+          {% trans "View Translations" %}
         </span>
       </a>
     </div>

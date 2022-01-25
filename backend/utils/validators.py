@@ -28,8 +28,8 @@ def get_validated_file(file):
             )
         if file.size > MAX_UPLOAD_SIZE:
             raise forms.ValidationError(
-                "Please keep file size under %s. Current file size %s" % (
-                    filesizeformat(MAX_UPLOAD_SIZE), filesizeformat(file.size)
+                "Please keep file size under %s. Current file (%s) size is %s" % (
+                    filesizeformat(MAX_UPLOAD_SIZE), file.name, filesizeformat(file.size)
                 )
             )
     return file
@@ -47,8 +47,8 @@ def get_validated_image(image):
             )
         if image.size > MAX_UPLOAD_SIZE:
             raise forms.ValidationError(
-                "Please keep file size under %s. Current file size %s" % (
-                    filesizeformat(MAX_UPLOAD_SIZE), filesizeformat(image.size)
+                "Please keep file size under %s. Current file (%s) size is %s" % (
+                    filesizeformat(MAX_UPLOAD_SIZE), image.name, filesizeformat(image.size)
                 )
             )
     return image
@@ -66,8 +66,8 @@ def get_validated_document(document):
             )
         if document.size > MAX_UPLOAD_SIZE:
             raise forms.ValidationError(
-                "Please keep file size under %s. Current file size %s" % (
-                    filesizeformat(MAX_UPLOAD_SIZE), filesizeformat(document.size)
+                "Please keep file size under %s. Current file (%s) size is %s" % (
+                    filesizeformat(MAX_UPLOAD_SIZE), document.name, filesizeformat(document.size)
                 )
             )
     return document

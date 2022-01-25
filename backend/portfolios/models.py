@@ -3,6 +3,7 @@ from django.http import Http404
 from django.contrib.auth import get_user_model
 from utils.snippets import autoslugFromUUID, autoslugWithFieldAndUUID
 from django.utils.translation import gettext_lazy as _
+from django.utils import dateformat
 from portfolios.file_upload_helpers import (
     skill_icon_path, professional_experience_company_image_path, professional_experience_media_path, education_media_path, certification_media_path, project_media_path, interest_icon_path, testimonial_image_path
 )
@@ -24,19 +25,19 @@ class SkillManager(models.Manager):
             qs = self.get_queryset().filter(id=id)
             instance = qs.first()
         except:
-            raise Http404("Something went wrong !!!")
+            raise Http404(_("Something went wrong !!!"))
         return instance
 
     def get_by_slug(self, slug):
         try:
             instance = self.get_queryset().get(slug=slug)
         except Skill.DoesNotExist:
-            raise Http404("Not Found !!!")
+            raise Http404(_("Not Found !!!"))
         except Skill.MultipleObjectsReturned:
             qs = self.get_queryset().filter(slug=slug)
             instance = qs.first()
         except:
-            raise Http404("Something went wrong !!!")
+            raise Http404(_("Something went wrong !!!"))
         return instance
 
 @autoslugWithFieldAndUUID(fieldname="title")
@@ -56,8 +57,8 @@ class Skill(models.Model):
 
     class Meta:
         db_table = 'skill'
-        verbose_name = 'Skill'
-        verbose_name_plural = 'Skills'
+        verbose_name = _('Skill')
+        verbose_name_plural = _('Skills')
         ordering = ['-created_at']
         get_latest_by = "created_at"
         unique_together = (('user', 'title'),)
@@ -90,12 +91,12 @@ class ProfessionalExperienceManager(models.Manager):
         try:
             instance = self.get_queryset().get(id=id)
         except ProfessionalExperience.DoesNotExist:
-            raise Http404("Not Found !!!")
+            raise Http404(_("Not Found !!!"))
         except ProfessionalExperience.MultipleObjectsReturned:
             qs = self.get_queryset().filter(id=id)
             instance = qs.first()
         except:
-            raise Http404("Something went wrong !!!")
+            raise Http404(_("Something went wrong !!!"))
         return instance
 
     def get_by_slug(self, slug):
@@ -107,7 +108,7 @@ class ProfessionalExperienceManager(models.Manager):
             qs = self.get_queryset().filter(slug=slug)
             instance = qs.first()
         except:
-            raise Http404("Something went wrong !!!")
+            raise Http404(_("Something went wrong !!!"))
         return instance
 
 
@@ -118,10 +119,10 @@ class ProfessionalExperience(models.Model):
     Details: Includes Job Experiences and other professional experiences.
     """
     class JobType(models.TextChoices):
-        FULL_TIME = 'Full Time', _('Full Time')
-        PART_TIME = 'Part Time', _('Part Time')
-        CONTRACTUAL = 'Contractual', _('Contractual')
-        REMOTE = 'Remote', _('Remote')
+        FULL_TIME = _('Full Time'), _('Full Time')
+        PART_TIME = _('Part Time'), _('Part Time')
+        CONTRACTUAL = _('Contractual'), _('Contractual')
+        REMOTE = _('Remote'), _('Remote')
 
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="user_professional_experiences")
     slug = models.SlugField(max_length=255, unique=True)
@@ -142,8 +143,8 @@ class ProfessionalExperience(models.Model):
 
     class Meta:
         db_table = 'professional_experience'
-        verbose_name = 'Professional Experience'
-        verbose_name_plural = 'Professional Experiences'
+        verbose_name = _('Professional Experience')
+        verbose_name_plural = _('Professional Experiences')
         ordering = ('-currently_working', '-start_date')
         get_latest_by = "created_at"
 
@@ -154,7 +155,8 @@ class ProfessionalExperience(models.Model):
         if self.currently_working:
             return _('Present')
         elif self.end_date:
-            return self.end_date.strftime("%B %Y")
+            # return formatted date (supporting translation)
+            return dateformat.format(self.end_date, "F Y")
         return _('Not Specified')
 
 class ProfessionalExperienceMediaManager(models.Manager):
@@ -166,24 +168,24 @@ class ProfessionalExperienceMediaManager(models.Manager):
         try:
             instance = self.get_queryset().get(id=id)
         except ProfessionalExperienceMedia.DoesNotExist:
-            raise Http404("Not Found !!!")
+            raise Http404(_("Not Found !!!"))
         except ProfessionalExperienceMedia.MultipleObjectsReturned:
             qs = self.get_queryset().filter(id=id)
             instance = qs.first()
         except:
-            raise Http404("Something went wrong !!!")
+            raise Http404(_("Something went wrong !!!"))
         return instance
 
     def get_by_slug(self, slug):
         try:
             instance = self.get_queryset().get(slug=slug)
         except ProfessionalExperienceMedia.DoesNotExist:
-            raise Http404("Not Found !!!")
+            raise Http404(_("Not Found !!!"))
         except ProfessionalExperienceMedia.MultipleObjectsReturned:
             qs = self.get_queryset().filter(slug=slug)
             instance = qs.first()
         except:
-            raise Http404("Something went wrong !!!")
+            raise Http404(_("Something went wrong !!!"))
         return instance
 
 @autoslugFromUUID()
@@ -200,8 +202,8 @@ class ProfessionalExperienceMedia(models.Model):
 
     class Meta:
         db_table = 'professional_experience_media'
-        verbose_name = 'Professional Experience Media'
-        verbose_name_plural = 'Professional Experience Media'
+        verbose_name = _('Professional Experience Media')
+        verbose_name_plural = _('Professional Experience Media')
         get_latest_by = "created_at"
         order_with_respect_to = 'professional_experience'
 
@@ -231,8 +233,8 @@ class Education(models.Model):
 
     class Meta:
         db_table = 'education'
-        verbose_name = 'Education'
-        verbose_name_plural = 'Educations'
+        verbose_name = _('Education')
+        verbose_name_plural = _('Educations')
         ordering = ['-created_at']
         get_latest_by = "created_at"
 
@@ -258,8 +260,8 @@ class EducationMedia(models.Model):
 
     class Meta:
         db_table = 'education_media'
-        verbose_name = 'Education Media'
-        verbose_name_plural = 'Education Media'
+        verbose_name = _('Education Media')
+        verbose_name_plural = _('Education Media')
         get_latest_by = "created_at"
         order_with_respect_to = 'education'
 
@@ -288,8 +290,8 @@ class Certification(models.Model):
 
     class Meta:
         db_table = 'certification'
-        verbose_name = 'Certification'
-        verbose_name_plural = 'Certifications'
+        verbose_name = _('Certification')
+        verbose_name_plural = _('Certifications')
         ordering = ['-created_at']
         get_latest_by = "created_at"
 
@@ -308,8 +310,8 @@ class CertificationMedia(models.Model):
 
     class Meta:
         db_table = 'certification_media'
-        verbose_name = 'Certification Media'
-        verbose_name_plural = 'Certification Media'
+        verbose_name = _('Certification Media')
+        verbose_name_plural = _('Certification Media')
         get_latest_by = "created_at"
         order_with_respect_to = 'certification'
 
@@ -337,8 +339,8 @@ class Project(models.Model):
 
     class Meta:
         db_table = 'project'
-        verbose_name = 'Project'
-        verbose_name_plural = 'Projects'
+        verbose_name = _('Project')
+        verbose_name_plural = _('Projects')
         ordering = ['-created_at']
         get_latest_by = "created_at"
 
@@ -357,8 +359,8 @@ class ProjectMedia(models.Model):
 
     class Meta:
         db_table = 'project_media'
-        verbose_name = 'Project Media'
-        verbose_name_plural = 'Project Media'
+        verbose_name = _('Project Media')
+        verbose_name_plural = _('Project Media')
         get_latest_by = "created_at"
         order_with_respect_to = 'project'
 
@@ -381,8 +383,8 @@ class Interest(models.Model):
 
     class Meta:
         db_table = 'interest'
-        verbose_name = 'Interest'
-        verbose_name_plural = 'Interests'
+        verbose_name = _('Interest')
+        verbose_name_plural = _('Interests')
         ordering = ['-created_at']
         get_latest_by = "created_at"
 
@@ -406,8 +408,8 @@ class Testimonial(models.Model):
 
     class Meta:
         db_table = 'testimonial'
-        verbose_name = 'Testimonial'
-        verbose_name_plural = 'Testimonials'
+        verbose_name = _('Testimonial')
+        verbose_name_plural = _('Testimonials')
         ordering = ['-created_at']
         get_latest_by = "created_at"
 

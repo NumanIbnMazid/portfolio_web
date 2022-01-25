@@ -1,10 +1,7 @@
 from django import forms
 from allauth.account.forms import LoginForm
 from django.contrib.auth import get_user_model
-from django.conf import settings
-import os
-from django.core.files.uploadedfile import UploadedFile
-from django.template.defaultfilters import filesizeformat
+from utils.validators import get_validated_image
 
 
 class CustomLoginForm(LoginForm):
@@ -63,13 +60,4 @@ class UserProfileForm(forms.ModelForm):
 
     def clean_image(self):
         image = self.cleaned_data.get('image')
-        if image and isinstance(image, UploadedFile):
-            file_extension = os.path.splitext(image.name)[1]
-            allowed_image_types = settings.ALLOWED_IMAGE_TYPES
-            if not file_extension in allowed_image_types:
-                raise forms.ValidationError("Only %s file formats are supported! Current image format is %s" % (
-                    allowed_image_types, file_extension))
-            if image.size > settings.MAX_UPLOAD_SIZE:
-                raise forms.ValidationError("Please keep filesize under %s. Current filesize %s" % (
-                    filesizeformat(settings.MAX_UPLOAD_SIZE), filesizeformat(image.size)))
-        return image
+        return get_validated_image(image)

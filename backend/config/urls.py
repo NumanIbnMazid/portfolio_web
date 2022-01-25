@@ -3,6 +3,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views import defaults as default_views
+from django.conf.urls.i18n import i18n_patterns
 
 # third party urls
 from config.urls_third_party import urlpatterns as THIRD_PARTY_URL_PATTERNS
@@ -10,19 +11,23 @@ from config.urls_third_party import urlpatterns as THIRD_PARTY_URL_PATTERNS
 # Views
 from config.views import HomeView, DashboardView
 
-ADMIN_PANEL_URL_PATTERNS = [
+ADMIN_PANEL_URL_PATTERNS = i18n_patterns(
     path('dashboard/', DashboardView.as_view(), name='dashboard'),
-]
-
-APP_URL_PATTERNS = [
-    path("users/", include(("users.urls", "users"), namespace="users")),
     path("portfolios/", include(("portfolios.urls", "portfolios"), namespace="portfolios")),
-] + ADMIN_PANEL_URL_PATTERNS
+    prefix_default_language=False
+)
 
-urlpatterns = [
+APP_URL_PATTERNS = i18n_patterns(
+    path("users/", include(("users.urls", "users"), namespace="users")),
+    prefix_default_language=False
+) + ADMIN_PANEL_URL_PATTERNS
+
+urlpatterns = i18n_patterns(
     path('admin/', admin.site.urls),
     path('', HomeView.as_view(), name='home'),
-] + THIRD_PARTY_URL_PATTERNS + APP_URL_PATTERNS
+    path('i18n/', include('django.conf.urls.i18n')),
+    prefix_default_language=False
+) + THIRD_PARTY_URL_PATTERNS + APP_URL_PATTERNS
 
 if settings.DEBUG:
     # Static and Media URL

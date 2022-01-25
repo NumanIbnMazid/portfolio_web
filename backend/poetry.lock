@@ -248,6 +248,19 @@ docs = ["furo (>=2021.8.17b43,<2021.9.0)", "sphinx (>=3.5.0)", "sphinx-notfound-
 testing = ["coverage[toml] (>=5.0a4)", "pytest (>=4.6.11)"]
 
 [[package]]
+name = "django-rosetta"
+version = "0.9.8"
+description = "A Django application that eases the translation of Django projects"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+Django = ">=2.2"
+polib = ">=1.1.0"
+requests = ">=2.1.0"
+
+[[package]]
 name = "django-safedelete"
 version = "1.1.2"
 description = "Mask your objects instead of deleting them from your database."
@@ -302,6 +315,14 @@ description = "Python Imaging Library (Fork)"
 category = "main"
 optional = false
 python-versions = ">=3.7"
+
+[[package]]
+name = "polib"
+version = "1.1.1"
+description = "A library to manipulate gettext files (po and mo files)."
+category = "main"
+optional = false
+python-versions = "*"
 
 [[package]]
 name = "psycopg2-binary"
@@ -478,7 +499,7 @@ brotli = ["brotli"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "2970816941ff90ac8e74d06b5d1cc128660bde9a42dde49f7478c097f9e7a858"
+content-hash = "ba0cf8d1b292b1aacecfbf68ded806d66405050527260ec3eb0a215922a0200c"
 
 [metadata.files]
 argon2-cffi = [
@@ -663,6 +684,10 @@ django-environ = [
     {file = "django-environ-0.8.1.tar.gz", hash = "sha256:6f0bc902b43891656b20486938cba0861dc62892784a44919170719572a534cb"},
     {file = "django_environ-0.8.1-py2.py3-none-any.whl", hash = "sha256:42593bee519a527602a467c7b682aee1a051c2597f98c45f4f4f44169ecdb6e5"},
 ]
+django-rosetta = [
+    {file = "django-rosetta-0.9.8.tar.gz", hash = "sha256:a5049d47abafeef6a8aba8a0c12103c93fd77a8bd8436b60307fbd5e1cb8d248"},
+    {file = "django_rosetta-0.9.8-py3-none-any.whl", hash = "sha256:f8449da6963e77b6e4082bde70f5f3f270eba633e3bdb29d663741f6cd01c3fd"},
+]
 django-safedelete = [
     {file = "django-safedelete-1.1.2.tar.gz", hash = "sha256:d675db57c98a8068b40dedcf802d13c1b8e85287806f79d80049d62c359ca872"},
     {file = "django_safedelete-1.1.2-py3-none-any.whl", hash = "sha256:36581eb9d18e1cf9c3f25cd63c2d5833096a627234850e4c1dccfd3bece71d29"},
@@ -716,6 +741,10 @@ pillow = [
     {file = "Pillow-9.0.0-pp37-pypy37_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:6c5439bfb35a89cac50e81c751317faea647b9a3ec11c039900cd6915831064d"},
     {file = "Pillow-9.0.0-pp38-pypy38_pp73-win_amd64.whl", hash = "sha256:95545137fc56ce8c10de646074d242001a112a92de169986abd8c88c27566a05"},
     {file = "Pillow-9.0.0.tar.gz", hash = "sha256:ee6e2963e92762923956fe5d3479b1fdc3b76c83f290aad131a2f98c3df0593e"},
+]
+polib = [
+    {file = "polib-1.1.1-py2.py3-none-any.whl", hash = "sha256:d3ee85e0c6788f789353416b1612c6c92d75fe6ccfac0029711974d6abd0f86d"},
+    {file = "polib-1.1.1.tar.gz", hash = "sha256:e02c355ae5e054912e3b0d16febc56510eff7e49d60bf22aecb463bd2f2a2dfa"},
 ]
 psycopg2-binary = [
     {file = "psycopg2-binary-2.9.3.tar.gz", hash = "sha256:761df5313dc15da1502b21453642d7599d26be88bff659382f8f9747c7ebea4e"},

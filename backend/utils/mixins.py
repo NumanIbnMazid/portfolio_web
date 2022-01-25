@@ -24,7 +24,7 @@ class ContextMixinView(ContextMixin):
 
         # Assuring if defined success_url as it has other dependencies
         if self.success_url is None:
-            raise ImproperlyConfigured("Requires either a definition of `success_url`")
+            raise ImproperlyConfigured(_("Requires either a definition of `success_url`"))
 
         try:
             context = super().get_context_data(**kwargs)
@@ -122,11 +122,13 @@ class CustomViewSetMixin(UpdateView, ListView, TemplateView, ContextMixinView):
             except Exception as exception:
                 if "That page contains no results" in str(exception):
                     return HttpResponseRedirect(reverse(self.success_url))
+
                 print("**************************************** EXCEPTION ****************************************")
                 print(exception)
                 print("**************************************** EXCEPTION ****************************************")
+
                 messages.add_message(
-                    self.request, messages.ERROR, "Something went wrong. Please try again later."
+                    self.request, messages.ERROR, _("Something went wrong. Please try again later.")
                 )
                 return HttpResponseRedirect(reverse('home'))
 

@@ -8,7 +8,7 @@
 <button class="btn-primary block text-sm font-semibold rounded-lg p-3 my-4 text-center jquery-ui-dialog-opener"
   hx-get="{% url 'portfolios:professional_experience_create' %}?page={{ page_obj.number }}" hx-trigger="click"
   hx-target="#main" hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML swap:0.3s">
-  <i class="fas fa-plus"></i> Add Professional Experience
+  <i class="fas fa-plus"></i> {% trans "Add Professional Experience" %}
 </button>
 
 <div class="grid gap-6 mb-8 sm:grid-cols-1 md:grid-cols-2" id="professional-experiences">
@@ -55,7 +55,7 @@
     <!-- job type and job duration -->
     <div class="grid my-2 sm:grid-cols-1 md:grid-cols-2 text-slate-500 font-bold">
       <div>
-        {{ object.start_date }} - {{ object.get_end_date }}
+        {{ object.start_date|date:"F, Y" }} - {{ object.get_end_date }}
       </div>
       <div class="md:text-right w-11/12">
         {{ object.job_type|default:'-' }}
@@ -72,7 +72,7 @@
   {% empty %}
   <div class="bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3 mx-4 text-center rounded relative"
     role="alert">
-    <p class="font-bold">No Data</p>
+    <p class="font-bold">{% trans 'No Data' %}</p>
   </div>
   {% endfor %}
 
