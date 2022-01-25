@@ -39,7 +39,7 @@
       <form name="languageForm" method="POST">
         {% csrf_token %}
         <select name="language"
-          class="shadow appearance-none border rounded-lg py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          class="shadow appearance-none border rounded-lg py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus-visible:ring-0 focus:border-0"
           id="language-select"
           hx-post="{% url 'set_language' %}?page={{ page_obj.number }}"
           hx-push-url="true"
