@@ -12,7 +12,7 @@
     <span class="ml-2">
       <i class="fas fa-minus-circle text-danger text-xl cursor-pointer"
         hx-get="{% url 'portfolios:professional_experience_media_delete' slug=media.slug %}?page={{ page_obj.number }}"
-        hx-trigger="click" hx-target="#main" hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML swap:0.3s"></i>
+        hx-trigger="click" hx-target="#main" hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML"></i>
     </span>
   </li>
   {% endfor %}

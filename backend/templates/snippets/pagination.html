@@ -6,12 +6,12 @@
   <span class="step-links">
     {% if page_obj.has_previous %}
     <button class="btn-primary" hx-get="{% url object_list_url %}?page=1" hx-push-url="true"
-      hx-trigger="click" hx-target="#main" hx-swap="outerHTML swap:0.3s" hx-indicator="#htmxLoaderIndicator">
+      hx-trigger="click" hx-target="#main" hx-swap="outerHTML" hx-indicator="#htmxLoaderIndicator">
       &laquo; {% trans "first" %}
     </button>
     <button class="btn-primary" hx-get="{% url object_list_url %}?page={{ page_obj.previous_page_number }}"
       hx-push-url="true" hx-trigger="click"
-      hx-target="#main" hx-swap="outerHTML swap:0.3s" hx-indicator="#htmxLoaderIndicator">{% trans "previous" %}</button>
+      hx-target="#main" hx-swap="outerHTML" hx-indicator="#htmxLoaderIndicator">{% trans "previous" %}</button>
     {% endif %}
 
     <span class="current">
@@ -21,10 +21,10 @@
     {% if page_obj.has_next %}
     <button class="btn-primary" hx-get="{% url object_list_url %}?page={{ page_obj.next_page_number }}"
       hx-push-url="true" hx-trigger="click" hx-target="#main"
-      hx-swap="outerHTML swap:0.3s" hx-indicator="#htmxLoaderIndicator">{% trans "next" %}</button>
+      hx-swap="outerHTML" hx-indicator="#htmxLoaderIndicator">{% trans "next" %}</button>
     <button class="btn-primary" hx-get="{% url object_list_url %}?page={{ page_obj.paginator.num_pages }}"
       hx-push-url="true" hx-trigger="click"
-      hx-target="#main" hx-swap="outerHTML swap:0.3s" hx-indicator="#htmxLoaderIndicator">
+      hx-target="#main" hx-swap="outerHTML" hx-indicator="#htmxLoaderIndicator">
       {% trans "last" %} &raquo;
     </button>
     {% endif %}

@@ -7,7 +7,7 @@
 <!-- Skills Add Button -->
 <button class="btn-primary block text-sm font-semibold rounded-lg p-3 my-4 text-center jquery-ui-dialog-opener"
   hx-get="{% url 'portfolios:professional_experience_create' %}?page={{ page_obj.number }}" hx-trigger="click"
-  hx-target="#main" hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML swap:0.3s">
+  hx-target="#main" hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML">
   <i class="fas fa-plus"></i> {% trans "Add Professional Experience" %}
 </button>
 
@@ -34,17 +34,17 @@
         <span class="ml-2">
           <i class="fas fa-minus-circle text-danger text-xl cursor-pointer"
             hx-get="{% url 'portfolios:professional_experience_delete' slug=object.slug %}?page={{ page_obj.number }}"
-            hx-trigger="click" hx-target="#main" hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML swap:0.3s"></i>
+            hx-trigger="click" hx-target="#main" hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML"></i>
         </span>
         <span class="ml-1">
           <i class="fas fa-edit text-primary text-xl cursor-pointer"
             hx-get="{% url 'portfolios:professional_experience_update' slug=object.slug %}?page={{ page_obj.number }}"
-            hx-trigger="click" hx-target="#main" hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML swap:0.3s"></i>
+            hx-trigger="click" hx-target="#main" hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML"></i>
         </span>
         <span class="ml-1">
           <i class="fas fa-eye text-info text-xl cursor-pointer"
             hx-get="{% url 'portfolios:professional_experience_detail' slug=object.slug %}?page={{ page_obj.number }}"
-            hx-trigger="click" hx-target="#main" hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML swap:0.3s"></i>
+            hx-trigger="click" hx-target="#main" hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML"></i>
         </span>
       </div>
     </div>

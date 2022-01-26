@@ -5,7 +5,7 @@
 <!-- Skills Add Button -->
 <button class="btn-primary block text-sm font-semibold rounded-lg p-3 my-4 text-center jquery-ui-dialog-opener"
   hx-get="{% url 'portfolios:skill_create' %}" hx-trigger="click" hx-target="#main" hx-indicator="#htmxLoaderIndicator"
-  hx-swap="outerHTML swap:0.3s">
+  hx-swap="outerHTML">
   <i class="fas fa-plus"></i> Add Skill
 </button>
 
@@ -32,17 +32,17 @@
         <span class="ml-2">
           <i class="fas fa-minus-circle text-danger text-xl cursor-pointer"
             hx-get="{% url 'portfolios:skill_delete' slug=object.slug %}" hx-trigger="click" hx-target="#main"
-            hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML swap:0.3s"></i>
+            hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML"></i>
         </span>
         <span class="ml-1">
           <i class="fas fa-edit text-primary text-xl cursor-pointer"
             hx-get="{% url 'portfolios:skill_update' slug=object.slug %}" hx-trigger="click" hx-target="#main"
-            hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML swap:0.3s"></i>
+            hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML"></i>
         </span>
         <span class="ml-1">
           <i class="fas fa-eye text-info text-xl cursor-pointer"
             hx-get="{% url 'portfolios:skill_detail' slug=object.slug %}" hx-trigger="click" hx-target="#main"
-            hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML swap:0.3s"></i>
+            hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML"></i>
         </span>
       </div>
     </div>

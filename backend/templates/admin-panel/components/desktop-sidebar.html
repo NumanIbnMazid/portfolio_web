@@ -20,7 +20,7 @@
           hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-400 focus:outline-none
           {% if current_url == 'dashboard' %}font-extrabold text-gray-800
           dark:text-gray-200{% endif %}" hx-trigger="click" hx-target="#main" hx-indicator="#htmxLoaderIndicator"
-          hx-swap="outerHTML swap:0.2s" hx-get="{% url 'dashboard' %}" hx-push-url="true">
+          hx-swap="outerHTML" hx-get="{% url 'dashboard' %}" hx-push-url="true">
           <i class="fas fa-home"></i>
           <span class="ml-4">{% trans "Dashboard" %}</span>
         </button>
@@ -33,7 +33,7 @@
 
         <button class="inline-flex items-center w-full text-sm text-gray-800 transition-colors duration-150
           hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-400 focus:outline-none" hx-trigger="click"
-          hx-target="#main" hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML swap:0.2s"
+          hx-target="#main" hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML"
           hx-get="{% url 'users:user_profile' %}" hx-push-url="true">
           <i class="fas fa-user-circle"></i>
           <span class="ml-4 {% if current_url in 'user_profile, user_profile_update' %}font-extrabold text-gray-800
@@ -76,7 +76,7 @@
                 aria-hidden="true"><span class="text-xs">|</span></span>
               {% endif %}
               <a class="w-full cursor-pointer" hx-trigger="click" hx-target="#main" hx-indicator="#htmxLoaderIndicator"
-                hx-swap="outerHTML swap:0.2s" hx-get="{% url 'portfolios:skills' %}"
+                hx-swap="outerHTML" hx-get="{% url 'portfolios:skills' %}"
                 hx-push-url="true">
                 <span class="{% if current_url in Skill_url_list %}font-extrabold text-gray-800
                   dark:text-gray-200{% endif %} hover:text-gray-800
@@ -93,7 +93,7 @@
                 aria-hidden="true"><span class="text-xs">|</span></span>
               {% endif %}
               <a class="w-full cursor-pointer" hx-trigger="click" hx-target="#main" hx-indicator="#htmxLoaderIndicator"
-                hx-swap="outerHTML swap:0.2s" hx-get="{% url 'portfolios:professional_experiences' %}"
+                hx-swap="outerHTML" hx-get="{% url 'portfolios:professional_experiences' %}"
                 hx-push-url="true">
                 <span class="{% if current_url in ProfessionalExperience_url_list %}font-extrabold text-gray-800
                   dark:text-gray-200{% endif %} hover:text-gray-800

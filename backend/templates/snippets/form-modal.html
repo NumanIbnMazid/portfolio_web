@@ -99,7 +99,7 @@
 
         <button class="btn-primary" type="submit" hx-trigger="click" hx-target="#main"
           hx-post="{{ request.get_full_path }}" hx-indicator="#htmxLoaderIndicator"
-          x-on:click="closeJqueryModal('form-modal-dialog')" hx-swap="outerHTML swap:0.3s">
+          x-on:click="closeJqueryModal('form-modal-dialog')" hx-swap="outerHTML">
           {% if action == "delete" %}{% trans "Yes, Delete" %}{% elif action %}{{ action|title }}{% else %}{% trans 'Submit' %}{% endif %}
         </button>
 
