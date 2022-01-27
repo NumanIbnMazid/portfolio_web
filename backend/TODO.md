@@ -6,3 +6,4 @@
 * pagination (lazy loading)
 * Django Factory Boy
 * Bulk Delete
+* Create Dev branch
