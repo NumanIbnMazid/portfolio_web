@@ -7,3 +7,4 @@
 * Django Factory Boy
 * Bulk Delete
 * Create Dev branch
+* Use Rebase for Merging
