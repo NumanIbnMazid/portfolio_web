@@ -1,8 +1,8 @@
-# Django Starter Template
+# numanibnmazid.com
 
 ## Description
 
-Django Starter is a simple Skeleton to start with a Django project.
+Portfolio website for [Numan Ibn Mazid](https://www.linkedin.com/in/numanibnmazid/).
 
 ## Features
 
@@ -36,8 +36,8 @@ Django Starter is a simple Skeleton to start with a Django project.
 
 #### 1. Using Traditional Approach
 
-1. Clone the git: `git clone https://github.com/NumanIbnMazid/django_starter.git`
-2. Go into the new directory: `cd django_starter`
+1. Clone the git: `git clone https://github.com/NumanIbnMazid/numanibnmazid.com.git`
+2. Go into the new directory: `cd numanibnmazid.com`
 3. Install the required dependencies.
 
    - Install Dependencies Using Pip
@@ -70,8 +70,8 @@ Django Starter is a simple Skeleton to start with a Django project.
 
 #### 2. Using Docker
 
-1. Clone the git: `git clone https://github.com/NumanIbnMazid/django_starter.git`
-2. Go into the new directory: `cd django_starter`
+1. Clone the git: `git clone https://github.com/NumanIbnMazid/numanibnmazid.com.git`
+2. Go into the new directory: `cd numanibnmazid.com`
 3. Create a `.env` file and provide required environment variables using the template `.env.example`. Django SECRET_KEY can be generated from [djecrety.ir](https://djecrety.ir/)
 4. Run command `docker-compose up` to start the project.
 5. Open the app on browser by navigating the url `http://localhost:8000`
