@@ -1,3 +1,3 @@
-from django.test import TestCase
+# import test cases
 
-# Create your tests here.
+from users.test_cases.user_test_cases import UserTestCase

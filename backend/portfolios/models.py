@@ -1,5 +1,6 @@
 from django.db import models
 from django.http import Http404
+from django.urls import reverse
 from django.contrib.auth import get_user_model
 from utils.snippets import autoslugFromUUID, autoslugWithFieldAndUUID
 from django.utils.translation import gettext_lazy as _
@@ -65,6 +66,9 @@ class Skill(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('portfolios:skill_detail', kwargs={'slug': self.slug})
 
     def unique_error_message(self, model_class, unique_check):
         """ custom `unique_error_message` for `unique_together` validation """

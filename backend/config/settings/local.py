@@ -10,8 +10,28 @@ ALLOWED_HOSTS = ['*']
 # *** Databases ***
 # ----------------------------------------------------
 
-if os.environ.get('DATABASE_URL') is not None:
+if os.environ.get('GITHUB_WORKFLOW'):
+    DATABASES = {
+        'default': {
+           'ENGINE': 'django.db.backends.postgresql',
+           'NAME': 'github_actions',
+           'USER': 'postgres',
+           'PASSWORD': 'postgres',
+           'HOST': '127.0.0.1',
+           'PORT': '5432',
+        }
+    }
+
+elif os.environ.get('DATABASE_URL') is not None:
     DATABASES = {'default': env.db('DATABASE_URL')}
+
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR , 'project.db.sqlite3'),
+        }
+    }
 
 # remove sslmode for local development
 options = DATABASES['default'].get('OPTIONS', {})

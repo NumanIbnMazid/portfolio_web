@@ -1,3 +1,2 @@
-from django.test import TestCase
-
-# Create your tests here.
+# import test cases
+from portfolios.test_cases.skill_test_cases import SkillTestCase
