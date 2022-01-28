@@ -13,4 +13,4 @@ class UserTestCase(TestCase):
     # test if data is created sucessfully
     def test_data_created_sucessfully(self):
         instance = self.__MODEL.objects.get(id=self.user.id)
-        self.assertEquals(instance.username, self.user.username)
+        self.assertEqual(instance.username, self.user.username)

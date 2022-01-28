@@ -20,11 +20,12 @@ Portfolio web application of [Numan Ibn Mazid](https://www.linkedin.com/in/numan
 - [x] I18N Support
 - [x] Static File Compresson
 - [x] Factory Faker
+- [x] Testing with Django Test Framework and Pytest-Django
 - [x] Argon2 Password Hashing
 
 ## Technologies
 
-[Python](https://www.python.org/), [Django](https://www.djangoproject.com/), [PostgreSQL](https://www.postgresql.org/), [JavaScript](https://www.javascript.com/), [jQuery](https://jquery.com/), [HTMX](https://htmx.org/), [Alpine JS](https://alpinejs.dev/), [yarn](https://yarnpkg.com/), [ReactJS](https://reactjs.org/), [GatsbyJS](https://www.gatsbyjs.org/), [HTML5](https://www.w3.org/TR/html5/), [CSS3](https://www.w3.org/Style/CSS/), [TailwindCSS](https://tailwindcss.com/), [Docker](https://www.docker.com/), [Docker Compose](https://docs.docker.com/compose/), [GitHub](https://github.com/), [GitHub Actions](https://github.com/features/actions)
+[Python](https://www.python.org/), [Django](https://www.djangoproject.com/), [PostgreSQL](https://www.postgresql.org/), [JavaScript](https://www.javascript.com/), [jQuery](https://jquery.com/), [HTMX](https://htmx.org/), [Alpine JS](https://alpinejs.dev/), [yarn](https://yarnpkg.com/), [ReactJS](https://reactjs.org/), [GatsbyJS](https://www.gatsbyjs.org/), [HTML5](https://www.w3.org/TR/html5/), [CSS3](https://www.w3.org/Style/CSS/), [TailwindCSS](https://tailwindcss.com/), [Docker](https://www.docker.com/), [Docker Compose](https://docs.docker.com/compose/), [GitHub](https://github.com/), [GitHub Actions](https://github.com/features/actions), [pytest-django](https://pytest-django.readthedocs.io/en/latest/)
 
 ## Installation
 

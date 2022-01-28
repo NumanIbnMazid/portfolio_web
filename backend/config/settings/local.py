@@ -59,11 +59,11 @@ TEMPLATES[0]["DIRS"] = [os.path.join(root.path(), "templates")]
 
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'BACKEND': 'djpymemcache.backend.PyMemcacheCache', # https://github.com/django-pymemcache/django-pymemcache
         'LOCATION': '127.0.0.1:11211',
     },
     'rosetta': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'BACKEND': 'djpymemcache.backend.PyMemcacheCache', # https://github.com/django-pymemcache/django-pymemcache
         'LOCATION': '127.0.0.1:11211',
     }
 }

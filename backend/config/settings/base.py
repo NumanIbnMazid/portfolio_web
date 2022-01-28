@@ -179,7 +179,7 @@ LANGUAGES = [
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
-USE_L10N = True
+# USE_L10N = True # The USE_L10N setting is deprecated. Starting with Django 5.0, localized formatting of data will always be enabled.
 USE_TZ = True
 
 LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale')]
