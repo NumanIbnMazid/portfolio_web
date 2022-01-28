@@ -13,6 +13,7 @@ from utils.helpers import now
 ----------------------- * Generic View Mixins * -----------------------
 """
 
+
 class ContextMixinView(ContextMixin):
     """
     This is a mixin for generic views.
@@ -28,15 +29,29 @@ class ContextMixinView(ContextMixin):
 
         try:
             context = super().get_context_data(**kwargs)
-        except:
+        except Exception:
             context = {}
+
+        # display name for the current view
+        display_name = _(
+            f"{getattr(self.model._meta, 'verbose_name_plural', f'{self.model.__name__} List')}" if
+            self.action and self.action == "list" else
+            f"{getattr(self.model._meta, 'verbose_name', f'{self.model.__name__}')} Detail" if
+            self.action and self.action == "detail" else
+            f"{self.action.title()} {getattr(self.model._meta, 'verbose_name', {self.model.__name__})}" if
+            self.action else "Home"
+        )
 
         # default app contexts
         default_app_contexts = {
             # meta description
-            "meta_description": _("numanibnmazid.com: Portfolio of Numan Ibn Mazid. A professional Software Engineer who enjoys developing innovative software solutions that are tailored to customer desirability and usability. Email: numanibnmazid@gmail.com"),
+            "meta_description": _("numanibnmazid.com: Portfolio of Numan Ibn Mazid. A professional Software Engineer who \
+                enjoys developing innovative software solutions that are tailored to customer desirability and \
+                usability. Email: numanibnmazid@gmail.com"),
             # meta keywords
-            "meta_keywords": _("numan ibn mazid, portfolio, website, web application, software development, software developer, singer, musician, youtuber, django, django rest framework, python, data structure and algorithms"),
+            "meta_keywords": _("numan ibn mazid, portfolio, website, web application, software development, \
+                software developer, singer, musician, youtuber, django, django rest framework, python, data structure \
+                    and algorithms"),
             # meta author
             "meta_author": _("Numan Ibn Mazid"),
             # meta copyright
@@ -52,8 +67,8 @@ class ContextMixinView(ContextMixin):
             "display_fields": self.model._meta.get_fields(),
             "action": self.action if self.action else None,
             # head & page title
-            "head_title": _(f"{getattr(self.model._meta, 'verbose_name_plural', f'{self.model.__name__} List')}" if self.action and self.action == "list" else f"{getattr(self.model._meta, 'verbose_name', f'{self.model.__name__}')} Detail" if self.action and self.action == "detail" else f"{self.action.title()} {getattr(self.model._meta, 'verbose_name', {self.model.__name__})}" if self.action else "Home"),
-            "page_title": _(f"{getattr(self.model._meta, 'verbose_name_plural', f'{self.model.__name__} List')}" if self.action and self.action == "list" else f"{getattr(self.model._meta, 'verbose_name', f'{self.model.__name__}')} Detail" if self.action and self.action == "detail" else f"{self.action.title()} {getattr(self.model._meta, 'verbose_name', {self.model.__name__})}" if self.action else "Home"),
+            "head_title": display_name,
+            "page_title": display_name,
             # Object List URL
             "object_list_url": self.success_url,
         }
@@ -101,7 +116,9 @@ class CustomViewSetMixin(UpdateView, ListView, TemplateView, ContextMixinView):
 
     def get_success_url(self):
         look_up_field = self.look_up_field if hasattr(self, 'look_up_field') else None
-        URL = reverse(self.success_url, kwargs={look_up_field: getattr(self.object, look_up_field)} if look_up_field else None)
+        URL = reverse(
+            self.success_url, kwargs={look_up_field: getattr(self.object, look_up_field)} if look_up_field else None
+        )
         # add pagination data with url if any
         if 'page' in self.request.GET:
             URL += f"?page={self.request.GET['page']}"
@@ -111,7 +128,7 @@ class CustomViewSetMixin(UpdateView, ListView, TemplateView, ContextMixinView):
         try:
             if self.get_object():
                 self.object = self.get_object()
-        except:
+        except Exception:
             # pass except block
             pass
         # do the rest in finally block
@@ -147,7 +164,7 @@ class CustomViewSetMixin(UpdateView, ListView, TemplateView, ContextMixinView):
         try:
             self.object = self.get_object()
         # bypass
-        except:
+        except Exception:
             pass
 
         form = self.get_form()
@@ -175,7 +192,7 @@ class CustomViewSetMixin(UpdateView, ListView, TemplateView, ContextMixinView):
                 )
             else:
                 raise Http404(_("Object not found!"))
-        except:
+        except Exception:
             messages.add_message(
                 self.request, messages.ERROR, self.get_error_message()
             )
@@ -248,7 +265,10 @@ class CustomViewSetMixin(UpdateView, ListView, TemplateView, ContextMixinView):
         elif self.success_message:
             return self.success_message
         elif self.action:
-            return _(f"{getattr(self.model._meta, 'verbose_name', {self.model.__name__}).title()} {self.action.title()}d Successfully")
+            return _(
+                f"{getattr(self.model._meta, 'verbose_name', {self.model.__name__}).title()} "
+                f"{self.action.title()}d Successfully"
+            )
         else:
             return _("SUCCESS")
 
@@ -258,7 +278,10 @@ class CustomViewSetMixin(UpdateView, ListView, TemplateView, ContextMixinView):
         elif self.error_message:
             return self.error_message
         elif self.action:
-            return _(f"Failed to {self.action.title()} {getattr(self.model._meta, 'verbose_name', {self.model.__name__}).title()}")
+            return _(
+                f"Failed to {self.action.title()} "
+                f"{getattr(self.model._meta, 'verbose_name', {self.model.__name__}).title()}"
+            )
         else:
             return _("ERROR")
 

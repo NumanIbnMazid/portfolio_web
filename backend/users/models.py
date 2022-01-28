@@ -62,7 +62,7 @@ class UserManager(BaseUserManager):
         except User.MultipleObjectsReturned:
             qs = self.get_queryset().filter(id=id)
             instance = qs.first()
-        except:
+        except Exception:
             raise Http404("Something went wrong!")
         return instance
 
@@ -74,7 +74,7 @@ class UserManager(BaseUserManager):
         except User.MultipleObjectsReturned:
             qs = self.get_queryset().filter(slug=slug)
             instance = qs.first()
-        except:
+        except Exception:
             raise Http404("Something went wrong!")
         return instance
 
@@ -135,7 +135,8 @@ class User(SafeDeleteModel, AbstractBaseUser, PermissionsMixin):
         return self.get_dynamic_username()
 
     def get_dynamic_username(self):
-        """ Get a dynamic username for a specific user instance. if the user has a name then returns the name, if the user does not have a name but has a username then return username, otherwise returns email as username """
+        """ Get a dynamic username for a specific user instance. if the user has a name then returns the name, \
+            if the user does not have a name but has a username then return username, otherwise returns email as username """
         if self.nick_name:
             return self.nick_name
         elif self.name:

@@ -1,8 +1,9 @@
 {
     "python.linting.flake8Enabled": true,
     "python.linting.enabled": true,
+    // Overriding default Flake8 Arguments (Use tox.ini for default)
     "python.linting.flake8Args": [
-        "--max-line-length=127",
+        "--max-line-length=120",
         "--max-complexity=10",
         // "--ignore=E402,F841,F401,E302,E305",
     ],

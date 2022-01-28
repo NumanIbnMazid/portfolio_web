@@ -6,11 +6,13 @@ from utils.snippets import autoslugFromUUID, autoslugWithFieldAndUUID
 from django.utils.translation import gettext_lazy as _
 from django.utils import dateformat
 from portfolios.file_upload_helpers import (
-    skill_icon_path, professional_experience_company_image_path, professional_experience_media_path, education_media_path, certification_media_path, project_media_path, interest_icon_path, testimonial_image_path
+    skill_icon_path, professional_experience_company_image_path, professional_experience_media_path, education_media_path,
+    certification_media_path, project_media_path, interest_icon_path, testimonial_image_path
 )
 
 
 """ *************** Skill *************** """
+
 
 class SkillManager(models.Manager):
 
@@ -25,7 +27,7 @@ class SkillManager(models.Manager):
         except Skill.MultipleObjectsReturned:
             qs = self.get_queryset().filter(id=id)
             instance = qs.first()
-        except:
+        except Exception:
             raise Http404(_("Something went wrong !!!"))
         return instance
 
@@ -37,9 +39,10 @@ class SkillManager(models.Manager):
         except Skill.MultipleObjectsReturned:
             qs = self.get_queryset().filter(slug=slug)
             instance = qs.first()
-        except:
+        except Exception:
             raise Http404(_("Something went wrong !!!"))
         return instance
+
 
 @autoslugWithFieldAndUUID(fieldname="title")
 class Skill(models.Model):
@@ -99,7 +102,7 @@ class ProfessionalExperienceManager(models.Manager):
         except ProfessionalExperience.MultipleObjectsReturned:
             qs = self.get_queryset().filter(id=id)
             instance = qs.first()
-        except:
+        except Exception:
             raise Http404(_("Something went wrong !!!"))
         return instance
 
@@ -111,7 +114,7 @@ class ProfessionalExperienceManager(models.Manager):
         except ProfessionalExperience.MultipleObjectsReturned:
             qs = self.get_queryset().filter(slug=slug)
             instance = qs.first()
-        except:
+        except Exception:
             raise Http404(_("Something went wrong !!!"))
         return instance
 
@@ -163,6 +166,7 @@ class ProfessionalExperience(models.Model):
             return dateformat.format(self.end_date, "F Y")
         return _('Not Specified')
 
+
 class ProfessionalExperienceMediaManager(models.Manager):
 
     def all(self):
@@ -176,7 +180,7 @@ class ProfessionalExperienceMediaManager(models.Manager):
         except ProfessionalExperienceMedia.MultipleObjectsReturned:
             qs = self.get_queryset().filter(id=id)
             instance = qs.first()
-        except:
+        except Exception:
             raise Http404(_("Something went wrong !!!"))
         return instance
 
@@ -188,13 +192,16 @@ class ProfessionalExperienceMediaManager(models.Manager):
         except ProfessionalExperienceMedia.MultipleObjectsReturned:
             qs = self.get_queryset().filter(slug=slug)
             instance = qs.first()
-        except:
+        except Exception:
             raise Http404(_("Something went wrong !!!"))
         return instance
 
+
 @autoslugFromUUID()
 class ProfessionalExperienceMedia(models.Model):
-    professional_experience = models.ForeignKey(ProfessionalExperience, on_delete=models.CASCADE, related_name="professional_experience_media")
+    professional_experience = models.ForeignKey(
+        ProfessionalExperience, on_delete=models.CASCADE, related_name="professional_experience_media"
+    )
     slug = models.SlugField(max_length=255, unique=True)
     file = models.FileField(upload_to=professional_experience_media_path, blank=True, null=True)
     description = models.TextField(blank=True, null=True)

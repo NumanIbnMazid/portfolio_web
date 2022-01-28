@@ -60,10 +60,12 @@ class ProfessionalExperienceForm(forms.ModelForm):
         company_image = self.cleaned_data.get('company_image')
         return get_validated_image(company_image)
 
+
 class ProfessionalExperienceMediaForm(forms.ModelForm):
     class Meta:
         model = ProfessionalExperienceMedia
         fields = ("file",)
+
 
 class ProfessionalExperienceWithMediaForm(ProfessionalExperienceForm):
     """ ProfessionalExperienceWithMediaForm = ProfessionalExperienceForm + ProfessionalExperienceMediaForm """
@@ -72,7 +74,7 @@ class ProfessionalExperienceWithMediaForm(ProfessionalExperienceForm):
     file = forms.FileField(required=False, widget=forms.ClearableFileInput(attrs={'multiple': True}))
 
     class Meta(ProfessionalExperienceForm.Meta):
-        fields = ProfessionalExperienceForm.Meta.fields + ['file',]
+        fields = ProfessionalExperienceForm.Meta.fields + ['file', ]
 
     def clean_file(self):
         file = self.cleaned_data.get('file')

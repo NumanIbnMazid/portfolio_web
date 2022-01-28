@@ -20,7 +20,7 @@ def get_validated_file(file):
     if file and isinstance(file, UploadedFile):
         file_extension = os.path.splitext(file.name)[1]
         allowed_file_types = ALLOWED_FILE_TYPES
-        if not file_extension in allowed_file_types:
+        if file_extension not in allowed_file_types:
             raise forms.ValidationError(
                 "Only %s file formats are supported! Current file format is %s" % (
                     allowed_file_types, file_extension if file_extension else "undefined"
@@ -39,7 +39,7 @@ def get_validated_image(image):
     if image and isinstance(image, UploadedFile):
         file_extension = os.path.splitext(image.name)[1]
         allowed_image_types = ALLOWED_IMAGE_TYPES
-        if not file_extension in allowed_image_types:
+        if file_extension not in allowed_image_types:
             raise forms.ValidationError(
                 "Only %s image formats are supported! Current file format is %s" % (
                     allowed_image_types, file_extension if file_extension else "undefined"
@@ -58,7 +58,7 @@ def get_validated_document(document):
     if document and isinstance(document, UploadedFile):
         file_extension = os.path.splitext(document.name)[1]
         allowed_document_types = ALLOWED_DOCUMENT_TYPES
-        if not file_extension in allowed_document_types:
+        if file_extension not in allowed_document_types:
             raise forms.ValidationError(
                 "Only %s document formats are supported! Current file format is %s" % (
                     allowed_document_types, file_extension if file_extension else "undefined"

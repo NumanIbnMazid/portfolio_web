@@ -6,6 +6,7 @@ from django.utils.decorators import method_decorator
 
 user_profile_decorators = [login_required]
 
+
 @method_decorator(user_profile_decorators, name='dispatch')
 class UserProfileView(CustomViewSetMixin):
     template_name = "users/profile.html"

@@ -1,4 +1,4 @@
-from .base import *
+from .base import *  # NOQA
 
 # ----------------------------------------------------
 # *** Allowed Hosts ***
@@ -10,26 +10,26 @@ ALLOWED_HOSTS = ['*']
 # *** Databases ***
 # ----------------------------------------------------
 
-if os.environ.get('GITHUB_WORKFLOW'):
+if os.environ.get('GITHUB_WORKFLOW'):  # NOQA
     DATABASES = {
         'default': {
-           'ENGINE': 'django.db.backends.postgresql',
-           'NAME': 'github_actions',
-           'USER': 'postgres',
-           'PASSWORD': 'postgres',
-           'HOST': '127.0.0.1',
-           'PORT': '5432',
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'github_actions',
+            'USER': 'postgres',
+            'PASSWORD': 'postgres',
+            'HOST': '127.0.0.1',
+            'PORT': '5432',
         }
     }
 
-elif os.environ.get('DATABASE_URL') is not None:
-    DATABASES = {'default': env.db('DATABASE_URL')}
+elif os.environ.get('DATABASE_URL') is not None:  # NOQA
+    DATABASES = {'default': env.db('DATABASE_URL')}  # NOQA
 
 else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR , 'project.db.sqlite3'),
+            'NAME': os.path.join(BASE_DIR, 'project.db.sqlite3'),  # NOQA
         }
     }
 
@@ -49,7 +49,7 @@ DEBUG = True
 # *** Templates ***
 # ----------------------------------------------------
 
-TEMPLATES[0]["DIRS"] = [os.path.join(root.path(), "templates")]
+TEMPLATES[0]["DIRS"] = [os.path.join(root.path(), "templates")]  # NOQA
 
 # ----------------------------------------------------
 # *** CACHES ***
@@ -59,11 +59,13 @@ TEMPLATES[0]["DIRS"] = [os.path.join(root.path(), "templates")]
 
 CACHES = {
     'default': {
-        'BACKEND': 'djpymemcache.backend.PyMemcacheCache', # https://github.com/django-pymemcache/django-pymemcache
+        # https://github.com/django-pymemcache/django-pymemcache
+        'BACKEND': 'djpymemcache.backend.PyMemcacheCache',
         'LOCATION': '127.0.0.1:11211',
     },
     'rosetta': {
-        'BACKEND': 'djpymemcache.backend.PyMemcacheCache', # https://github.com/django-pymemcache/django-pymemcache
+        # https://github.com/django-pymemcache/django-pymemcache
+        'BACKEND': 'djpymemcache.backend.PyMemcacheCache',
         'LOCATION': '127.0.0.1:11211',
     }
 }
@@ -73,7 +75,8 @@ CACHES = {
 # ----------------------------------------------------
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#logging
-# See https://docs.djangoproject.com/en/dev/topics/logging for more details on how to customize logging configuration.
+# See https://docs.djangoproject.com/en/dev/topics/logging for more details on
+# how to customize logging configuration.
 
 LOGGING = {
     "version": 1,
@@ -112,11 +115,11 @@ CORS_ORIGIN_ALLOW_ALL = True
 # *** Django Debug Toolbar ***
 # ----------------------------------------------------
 
-if not "debug_toolbar" in INSTALLED_APPS:
-    INSTALLED_APPS += ["debug_toolbar"]
+if "debug_toolbar" not in INSTALLED_APPS:  # NOQA
+    INSTALLED_APPS += ["debug_toolbar"]  # NOQA
 
-if not "debug_toolbar.middleware.DebugToolbarMiddleware" in MIDDLEWARE:
-    MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]
+if "debug_toolbar.middleware.DebugToolbarMiddleware" not in MIDDLEWARE:  # NOQA
+    MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]  # NOQA
 
 # https://django-debug-toolbar.readthedocs.io/en/latest/configuration.html#debug-toolbar-config
 DEBUG_TOOLBAR_CONFIG = {
@@ -128,7 +131,7 @@ INTERNAL_IPS = [
     "127.0.0.1", "0.0.0.0", "10.0.2.2"
 ]
 
-if env.str("USE_DOCKER", default="no") == "yes":
+if env.str("USE_DOCKER", default="no") == "yes":  # NOQA
     import socket
 
     hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())

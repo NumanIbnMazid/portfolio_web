@@ -15,7 +15,7 @@ from django.http import HttpResponseRedirect, Http404
 from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 
-skill_decorators = professional_experience_decorators= [login_required]
+skill_decorators = professional_experience_decorators = [login_required]
 
 
 # ----------------------------------------------------
@@ -42,11 +42,12 @@ class SkillView(CustomViewSetMixin):
         # assign user to the form
         form.instance.user = self.request.user
         # validate unique skill title
-        qs = Skill.objects.filter(user=self.request.user, title__iexact=form.cleaned_data.get('title')).exclude(slug__iexact=self.kwargs.get('slug'))
+        qs = Skill.objects.filter(user=self.request.user, title__iexact=form.cleaned_data.get('title')).\
+            exclude(slug__iexact=self.kwargs.get('slug'))
         if qs:
             form.add_error(
                 "title", forms.ValidationError(
-                    f"This skill already exists!"
+                    _("This skill already exists!")
                 )
             )
         return super().form_valid(form)
@@ -65,7 +66,10 @@ class ProfessionalExperienceView(CustomViewSetMixin):
     paginate_by = 4
     success_url = 'portfolios:professional_experiences'
     lookup_field = 'slug'
-    url_list = ["professional_experiences", "professional_experience_create", "professional_experience_detail", "professional_experience_update", "professional_experience_delete"]
+    url_list = [
+        "professional_experiences", "professional_experience_create", "professional_experience_detail",
+        "professional_experience_update", "professional_experience_delete"
+    ]
 
     def get_queryset(self):
         return ProfessionalExperience.objects.all()
@@ -102,7 +106,8 @@ class ProfessionalExperienceView(CustomViewSetMixin):
             form.instance.user = self.request.user
 
             # validate unique  company name
-            qs = ProfessionalExperience.objects.filter(user=self.request.user, company__iexact=form.cleaned_data.get('company')).exclude(slug__iexact=self.kwargs.get('slug'))
+            qs = ProfessionalExperience.objects.filter(user=self.request.user, company__iexact=form.cleaned_data.get('company')
+                                                       ).exclude(slug__iexact=self.kwargs.get('slug'))
             if qs:
                 form.add_error(
                     "title", forms.ValidationError(
@@ -121,11 +126,11 @@ class ProfessionalExperienceView(CustomViewSetMixin):
             professional_experience_media_form = ProfessionalExperienceMediaForm(self.request.POST, self.request.FILES)
             # check if the form is valid and form has files
             if professional_experience_media_form.is_valid() and len(files) >= 1:
-                with transaction.atomic(): # ensure that all objects are saved otherwise rollback
+                with transaction.atomic():  # ensure that all objects are saved otherwise rollback
                     for file in files:
                         ProfessionalExperienceMedia.objects.update_or_create(
                             professional_experience=self.object,
-                            file = file
+                            file=file
                         )
 
             return super().form_valid(form)
@@ -145,7 +150,10 @@ class ProfessionalExperienceView(CustomViewSetMixin):
 #     paginate_by = 4
 #     success_url = 'portfolios:professional_experiences'
 #     lookup_field = 'slug'
-#     url_list = ["professional_experiences", "professional_experience_create", "professional_experience_detail", "professional_experience_update", "professional_experience_delete"]
+    # url_list = [
+    #     "professional_experiences", "professional_experience_create", "professional_experience_detail",
+    #     "professional_experience_update", "professional_experience_delete"
+    # ]
 
 #     def get_queryset(self):
 #         return ProfessionalExperience.objects.all()
@@ -157,7 +165,8 @@ class ProfessionalExperienceView(CustomViewSetMixin):
 #         # assign user to the form
 #         form.instance.user = self.request.user
 #         # validate unique  company name
-#         qs = ProfessionalExperience.objects.filter(user=self.request.user, company__iexact=form.cleaned_data.get('company')).exclude(slug__iexact=self.kwargs.get('slug'))
+        # qs = ProfessionalExperience.objects.filter(user=self.request.user, company__iexact=form.cleaned_data.get('company')
+        #                                            ).exclude(slug__iexact=self.kwargs.get('slug'))
 #         if qs:
 #             form.add_error(
 #                 "title", forms.ValidationError(

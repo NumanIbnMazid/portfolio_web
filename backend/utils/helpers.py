@@ -3,8 +3,10 @@ from django.conf import settings
 from django.utils import timezone
 import datetime
 
+
 def get_user_media_path(user):
     return f"{slugify(user.username[:23])}"
+
 
 def now():
 
@@ -18,7 +20,8 @@ def now():
         return datetime.now()
 
 
-def create_factory_data(factory=None, num_of_data=7, display_name="item", display_name_plural="items", delete_old_data=False, model=None):
+def create_factory_data(factory=None, num_of_data=7, display_name="item", display_name_plural="items",
+                        delete_old_data=False, model=None):
 
     """[Creates dummy data]
 

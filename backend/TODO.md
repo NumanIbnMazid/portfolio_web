@@ -9,3 +9,4 @@
 * Create Dev branch
 * Use Rebase for Merging
 * Users List for Super User
+* Remove Unused or Empty Folders

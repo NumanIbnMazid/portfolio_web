@@ -46,10 +46,7 @@ def simple_random_string():
     timestamp_now = time.strftime("%H%M%S")
     random_str = random_string_generator()
     random_num = random_number_generator()
-    bindings = (
-        random_str + timestamp_d + random_num + timestamp_now +
-        timestamp_y + random_num + timestamp_m
-    )
+    bindings = (random_str + timestamp_d + random_num + timestamp_now + timestamp_y + random_num + timestamp_m)
     return bindings
 
 
@@ -70,7 +67,7 @@ def simple_random_string_with_timestamp(size=None):
     bindings = (
         random_str + timestamp_d + timestamp_m + timestamp_y + random_num
     )
-    if not size == None:
+    if size is None:
         return bindings[0:size]
     return bindings
 
@@ -86,7 +83,7 @@ def unique_slug_generator(instance, field=None, new_slug=None):
     Returns:
         [str]: [Generated unique slug]
     """
-    if field == None:
+    if field is None:
         field = instance.title
     if new_slug is not None:
         slug = new_slug
@@ -114,15 +111,13 @@ def url_check(url):
         [bool]: [returns True if provided string is URL, otherwise returns False]
     """
 
-    min_attr = ('scheme', 'netloc')
-
     try:
         result = urlparse(url)
         if all([result.scheme, result.netloc]):
             return True
         else:
             return False
-    except:
+    except Exception:
         return False
 
 
@@ -154,7 +149,7 @@ def autoslugWithFieldAndUUID(fieldname):
                         instance.slug = new_slug
                     else:
                         instance.slug = slug
-                except Exception as e:
+                except Exception:
                     instance.slug = simple_random_string()
         return model
     return decorator
@@ -188,7 +183,7 @@ def autoslugFromField(fieldname):
                         instance.slug = new_slug
                     else:
                         instance.slug = slug
-                except Exception as e:
+                except Exception:
                     instance.slug = simple_random_string()
         return model
     return decorator
@@ -206,7 +201,7 @@ def autoslugFromUUID():
             if not raw and not instance.slug:
                 try:
                     instance.slug = str(uuid.uuid4())
-                except Exception as e:
+                except Exception:
                     instance.slug = simple_random_string()
         return model
     return decorator

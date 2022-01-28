@@ -9,12 +9,16 @@ class CustomLoginForm(LoginForm):
         super(CustomLoginForm, self).__init__(*args, **kwargs)
         self.fields['login'].widget = forms.EmailInput(
             attrs={
-                'autocomplete': 'off', 'placeholder': 'Email Address', 'class': 'block w-full mb-4 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-app-theme-400 focus:outline-none focus:shadow-outline-app-theme dark:text-gray-300 dark:focus:shadow-outline-gray form-input'
+                'autocomplete': 'off', 'placeholder': 'Email Address', 'class': 'block w-full mb-4 text-sm \
+                    dark:border-gray-600 dark:bg-gray-700 focus:border-app-theme-400 focus:outline-none \
+                        focus:shadow-outline-app-theme dark:text-gray-300 dark:focus:shadow-outline-gray form-input'
             }
         )
         self.fields['password'].widget = forms.PasswordInput(
             attrs={
-                'autocomplete': 'off', 'placeholder': 'Password', 'class': 'block w-full mb-4 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-app-theme-400 focus:outline-none focus:shadow-outline-app-theme dark:text-gray-300 dark:focus:shadow-outline-gray form-input'
+                'autocomplete': 'off', 'placeholder': 'Password', 'class': 'block w-full mb-4 text-sm dark:border-gray-600 \
+                    dark:bg-gray-700 focus:border-app-theme-400 focus:outline-none focus:shadow-outline-app-theme \
+                        dark:text-gray-300 dark:focus:shadow-outline-gray form-input'
             }
         )
 

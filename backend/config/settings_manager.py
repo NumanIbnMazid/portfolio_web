@@ -1,5 +1,6 @@
 import environ
 
+
 def get_settings_file():
 
     # ----------------------------------------------------
@@ -12,7 +13,8 @@ def get_settings_file():
     DEFAULT_ENV_FILE = DEFAULT_ENV_PATH.path('.env')()
 
     env = environ.Env(DEBUG=(bool, False),)
-    environ.Env.read_env(env.str('ENV_PATH', DEFAULT_ENV_FILE))  # reading .env file
+    # reading .env file
+    environ.Env.read_env(env.str('ENV_PATH', DEFAULT_ENV_FILE))
 
     # ----------------------------------------------------
     # *** Project's Settings File ***

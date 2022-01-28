@@ -1,4 +1,3 @@
-from portfolios.models import Skill
 from portfolios.factories.skill_factory import create_skills_with_factory
 from django.db import transaction
 from django.core.management.base import BaseCommand

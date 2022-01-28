@@ -91,7 +91,7 @@ def decorator_include(decorators, arg, namespace=None):
 
 
 is_superuser = user_passes_test(
-    lambda user: user.is_superuser == True, login_url=settings.DECORATOR_REDIRECT_URL
+    lambda user: user.is_superuser is True, login_url=settings.DECORATOR_REDIRECT_URL
 )
 
 
@@ -106,7 +106,7 @@ def is_superuser_required(view_func):
 
 
 is_staff = user_passes_test(
-    lambda user: user.is_staff == True, login_url=settings.DECORATOR_REDIRECT_URL
+    lambda user: user.is_staff is True, login_url=settings.DECORATOR_REDIRECT_URL
 )
 
 

@@ -1,6 +1,5 @@
 import os
 import time
-from django.utils.text import slugify
 from utils.helpers import get_user_media_path
 
 
@@ -34,7 +33,10 @@ def professional_experience_media_path(instance, filename):
     final_filename = '{new_filename}{ext}'.format(
         new_filename=new_filename, ext=ext
     )
-    return f"{get_user_media_path(instance.professional_experience.user)}/professional-experiences/{instance.professional_experience.slug[:23]}/media/{final_filename}"
+    return (
+        f"{get_user_media_path(instance.professional_experience.user)}/professional-experiences/"
+        f"{instance.professional_experience.slug[:23]}/media/{final_filename}"
+    )
 
 
 def education_media_path(instance, filename):
@@ -52,7 +54,10 @@ def certification_media_path(instance, filename):
     final_filename = '{new_filename}{ext}'.format(
         new_filename=new_filename, ext=ext
     )
-    return f"{get_user_media_path(instance.certification.user)}/certifications/{instance.certification.slug[:23]}/media/{final_filename}"
+    return (
+        f"{get_user_media_path(instance.certification.user)}/certifications/{instance.certification.slug[:23]}"
+        f"/media/{final_filename}"
+    )
 
 
 def project_media_path(instance, filename):

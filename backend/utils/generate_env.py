@@ -9,6 +9,7 @@ DEFAULT_ENV_PATH = environ.Path(__file__) - 2
 DEFAULT_ENV_FILE = DEFAULT_ENV_PATH.path('.env')()
 DEFAULT_ENV_EXAMPLE_FILE = DEFAULT_ENV_PATH.path('.env.example')()
 
+
 def get_env_key_values():
     KEY_VALUES = {}
     with open(DEFAULT_ENV_EXAMPLE_FILE, "r") as f:

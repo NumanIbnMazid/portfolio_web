@@ -1,12 +1,14 @@
 from django.contrib import admin
 from utils.mixins import CustomModelAdminMixin
 from .models import (
-    Skill, ProfessionalExperience, ProfessionalExperienceMedia, Education, EducationMedia, Certification, CertificationMedia, Project, ProjectMedia, Interest, Testimonial
+    Skill, ProfessionalExperience, ProfessionalExperienceMedia, Education, EducationMedia, Certification, CertificationMedia,
+    Project, ProjectMedia, Interest, Testimonial
 )
 
 # ----------------------------------------------------
 # *** Skill ***
 # ----------------------------------------------------
+
 
 class SkillAdmin(CustomModelAdminMixin, admin.ModelAdmin):
     pass
@@ -25,6 +27,7 @@ admin.site.register(Skill, SkillAdmin)
 class ProfessionalExperienceMediaAdmin(admin.StackedInline):
     model = ProfessionalExperienceMedia
 
+
 class ProfessionalExperienceAdmin(CustomModelAdminMixin, admin.ModelAdmin):
     inlines = [ProfessionalExperienceMediaAdmin]
 
@@ -41,6 +44,7 @@ admin.site.register(ProfessionalExperience, ProfessionalExperienceAdmin)
 
 class EducationMediaAdmin(admin.StackedInline):
     model = EducationMedia
+
 
 class EducationAdmin(CustomModelAdminMixin, admin.ModelAdmin):
     inlines = [EducationMediaAdmin]
@@ -59,6 +63,7 @@ admin.site.register(Education, EducationAdmin)
 class CertificationMediaAdmin(admin.StackedInline):
     model = CertificationMedia
 
+
 class CertificationAdmin(CustomModelAdminMixin, admin.ModelAdmin):
     inlines = [CertificationMediaAdmin]
 
@@ -75,6 +80,7 @@ admin.site.register(Certification, CertificationAdmin)
 
 class ProjectMediaAdmin(admin.StackedInline):
     model = ProjectMedia
+
 
 class ProjectAdmin(CustomModelAdminMixin, admin.ModelAdmin):
     inlines = [ProjectMediaAdmin]

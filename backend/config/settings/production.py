@@ -1,4 +1,4 @@
-from .base import *
+from .base import *  # NOQA
 
 # ----------------------------------------------------
 # *** Allowed Hosts ***
@@ -10,10 +10,10 @@ ALLOWED_HOSTS = ["mysite.example.com"]
 # *** Databases ***
 # ----------------------------------------------------
 
-DATABASES = {'default': get_env_value('DATABASE_URL')}
+DATABASES = {'default': get_env_value('DATABASE_URL')}  # NOQA
 # set atomic requests
 # DATABASES["default"]["ATOMIC_REQUESTS"] = True
-DATABASES["default"]["CONN_MAX_AGE"] = env.int("CONN_MAX_AGE", default=60)
+DATABASES["default"]["CONN_MAX_AGE"] = env.int("CONN_MAX_AGE", default=60)  # NOQA
 
 # ----------------------------------------------------
 # *** Debug ***
@@ -25,7 +25,7 @@ DEBUG = False
 # *** Templates ***
 # ----------------------------------------------------
 
-TEMPLATES[0]["DIRS"] = [os.path.join(root.path(), "templates")]
+TEMPLATES[0]["DIRS"] = [os.path.join(root.path(), "templates")]  # NOQA
 
 # ----------------------------------------------------
 # *** CACHES ***
@@ -35,11 +35,13 @@ TEMPLATES[0]["DIRS"] = [os.path.join(root.path(), "templates")]
 
 CACHES = {
     'default': {
-        'BACKEND': 'djpymemcache.backend.PyMemcacheCache', # https://github.com/django-pymemcache/django-pymemcache
+        # https://github.com/django-pymemcache/django-pymemcache
+        'BACKEND': 'djpymemcache.backend.PyMemcacheCache',
         'LOCATION': '127.0.0.1:11211',
     },
     'rosetta': {
-        'BACKEND': 'djpymemcache.backend.PyMemcacheCache', # https://github.com/django-pymemcache/django-pymemcache
+        # https://github.com/django-pymemcache/django-pymemcache
+        'BACKEND': 'djpymemcache.backend.PyMemcacheCache',
         'LOCATION': '127.0.0.1:11211',
     }
 }
@@ -49,7 +51,8 @@ CACHES = {
 # ----------------------------------------------------
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#logging
-# See https://docs.djangoproject.com/en/dev/topics/logging for more details on how to customize logging configuration.
+# See https://docs.djangoproject.com/en/dev/topics/logging for more details on
+# how to customize logging configuration.
 
 LOGGING = {
     "version": 1,
@@ -75,7 +78,11 @@ LOGGING = {
             "propagate": False,
         },
         # Errors logged by the SDK itself
-        "sentry_sdk": {"level": "ERROR", "handlers": ["console"], "propagate": False},
+        "sentry_sdk": {
+            "level": "ERROR",
+            "handlers": ["console"],
+            "propagate": False
+        },
         "django.security.DisallowedHost": {
             "level": "ERROR",
             "handlers": ["console"],
@@ -91,7 +98,7 @@ LOGGING = {
 # ADMIN
 # ------------------------------------------------------------------------------
 # Django Admin URL regex.
-ADMIN_URL = env.str("DJANGO_ADMIN_URL")
+ADMIN_URL = env.str("DJANGO_ADMIN_URL")  # NOQA
 
 # ==============================================================================
 # *** SECURITY SETTINGS ***
@@ -100,23 +107,24 @@ ADMIN_URL = env.str("DJANGO_ADMIN_URL")
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-proxy-ssl-header
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-ssl-redirect
-SECURE_SSL_REDIRECT = env.bool("DJANGO_SECURE_SSL_REDIRECT", default=True)
+SECURE_SSL_REDIRECT = env.bool("DJANGO_SECURE_SSL_REDIRECT", default=True)  # NOQA
 # https://docs.djangoproject.com/en/dev/ref/settings/#session-cookie-secure
 SESSION_COOKIE_SECURE = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#csrf-cookie-secure
 CSRF_COOKIE_SECURE = True
 # https://docs.djangoproject.com/en/dev/topics/security/#ssl-https
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-hsts-seconds
-# TODO: set this to 60 seconds first and then to 518400 once you prove the former works
-SECURE_HSTS_SECONDS = 60 # 60 * 60 * 24 * 7 * 52  # one year
+# TODO: set this to 60 seconds first and then to 518400 once
+# you prove the former works
+SECURE_HSTS_SECONDS = 60  # 60 * 60 * 24 * 7 * 52  # one year
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-hsts-include-subdomains
-SECURE_HSTS_INCLUDE_SUBDOMAINS = env.bool(
+SECURE_HSTS_INCLUDE_SUBDOMAINS = env.bool(  # NOQA
     "DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS", default=True
 )
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-hsts-preload
-SECURE_HSTS_PRELOAD = env.bool("DJANGO_SECURE_HSTS_PRELOAD", default=True)
+SECURE_HSTS_PRELOAD = env.bool("DJANGO_SECURE_HSTS_PRELOAD", default=True)  # NOQA
 # https://docs.djangoproject.com/en/dev/ref/middleware/#x-content-type-options-nosniff
-SECURE_CONTENT_TYPE_NOSNIFF = env.bool(
+SECURE_CONTENT_TYPE_NOSNIFF = env.bool(  # NOQA
     "DJANGO_SECURE_CONTENT_TYPE_NOSNIFF", default=True
 )
 CSRF_COOKIE_HTTPONLY = True
@@ -142,13 +150,14 @@ CORS_ORIGIN_WHITELIST = (
 # ----------------------------------------------------
 
 # https://django-compressor.readthedocs.io/en/stable/settings.html?highlight=COMPRESS_ENABLED#django.conf.settings.COMPRESS_ENABLED
-COMPRESS_ENABLED = env.bool("COMPRESS_ENABLED", default=True)
+COMPRESS_ENABLED = env.bool("COMPRESS_ENABLED", default=True)  # NOQA
 # https://django-compressor.readthedocs.io/en/stable/settings.html?highlight=COMPRESS_URL#django.conf.settings.COMPRESS_URL
-COMPRESS_URL = STATIC_URL
+COMPRESS_URL = STATIC_URL  # NOQA
 # https://django-compressor.readthedocs.io/en/stable/settings.html?highlight=COMPRESS_OFFLINE#django.conf.settings.COMPRESS_OFFLINE
-COMPRESS_OFFLINE = True  # Offline compression is required when using Whitenoise
+# Offline compression is required when using Whitenoise
+COMPRESS_OFFLINE = True
 # https://django-compressor.readthedocs.io/en/stable/settings.html?highlight=COMPRESS_OFFLINE#django.conf.settings.COMPRESS_OFFLINE_TIMEOUT
-COMPRESS_OFFLINE_TIMEOUT = 31536000 # 1 year
+COMPRESS_OFFLINE_TIMEOUT = 31536000  # 1 year
 # https://django-compressor.readthedocs.io/en/stable/settings.html?highlight=COMPRESS_FILTERS#django.conf.settings.COMPRESS_FILTERS
 COMPRESS_FILTERS = {
     "css": [

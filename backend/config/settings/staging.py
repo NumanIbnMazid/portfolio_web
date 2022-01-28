@@ -1,16 +1,16 @@
-from .base import *
+from .base import *  # NOQA
 
 # ----------------------------------------------------
 # *** Allowed Hosts ***
 # ----------------------------------------------------
 
-ALLOWED_HOSTS = env('ALLOWED_HOSTS').split(" ")
+ALLOWED_HOSTS = env('ALLOWED_HOSTS').split(" ")  # NOQA
 
 # ----------------------------------------------------
 # *** Databases ***
 # ----------------------------------------------------
 
-DATABASES = {'default': get_env_value('DATABASE_URL')}
+DATABASES = {'default': get_env_value('DATABASE_URL')}  # NOQA
 # set atomic requests
 # DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
@@ -24,7 +24,7 @@ DEBUG = False
 # *** Templates ***
 # ----------------------------------------------------
 
-TEMPLATES[0]["DIRS"] = [os.path.join(root.path(), "templates")]
+TEMPLATES[0]["DIRS"] = [os.path.join(root.path(), "templates")]  # NOQA
 
 # ----------------------------------------------------
 # *** CACHES ***
@@ -34,11 +34,13 @@ TEMPLATES[0]["DIRS"] = [os.path.join(root.path(), "templates")]
 
 CACHES = {
     'default': {
-        'BACKEND': 'djpymemcache.backend.PyMemcacheCache', # https://github.com/django-pymemcache/django-pymemcache
+        # https://github.com/django-pymemcache/django-pymemcache
+        'BACKEND': 'djpymemcache.backend.PyMemcacheCache',
         'LOCATION': '127.0.0.1:11211',
     },
     'rosetta': {
-        'BACKEND': 'djpymemcache.backend.PyMemcacheCache', # https://github.com/django-pymemcache/django-pymemcache
+        # https://github.com/django-pymemcache/django-pymemcache
+        'BACKEND': 'djpymemcache.backend.PyMemcacheCache',
         'LOCATION': '127.0.0.1:11211',
     }
 }
@@ -49,7 +51,8 @@ CACHES = {
 # ----------------------------------------------------
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#logging
-# See https://docs.djangoproject.com/en/dev/topics/logging for more details on how to customize logging configuration.
+# See https://docs.djangoproject.com/en/dev/topics/logging for more details
+# on how to customize logging configuration.
 
 LOGGING = {
     "version": 1,
@@ -86,13 +89,14 @@ CORS_ORIGIN_ALLOW_ALL = True
 # ----------------------------------------------------
 
 # https://django-compressor.readthedocs.io/en/stable/settings.html?highlight=COMPRESS_ENABLED#django.conf.settings.COMPRESS_ENABLED
-COMPRESS_ENABLED = env.bool("COMPRESS_ENABLED", default=True)
+COMPRESS_ENABLED = env.bool("COMPRESS_ENABLED", default=True)  # NOQA
 # https://django-compressor.readthedocs.io/en/stable/settings.html?highlight=COMPRESS_URL#django.conf.settings.COMPRESS_URL
-COMPRESS_URL = STATIC_URL
+COMPRESS_URL = STATIC_URL  # NOQA
 # https://django-compressor.readthedocs.io/en/stable/settings.html?highlight=COMPRESS_OFFLINE#django.conf.settings.COMPRESS_OFFLINE
-COMPRESS_OFFLINE = True  # Offline compression is required when using Whitenoise
+# Offline compression is required when using Whitenoise
+COMPRESS_OFFLINE = True
 # https://django-compressor.readthedocs.io/en/stable/settings.html?highlight=COMPRESS_OFFLINE#django.conf.settings.COMPRESS_OFFLINE_TIMEOUT
-COMPRESS_OFFLINE_TIMEOUT = 31536000 # 1 year
+COMPRESS_OFFLINE_TIMEOUT = 31536000  # 1 year
 # https://django-compressor.readthedocs.io/en/stable/settings.html?highlight=COMPRESS_FILTERS#django.conf.settings.COMPRESS_FILTERS
 COMPRESS_FILTERS = {
     "css": [
