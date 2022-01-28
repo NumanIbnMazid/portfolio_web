@@ -58,7 +58,7 @@ class ContextMixinView(ContextMixin):
             "object_list_url": self.success_url,
         }
 
-        # synchornize the default app context with the context
+        # synchornize default app contexts with context
         context.update(default_app_contexts)
 
         # check if view has context
@@ -74,7 +74,7 @@ class ContextMixinView(ContextMixin):
             for key, value in action_context_data.items():
                 context[key] = value
 
-        # synchroneize the kwargs with the default app context
+        # synchronize kwargs with default app context
         context.update(kwargs)
 
         # return contexts
