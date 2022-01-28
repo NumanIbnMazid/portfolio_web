@@ -1,19 +1,30 @@
 # numanibnmazid.com
 
+```diff
+- [N:B: This site is under construction]
+```
+
 ## Description
 
-Portfolio website for [Numan Ibn Mazid](https://www.linkedin.com/in/numanibnmazid/).
+Portfolio web application of [Numan Ibn Mazid](https://www.linkedin.com/in/numanibnmazid/).
 
 ## Features
 
 - [x] Easy Installation
 - [x] Standard Project Structure
-- [x] Example Landing Page using Bootstrap 5
+- [x] Responsive Design
 - [x] Caching Support
 - [ ] Setup script
 - [x] Dockerized
 - [x] Management Commands
-- [ ] I18N Support
+- [x] I18N Support
+- [x] Static File Compresson
+- [x] Factory Faker
+- [x] Argon2 Password Hashing
+
+## Technologies
+
+[Python](https://www.python.org/), [Django](https://www.djangoproject.com/), [PostgreSQL](https://www.postgresql.org/), [JavaScript](https://www.javascript.com/), [jQuery](https://jquery.com/), [HTMX](https://htmx.org/), [Alpine JS](https://alpinejs.dev/), [yarn](https://yarnpkg.com/), [ReactJS](https://reactjs.org/), [GatsbyJS](https://www.gatsbyjs.org/), [HTML5](https://www.w3.org/TR/html5/), [CSS3](https://www.w3.org/Style/CSS/), [TailwindCSS](https://tailwindcss.com/), [Docker](https://www.docker.com/), [Docker Compose](https://docs.docker.com/compose/), [GitHub](https://github.com/), [GitHub Actions](https://github.com/features/actions)
 
 ## Installation
 
