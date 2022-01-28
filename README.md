@@ -12,6 +12,7 @@ Portfolio web application of [Numan Ibn Mazid](https://www.linkedin.com/in/numan
 
 - [x] Easy Installation
 - [x] Standard Project Structure
+- [x] Flake8 Code Style
 - [x] Responsive Design
 - [x] Caching Support
 - [ ] Setup script
