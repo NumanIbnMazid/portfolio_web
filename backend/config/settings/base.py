@@ -2,12 +2,14 @@ import os
 import environ
 from django.core.exceptions import ImproperlyConfigured
 
+
 def get_env_value(env_variable):
     try:
         return os.environ[env_variable]
     except KeyError:
         error_msg = 'Set the {} environment variable'.format(env_variable)
         raise ImproperlyConfigured(error_msg)
+
 
 root = environ.Path(__file__) - 3  # get root of the project
 
@@ -51,7 +53,7 @@ TEMPLATE_DEBUG = DEBUG
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR , 'project.db.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, 'project.db.sqlite3'),
     }
 }
 
@@ -73,9 +75,9 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
-    "utils", # for utility management
-    "users", # for user management
-    "portfolios", # for portfolio management
+    "utils",  # for utility management
+    "users",  # for user management
+    "portfolios",  # for portfolio management
 ]
 
 INSTALLED_APPS = [
@@ -184,15 +186,19 @@ LANGUAGES = [
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
-# USE_L10N = True # The USE_L10N setting is deprecated. Starting with Django 5.0, localized formatting of data will always be enabled.
+# USE_L10N = True # The USE_L10N setting is deprecated. Starting with Django 5.0,
+# localized formatting of data will always be enabled.
 USE_TZ = True
 
 LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale')]
 
 # Locale Middleware
-if not "django.middleware.locale.LocaleMiddleware" in MIDDLEWARE:
+if "django.middleware.locale.LocaleMiddleware" not in MIDDLEWARE:
     # insert after SessionMiddleware
-    MIDDLEWARE.insert(MIDDLEWARE.index('django.contrib.sessions.middleware.SessionMiddleware') + 1, "django.middleware.locale.LocaleMiddleware")
+    MIDDLEWARE.insert(
+        MIDDLEWARE.index('django.contrib.sessions.middleware.SessionMiddleware') + 1,
+        "django.middleware.locale.LocaleMiddleware"
+    )
 
 # ----------------------------------------------------
 # *** Other Definition ***
@@ -254,7 +260,7 @@ STATICFILES_FINDERS = [
 
 ALLOWED_IMAGE_TYPES = ['.jpg', '.jpeg', '.png', '.svg']
 ALLOWED_DOCUMENT_TYPES = ['.doc', '.docx', '.pdf']
-MAX_UPLOAD_SIZE = 2621440 # in bytes (2.62144 MB / 2.5 MB)
+MAX_UPLOAD_SIZE = 2621440  # in bytes (2.62144 MB / 2.5 MB)
 
 # ----------------------------------------------------
 # *** SECURITY ***
@@ -290,9 +296,12 @@ MANAGERS = ADMINS
 # http://whitenoise.evans.io/en/latest/django.html#using-whitenoise-in-development
 INSTALLED_APPS.extend(["whitenoise.runserver_nostatic"])
 
-if not "whitenoise.middleware.WhiteNoiseMiddleware" in MIDDLEWARE:
+if "whitenoise.middleware.WhiteNoiseMiddleware" not in MIDDLEWARE:
     # Must insert after SecurityMiddleware
-    MIDDLEWARE.insert(MIDDLEWARE.index('django.middleware.security.SecurityMiddleware') + 1, "whitenoise.middleware.WhiteNoiseMiddleware")
+    MIDDLEWARE.insert(
+        MIDDLEWARE.index('django.middleware.security.SecurityMiddleware') + 1,
+        "whitenoise.middleware.WhiteNoiseMiddleware"
+    )
 
 # forever-cacheable files and compression support
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
@@ -311,10 +320,10 @@ STATICFILES_FINDERS += ["compressor.finders.CompressorFinder"]
 # *** Django Cors Headers ***
 # ----------------------------------------------------
 
-if not "corsheaders" in INSTALLED_APPS:
+if "corsheaders" not in INSTALLED_APPS:
     INSTALLED_APPS += ["corsheaders"]
 
-if not "corsheaders.middleware.CorsMiddleware" in MIDDLEWARE:
+if "corsheaders.middleware.CorsMiddleware" not in MIDDLEWARE:
     MIDDLEWARE.insert(0, "corsheaders.middleware.CorsMiddleware")
 
 
@@ -325,14 +334,27 @@ if not "corsheaders.middleware.CorsMiddleware" in MIDDLEWARE:
 CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
 CRISPY_TEMPLATE_PACK = "tailwind"
 CRISPY_FAIL_SILENTLY = not DEBUG
+common_classes = "bg-white dark:bg-gray-700 focus:border-app-theme-400 dark:focus:border-app-theme \
+dark:focus:border-app-theme focus:outline-none focus:shadow-outline-app-theme dark:focus:shadow-outline-app-theme-200 \
+dark:text-white dark:focus:shadow-outline-app-theme form-input"
 CRISPY_CLASS_CONVERTERS = {
-    "textinput": "textinput bg-white dark:bg-gray-700 focus:border-app-theme-400 dark:focus:border-app-theme dark:focus:border-app-theme focus:outline-none focus:shadow-outline-app-theme dark:focus:shadow-outline-app-theme-200 dark:text-white dark:focus:shadow-outline-app-theme form-input",
-    "passwordinput": "passwordinput bg-white dark:bg-gray-700 focus:border-app-theme-400 dark:focus:border-app-theme dark:focus:border-app-theme focus:outline-none focus:shadow-outline-app-theme dark:focus:shadow-outline-app-theme-200 dark:text-white dark:focus:shadow-outline-app-theme form-input",
-    "dateinput": "dateinput bg-white dark:bg-gray-700 focus:border-app-theme-400 dark:focus:border-app-theme dark:focus:border-app-theme focus:outline-none focus:shadow-outline-app-theme dark:focus:shadow-outline-app-theme-200 dark:text-white dark:focus:shadow-outline-app-theme form-input",
-    "urlinput": "urlinput bg-white dark:bg-gray-700 focus:border-app-theme-400 dark:focus:border-app-theme dark:focus:border-app-theme focus:outline-none focus:shadow-outline-app-theme dark:focus:shadow-outline-app-theme-200 dark:text-white dark:focus:shadow-outline-app-theme form-input",
-    "textarea": "textarea bg-white dark:bg-gray-700 focus:border-app-theme-400 dark:focus:border-app-theme dark:focus:border-app-theme focus:outline-none focus:shadow-outline-app-theme dark:focus:shadow-outline-app-theme-200 dark:text-white dark:focus:shadow-outline-app-theme form-input",
-    "emailinput": "emailinput bg-white dark:bg-gray-700 focus:border-app-theme-400 dark:focus:border-app-theme dark:focus:border-app-theme focus:outline-none focus:shadow-outline-app-theme dark:focus:shadow-outline-app-theme-200 dark:text-white dark:focus:shadow-outline-app-theme form-input",
-    "clearablefileinput": "clearablefileinput bg-white dark:bg-gray-700 focus:border-app-theme-400 dark:focus:border-app-theme dark:focus:border-app-theme focus:outline-none focus:shadow-outline-app-theme dark:focus:shadow-outline-app-theme-200 dark:text-white dark:focus:shadow-outline-app-theme form-input",
+    # Test Input
+    "textinput": f"textinput {common_classes}",
+    # Password Input
+    "passwordinput": "passwordinput {common_classes}",
+    # Date Input
+    "dateinput": "dateinput {common_classes}",
+    # Url Input
+    "urlinput": "urlinput {common_classes}",
+    # Text Area
+    "textarea": "textarea {common_classes}",
+    # Email Input
+    "emailinput": "emailinput {common_classes}",
+    # Clearable File Input
+    "clearablefileinput": "clearablefileinput bg-white dark:bg-gray-700 focus:border-app-theme-400 \
+    dark:focus:border-app-theme dark:focus:border-app-theme focus:outline-none focus:shadow-outline-app-theme \
+    dark:focus:shadow-outline-app-theme-200 dark:text-white dark:focus:shadow-outline-app-theme form-input",
+    # Checkbox Input
     "checkboxinput": "checkboxinput w-5 h-5",
 }
 

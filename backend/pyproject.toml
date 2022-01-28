@@ -27,6 +27,7 @@ django-rosetta = "^0.9.8"
 factory-boy = "^3.2.1"
 pytest-django = "^4.5.2"
 django-pymemcache = "^1.0.0"
+flake8 = "^4.0.1"
 
 [tool.poetry.dev-dependencies]
 
