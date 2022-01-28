@@ -30,7 +30,12 @@ BASE_DIR = root()
 # ----------------------------------------------------
 # *** Project's SECRET KEY ***
 # ----------------------------------------------------
-SECRET_KEY = get_env_value('SECRET_KEY')
+try:
+    SECRET_KEY = get_env_value('SECRET_KEY')
+except ImproperlyConfigured:
+    # generate random secret key
+    from django.core.management.utils import get_random_secret_key
+    SECRET_KEY = get_random_secret_key()
 
 # ----------------------------------------------------
 # *** Debug Configuration ***
