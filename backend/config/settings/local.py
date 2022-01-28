@@ -128,7 +128,7 @@ INTERNAL_IPS = [
     "127.0.0.1", "0.0.0.0", "10.0.2.2"
 ]
 
-if env.str("USE_DOCKER") == "yes":
+if env.str("USE_DOCKER", default="no") == "yes":
     import socket
 
     hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
