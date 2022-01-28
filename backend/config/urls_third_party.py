@@ -12,7 +12,9 @@ urlpatterns = [
 # Rosetta URL Patterns
 if 'rosetta' in settings.INSTALLED_APPS:
     urlpatterns += [
-        re_path(r'^translations/', decorator_include([is_superuser_required], include('rosetta.urls'), namespace='rosetta')),
+        re_path(
+            r'^translations/', decorator_include([is_superuser_required], include('rosetta.urls'), namespace='rosetta')
+        ),
     ]
 
 if settings.DEBUG:

@@ -14,7 +14,9 @@ class SkillFactory(DjangoModelFactory):
     image = factory.django.ImageField(color='blue')
 
 
-def create_skills_with_factory(num_of_data=7, display_name="skill", display_name_plural="skills", delete_old_data=False):
+def create_skills_with_factory(
+    num_of_data=7, display_name="skill", display_name_plural="skills", delete_old_data=False
+):
 
     return create_factory_data(
         factory=SkillFactory,

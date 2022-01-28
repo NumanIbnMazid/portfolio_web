@@ -106,8 +106,10 @@ class ProfessionalExperienceView(CustomViewSetMixin):
             form.instance.user = self.request.user
 
             # validate unique  company name
-            qs = ProfessionalExperience.objects.filter(user=self.request.user, company__iexact=form.cleaned_data.get('company')
-                                                       ).exclude(slug__iexact=self.kwargs.get('slug'))
+            qs = ProfessionalExperience.objects.filter(
+                user=self.request.user, company__iexact=form.cleaned_data.get('company')
+            ).exclude(slug__iexact=self.kwargs.get('slug'))
+
             if qs:
                 form.add_error(
                     "title", forms.ValidationError(
@@ -165,12 +167,14 @@ class ProfessionalExperienceView(CustomViewSetMixin):
 #         # assign user to the form
 #         form.instance.user = self.request.user
 #         # validate unique  company name
-        # qs = ProfessionalExperience.objects.filter(user=self.request.user, company__iexact=form.cleaned_data.get('company')
-        #                                            ).exclude(slug__iexact=self.kwargs.get('slug'))
-#         if qs:
-#             form.add_error(
-#                 "title", forms.ValidationError(
-#                     f"This company already exists!"
-#                 )
-#             )
-#         return super().form_valid(form)
+        # qs = ProfessionalExperience.objects.filter(
+        #     user=self.request.user, company__iexact=form.cleaned_data.get('company')
+        # ).exclude(slug__iexact=self.kwargs.get('slug'))
+
+        # if qs:
+        #     form.add_error(
+        #         "title", forms.ValidationError(
+        #             "This company already exists!"
+        #         )
+        #     )
+        # return super().form_valid(form)

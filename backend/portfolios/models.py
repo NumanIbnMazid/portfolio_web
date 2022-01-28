@@ -6,8 +6,8 @@ from utils.snippets import autoslugFromUUID, autoslugWithFieldAndUUID
 from django.utils.translation import gettext_lazy as _
 from django.utils import dateformat
 from portfolios.file_upload_helpers import (
-    skill_icon_path, professional_experience_company_image_path, professional_experience_media_path, education_media_path,
-    certification_media_path, project_media_path, interest_icon_path, testimonial_image_path
+    skill_icon_path, professional_experience_company_image_path, professional_experience_media_path,
+    education_media_path, certification_media_path, project_media_path, interest_icon_path, testimonial_image_path
 )
 
 

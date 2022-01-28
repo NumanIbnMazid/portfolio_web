@@ -45,7 +45,10 @@ def education_media_path(instance, filename):
     final_filename = '{new_filename}{ext}'.format(
         new_filename=new_filename, ext=ext
     )
-    return f"{get_user_media_path(instance.education.user)}/educations/{instance.education.slug[:23]}/media/{final_filename}"
+    return (
+        f"{get_user_media_path(instance.education.user)}/educations/"
+        f"{instance.education.slug[:23]}/media/{final_filename}"
+    )
 
 
 def certification_media_path(instance, filename):

@@ -13,7 +13,8 @@ class HomeView(View):
         enjoys developing innovative software solutions that are tailored to customer desirability and usability. \
         Email: numanibnmazid@gmail.com"
         context['meta_keywords'] = "numan ibn mazid, portfolio, website, web application, software development, \
-        software developer, singer, musician, youtuber, django, django rest framework, python, data structure and algorithms"
+        software developer, singer, musician, youtuber, django, django rest framework, python, \
+        data structure and algorithms"
         context["meta_author"] = "Numan Ibn Mazid"
         # page contexts
         context["head_title"] = "Home"
@@ -31,7 +32,8 @@ class DashboardView(View):
         who enjoys developing innovative software solutions that are tailored to customer desirability and usability. \
         Email: numanibnmazid@gmail.com"
         context['meta_keywords'] = "numan ibn mazid, portfolio, website, web application, software development, \
-        software developer, singer, musician, youtuber, django, django rest framework, python, data structure and algorithms"
+        software developer, singer, musician, youtuber, django, django rest framework, python, \
+        data structure and algorithms"
         context["meta_author"] = "Numan Ibn Mazid"
         # page contexts
         context["head_title"] = "Dashboard"

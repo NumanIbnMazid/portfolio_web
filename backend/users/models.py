@@ -136,7 +136,8 @@ class User(SafeDeleteModel, AbstractBaseUser, PermissionsMixin):
 
     def get_dynamic_username(self):
         """ Get a dynamic username for a specific user instance. if the user has a name then returns the name, \
-            if the user does not have a name but has a username then return username, otherwise returns email as username """
+            if the user does not have a name but has a username then return username, \
+            otherwise returns email as username """
         if self.nick_name:
             return self.nick_name
         elif self.name:

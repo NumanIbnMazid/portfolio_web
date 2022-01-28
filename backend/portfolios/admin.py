@@ -1,8 +1,8 @@
 from django.contrib import admin
 from utils.mixins import CustomModelAdminMixin
 from .models import (
-    Skill, ProfessionalExperience, ProfessionalExperienceMedia, Education, EducationMedia, Certification, CertificationMedia,
-    Project, ProjectMedia, Interest, Testimonial
+    Skill, ProfessionalExperience, ProfessionalExperienceMedia, Education, EducationMedia,
+    Certification, CertificationMedia, Project, ProjectMedia, Interest, Testimonial
 )
 
 # ----------------------------------------------------

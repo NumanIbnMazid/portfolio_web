@@ -40,7 +40,9 @@ def create_factory_data(factory=None, num_of_data=7, display_name="item", displa
     if delete_old_data:
         # raise attribute error if model is not provided
         if model is None:
-            raise AttributeError(f"{display_name_plural} cannot be deleted without a model. Please provide a model class.")
+            raise AttributeError(
+                f"{display_name_plural} cannot be deleted without a model. Please provide a model class."
+            )
 
         # delete old data
         print(f"Deleting old {display_name_plural}...")

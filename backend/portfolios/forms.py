@@ -47,7 +47,9 @@ class ProfessionalExperienceForm(forms.ModelForm):
         elif cleaned_data.get('end_date') is not None and cleaned_data.get('currently_working'):
             self.add_error('end_date', _("End date is not required if you are currently working here."))
             self.add_error('currently_working', _("Currently working is not required if you provide an end date."))
-            raise forms.ValidationError(_("Conflicting with `End date` and `Currently working`. Please specify only one."))
+            raise forms.ValidationError(
+                _("Conflicting with `End date` and `Currently working`. Please specify only one.")
+            )
         return cleaned_data
 
     def clean_end_date(self):
