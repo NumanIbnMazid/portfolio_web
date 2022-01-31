@@ -126,8 +126,7 @@ class CustomViewSetMixin(UpdateView, ListView, TemplateView, ContextMixinView):
 
     def get(self, request, *args, **kwargs):
         try:
-            if self.get_object():
-                self.object = self.get_object()
+            self.object = self.get_object()
         except Exception:
             # pass except block
             pass

@@ -341,15 +341,15 @@ CRISPY_CLASS_CONVERTERS = {
     # Test Input
     "textinput": f"textinput {common_classes}",
     # Password Input
-    "passwordinput": "passwordinput {common_classes}",
+    "passwordinput": f"passwordinput {common_classes}",
     # Date Input
-    "dateinput": "dateinput {common_classes}",
+    "dateinput": f"dateinput {common_classes}",
     # Url Input
-    "urlinput": "urlinput {common_classes}",
+    "urlinput": f"urlinput {common_classes}",
     # Text Area
-    "textarea": "textarea {common_classes}",
+    "textarea": f"textarea {common_classes}",
     # Email Input
-    "emailinput": "emailinput {common_classes}",
+    "emailinput": f"emailinput {common_classes}",
     # Clearable File Input
     "clearablefileinput": "clearablefileinput bg-white dark:bg-gray-700 focus:border-app-theme-400 \
     dark:focus:border-app-theme dark:focus:border-app-theme focus:outline-none focus:shadow-outline-app-theme \

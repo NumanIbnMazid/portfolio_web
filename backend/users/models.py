@@ -68,11 +68,11 @@ class UserManager(BaseUserManager):
 
     def get_by_slug(self, slug):
         try:
-            instance = self.get_queryset().get(slug=slug)
+            instance = self.get_queryset().get(slug__iexact=slug)
         except User.DoesNotExist:
             raise Http404("User Not Found!")
         except User.MultipleObjectsReturned:
-            qs = self.get_queryset().filter(slug=slug)
+            qs = self.get_queryset().filter(slug__iexact=slug)
             instance = qs.first()
         except Exception:
             raise Http404("Something went wrong!")

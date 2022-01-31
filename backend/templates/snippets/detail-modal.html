@@ -9,10 +9,11 @@
     color: rgb(83, 172, 255) !important;
   }
 
-  input + p {
+  input+p {
     margin-top: 7px;
     text-align: center;
   }
+
 </style>
 
 {% endblock %}
@@ -22,65 +23,75 @@
   <div
     class="bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all dark:bg-gray-800 dark:text-gray-200">
 
-      <!-- modal header -->
-      <div class="border-b px-4 py-2 flex justify-between items-center">
-        <h3 class="font-semibold text-lg dark:text-white">{% if page_title %}{{ page_title }}{% else %}Detail{% endif %}
-        </h3>
-      </div>
+    <!-- modal header -->
+    <div class="border-b px-4 py-2 flex justify-between items-center">
+      <h3 class="font-semibold text-lg dark:text-white">{% if page_title %}{{ page_title }}{% else %}Detail{% endif %}
+      </h3>
+    </div>
 
-      <!-- Modal Body -->
-      <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 dark:bg-gray-700">
-        <div class="container">
+    <!-- Modal Body -->
+    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 dark:bg-gray-700">
+      <div class="container">
 
-          {% if detail_template %}
-          {% include detail_template %}
-          {% else %}
+        {% if detail_template %}
+        {% include detail_template %}
+        {% else %}
 
-          <div>
-            {% for field in display_fields %}
+        <div>
+          {% for field in display_fields %}
 
-            <div class="min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
-              <h6 class="mb-4 font-semibold text-gray-600 dark:text-gray-300">
-                {{ field.name|var_to_title }}
-              </h6>
-              <p class="text-gray-600 dark:text-gray-400">
-                {% if field.get_internal_type in "FileField" and object|getattribute:field.name is not None %}
-                <img src="{{ object|getattribute:field.name }}" alt="{{ object|getattribute:field.name }}">
-                {% else %}
-                <span>{{ object|getattribute:field.name|default:"---"|safe|linebreaks }}</span>
-                {% endif %}
-              </p>
-            </div>
-
-            {% endfor %}
+          <div class="min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
+            <h6 class="mb-4 font-semibold text-gray-600 dark:text-gray-300">
+              {{ field.name|var_to_title }}
+            </h6>
+            <p class="text-gray-600 dark:text-gray-400">
+              {% if field.get_internal_type in "FileField" and object|getattribute:field.name is not None %}
+              <img src="{{ object|getattribute:field.name }}" alt="{{ object|getattribute:field.name }}">
+              {% else %}
+              <span>{{ object|getattribute:field.name|default:"---"|safe|linebreaks }}</span>
+              {% endif %}
+            </p>
           </div>
 
-          {% endif %}
-
+          {% endfor %}
         </div>
-      </div>
 
-      <!-- Modal Footer -->
-      <div class="border-t bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse dark:bg-gray-700">
-
-        <button class="mr-4 jquery-ui-dialog-closer btn-danger">
-          Close
-        </button>
+        {% endif %}
 
       </div>
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="border-t bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse dark:bg-gray-700">
+
+      <button class="mr-4 jquery-ui-dialog-closer btn-danger">
+        Close
+      </button>
+
+    </div>
   </div>
 </div>
 </div>
 
 {% block additional_head_scripts %}
 
-{% if action in "detail" %}
+<script>
+  // NOTE: Remove Detail Modal Dialog before swapping element (Prevents from screen flickering)
+  document.body.addEventListener('htmx:beforeSwap', function (evt) {
+    if ($("#detail-modal-dialog").length) {
+      htmx.remove(htmx.find('#detail-modal-dialog'))
+    }
+  })
 
+</script>
+
+{# Keep jQuery Modal Open #}
+{% if action in "detail" %}
 <script>
   // open modal
   openJqueryModal("detail-modal-dialog")
-</script>
 
+</script>
 {% endif %}
 
 {% endblock %}

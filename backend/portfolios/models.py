@@ -33,11 +33,11 @@ class SkillManager(models.Manager):
 
     def get_by_slug(self, slug):
         try:
-            instance = self.get_queryset().get(slug=slug)
+            instance = self.get_queryset().get(slug__iexact=slug)
         except Skill.DoesNotExist:
             raise Http404(_("Not Found !!!"))
         except Skill.MultipleObjectsReturned:
-            qs = self.get_queryset().filter(slug=slug)
+            qs = self.get_queryset().filter(slug__iexact=slug)
             instance = qs.first()
         except Exception:
             raise Http404(_("Something went wrong !!!"))
@@ -108,11 +108,11 @@ class ProfessionalExperienceManager(models.Manager):
 
     def get_by_slug(self, slug):
         try:
-            instance = self.get_queryset().get(slug=slug)
+            instance = self.get_queryset().get(slug__iexact=slug)
         except ProfessionalExperience.DoesNotExist:
             raise Http404("Not Found !!!")
         except ProfessionalExperience.MultipleObjectsReturned:
-            qs = self.get_queryset().filter(slug=slug)
+            qs = self.get_queryset().filter(slug__iexact=slug)
             instance = qs.first()
         except Exception:
             raise Http404(_("Something went wrong !!!"))
@@ -186,11 +186,11 @@ class ProfessionalExperienceMediaManager(models.Manager):
 
     def get_by_slug(self, slug):
         try:
-            instance = self.get_queryset().get(slug=slug)
+            instance = self.get_queryset().get(slug__iexact=slug)
         except ProfessionalExperienceMedia.DoesNotExist:
             raise Http404(_("Not Found !!!"))
         except ProfessionalExperienceMedia.MultipleObjectsReturned:
-            qs = self.get_queryset().filter(slug=slug)
+            qs = self.get_queryset().filter(slug__iexact=slug)
             instance = qs.first()
         except Exception:
             raise Http404(_("Something went wrong !!!"))

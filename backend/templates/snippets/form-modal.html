@@ -24,7 +24,8 @@
     class="bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all dark:bg-gray-800 dark:text-gray-200">
 
     <!-- main form -->
-    <form id="djangoForm" method="POST" autocomplete="off" enctype='multipart/form-data' hx-encoding="multipart/form-data">
+    <form id="djangoForm" method="POST" autocomplete="off" enctype='multipart/form-data'
+      hx-encoding="multipart/form-data">
 
       {% csrf_token %}
 
@@ -105,7 +106,7 @@
 
         {# end submit button #}
 
-        <button class="mr-4 jquery-ui-dialog-closer btn-danger">
+        <button type="button" class="mr-4 jquery-ui-dialog-closer btn-danger">
           Cancel
         </button>
 
@@ -113,11 +114,17 @@
     </form>
   </div>
 </div>
-</div>
 
 {% block additional_head_scripts %}
 
 <script>
+  // NOTE: Remove Form Modal Dialog before swapping element (Prevents from screen flickering)
+  document.body.addEventListener('htmx:beforeSwap', function (evt) {
+    if ($("#form-modal-dialog").length) {
+      htmx.remove(htmx.find('#form-modal-dialog'))
+    }
+  })
+
   // document ready function
   $(function () {
 
@@ -130,16 +137,13 @@
 
 </script>
 
-{# keep modal/dialog open if if there remains form errors or action in create, update or delete #}
-
+{# Keep jQuery Modal Open #}
 {% if form.errors or action in "create, update, delete" %}
-
 <script>
   // open modal
   openJqueryModal("form-modal-dialog")
 
 </script>
-
 {% endif %}
 
 {% endblock %}

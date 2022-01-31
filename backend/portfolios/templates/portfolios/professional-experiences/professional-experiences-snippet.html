@@ -7,7 +7,7 @@
 {% if object.professional_experience_media %}
 <div id="fileData" class="hidden p-4 mt-2">
   {% for media in object.professional_experience_media.all %}
-  <li class="text-primary p-1">
+  <li class="text-primary p-1" aria-hidden="true">
     <a href="{{ media.file.url }}" target="_blank">{{ media.file.url }}</a>
     <span class="ml-2">
       <i class="fas fa-minus-circle text-danger text-xl cursor-pointer"
@@ -38,13 +38,13 @@
       dateFormat: "yy-mm-dd",
       onSelect: function (date) {
 
-        var selectedDate = new Date(date);
-        var msecsInADay = 86400000;
-        var endDate = new Date(selectedDate.getTime() + msecsInADay);
+        var selectedDate = new Date(date)
+        var msecsInADay = 86400000
+        var endDate = new Date(selectedDate.getTime() + msecsInADay)
 
         //Set Minimum Date of EndDatePicker After Selected Date of StartDatePicker
-        $("#end_date").datepicker("option", "minDate", endDate);
-        // $("#end_date").datepicker("option", "maxDate", '+2y');
+        $("#end_date").datepicker("option", "minDate", endDate)
+        // $("#end_date").datepicker("option", "maxDate", '+2y')
 
       }
     });
@@ -59,14 +59,14 @@
     // professional experience media populator function
     function populateProfessionalExperienceMediaData() {
       // media file input
-      let fileInputDiv = $('#div_id_file');
+      let fileInputDiv = $('#div_id_file')
 
       if (fileInputDiv.length) {
         try {
           // append html to file input div
           fileInputDiv.append($("#fileData").html())
 
-          // process htmx
+          // NOTE: process htmx (Required for htmx tags to work)
           htmx.process(document.querySelector('#div_id_file'))
         } catch (error) {
           console.log(error)
