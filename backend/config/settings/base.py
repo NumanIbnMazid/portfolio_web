@@ -70,8 +70,6 @@ THIRD_PARTY_APPS = [
     # Django Allauth
     "allauth",
     "allauth.account",
-    # Django Cleanup (Place to the bottom)
-    "django_cleanup.apps.CleanupConfig",
 ]
 
 LOCAL_APPS = [

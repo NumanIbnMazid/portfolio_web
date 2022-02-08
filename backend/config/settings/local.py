@@ -142,3 +142,11 @@ if env.str("USE_DOCKER", default="no") == "yes":  # NOQA
     except socket.gaierror:
         # The node container isn't started (yet?)
         pass
+
+# ----------------------------------------------------
+# *** Django Cleanup (Place to the bottom) ***
+# NOTE: Needs to be placed at the bottom of INSTALLED_APPS
+# ----------------------------------------------------
+
+if "django_cleanup.apps.CleanupConfig" not in INSTALLED_APPS:  # NOQA
+    INSTALLED_APPS.insert(-1, "django_cleanup.apps.CleanupConfig")  # NOQA
