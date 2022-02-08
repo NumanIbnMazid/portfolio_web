@@ -5,7 +5,7 @@ from django.core.management.utils import get_random_secret_key
 # *** Project Environment ***
 # ----------------------------------------------------
 
-DEFAULT_ENV_PATH = environ.Path(__file__) - 2
+DEFAULT_ENV_PATH = environ.Path(__file__) - 3
 DEFAULT_ENV_FILE = DEFAULT_ENV_PATH.path('.env')()
 DEFAULT_ENV_EXAMPLE_FILE = DEFAULT_ENV_PATH.path('.env.example')()
 
