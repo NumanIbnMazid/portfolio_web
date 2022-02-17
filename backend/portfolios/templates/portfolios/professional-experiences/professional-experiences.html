@@ -4,7 +4,7 @@
 
 {% block content %}
 
-<!-- Skills Add Button -->
+<!-- Add Button -->
 <button class="btn-primary block text-sm font-semibold rounded-lg p-3 my-4 text-center jquery-ui-dialog-opener"
   hx-get="{% url 'portfolios:professional_experience_create' %}?page={{ page_obj.number }}" hx-trigger="click"
   hx-target="#main" hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML">

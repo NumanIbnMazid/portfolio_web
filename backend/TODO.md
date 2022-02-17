@@ -4,9 +4,4 @@
 * Form Feedback realtime rather than form submit like file size or type, already data exists etc.
 * Add Translation
 * pagination (lazy loading)
-* Django Factory Boy
-* Bulk Delete
-* Create Dev branch
-* Use Rebase for Merging
-* Users List for Super User
-* Remove Unused or Empty Folders
+* List Common -> Integrate detail modal field rendering

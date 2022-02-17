@@ -1,0 +1,86 @@
+{% extends "admin-panel/base.html" %}
+
+{% load i18n custom_tags getattribute %}
+
+{% block content %}
+
+<!-- Add Button -->
+<button class="btn-primary block text-sm font-semibold rounded-lg p-3 my-4 text-center jquery-ui-dialog-opener"
+  hx-get="{% url 'portfolios:education_create' %}" hx-trigger="click" hx-target="#main" hx-indicator="#htmxLoaderIndicator"
+  hx-swap="outerHTML">
+  <i class="fas fa-plus"></i> {% trans 'Add Education' %}
+</button>
+
+
+<div class="flex flex-wrap flex-row items-center content-center space-x-4">
+
+  {% for object in object_list %}
+
+  <!-- item card -->
+  <div class="flex flex-wrap items-center content-center p-4 m-4 bg-light hover:bg-slate-300 dark:hover:bg-gray-800 dark:bg-gray-700 text-gray-700
+      dark:text-gray-200 rounded-lg">
+    <div class="mr-2">
+      {% if object.image %}
+      <img src="{{ object.image.url }}" class="float-left" alt="{{ object.title }}" height="30" width="30">
+      {% else %}
+      <i class="fas fa-briefcase mr-1"></i>
+      {% endif %}
+    </div>
+    <div class="flex flex-wrap">
+      <div class="font-semibold shadow-lg p-1 rounded-md">
+        {{ object.title }}
+      </div>
+      <div>
+        <span class="ml-2">
+          <i class="fas fa-minus-circle text-danger text-xl cursor-pointer"
+            hx-get="{% url 'portfolios:education_delete' slug=object.slug %}" hx-trigger="click" hx-target="#main"
+            hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML"></i>
+        </span>
+        <span class="ml-1">
+          <i class="fas fa-edit text-primary text-xl cursor-pointer"
+            hx-get="{% url 'portfolios:education_update' slug=object.slug %}" hx-trigger="click" hx-target="#main"
+            hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML"></i>
+        </span>
+        <span class="ml-1">
+          <i class="fas fa-eye text-info text-xl cursor-pointer"
+            hx-get="{% url 'portfolios:education_detail' slug=object.slug %}" hx-trigger="click" hx-target="#main"
+            hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML"></i>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  {% empty %}
+  <div class="w-6/12 bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3 mx-4 text-center rounded relative"
+    role="alert">
+    <p class="font-bold">No Data</p>
+  </div>
+  {% endfor %}
+
+</div>
+
+{# PAGINATION #}
+<!-- pagination template -->
+{% include "snippets/pagination.html" %}
+
+<!-- include modal form -->
+{% include "snippets/form-modal.html" %}
+{% include "snippets/detail-modal.html" %}
+
+{# include page specific snippet template #}
+
+{% if snippet_template %}
+
+{% if snippet_template|get_type == 'list' %}
+
+{% for template in snippet_template %}
+{% include template %}
+{% endfor %}
+
+{% else %}
+{% include snippet_template %}
+{% endif %}
+
+{% endif %}
+
+{% endblock %}

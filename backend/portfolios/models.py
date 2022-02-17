@@ -173,10 +173,10 @@ class ProfessionalExperienceMedia(models.Model):
 class Education(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="user_educations")
     slug = models.SlugField(max_length=255, unique=True)
-    degree = models.CharField(max_length=150)
     school = models.CharField(max_length=150)
+    degree = models.CharField(max_length=150)
     address = models.CharField(max_length=254)
-    field_of_study = models.CharField(max_length=150)
+    field_of_study = models.CharField(max_length=200)
     start_date = models.DateField()
     end_date = models.DateField(blank=True, null=True)
     currently_studying = models.BooleanField(default=False)
