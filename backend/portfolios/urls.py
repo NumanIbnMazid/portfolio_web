@@ -36,4 +36,8 @@ urlpatterns = [
     path("professional-experience-media/<slug>/delete/",
          ProfessionalExperienceView.as_view(action="media_delete"), name="professional_experience_media_delete"
          ),
+
+    # ----------------------------------------------------
+    # *** Education ***
+    # ----------------------------------------------------
 ]

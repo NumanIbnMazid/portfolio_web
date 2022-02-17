@@ -11,6 +11,39 @@ from portfolios.file_upload_helpers import (
 )
 
 
+""" *************** Common Model Manager *************** """
+
+
+class CustomModelManager(models.Manager):
+    """
+    Common Model Manager
+    actions: all(), get_by_id(id), get_by_slug(slug)
+    """
+
+    def all(self):
+        return self.get_queryset()
+
+    def get_by_id(self, id):
+        try:
+            return self.get(id=id)
+        except self.model.DoesNotExist:
+            raise Http404(_("Not Found !!!"))
+        except self.model.MultipleObjectsReturned:
+            return self.get_queryset().filter(id=id).first()
+        except Exception:
+            raise Http404(_("Something went wrong !!!"))
+
+    def get_by_slug(self, slug):
+        try:
+            return self.get(slug=slug)
+        except self.model.DoesNotExist:
+            raise Http404(_("Not Found !!!"))
+        except self.model.MultipleObjectsReturned:
+            return self.get_queryset().filter(id=id).first()
+        except Exception:
+            raise Http404(_("Something went wrong !!!"))
+
+
 """ *************** Skill *************** """
 
 
@@ -23,7 +56,7 @@ class SkillManager(models.Manager):
         try:
             instance = self.get_queryset().get(id=id)
         except Skill.DoesNotExist:
-            raise Http404("Not Found !!!")
+            raise Http404(_("Not Found !!!"))
         except Skill.MultipleObjectsReturned:
             qs = self.get_queryset().filter(id=id)
             instance = qs.first()
@@ -89,36 +122,6 @@ class Skill(models.Model):
 """ *************** Professional Experience *************** """
 
 
-class ProfessionalExperienceManager(models.Manager):
-
-    def all(self):
-        return self.get_queryset()
-
-    def get_by_id(self, id):
-        try:
-            instance = self.get_queryset().get(id=id)
-        except ProfessionalExperience.DoesNotExist:
-            raise Http404(_("Not Found !!!"))
-        except ProfessionalExperience.MultipleObjectsReturned:
-            qs = self.get_queryset().filter(id=id)
-            instance = qs.first()
-        except Exception:
-            raise Http404(_("Something went wrong !!!"))
-        return instance
-
-    def get_by_slug(self, slug):
-        try:
-            instance = self.get_queryset().get(slug__iexact=slug)
-        except ProfessionalExperience.DoesNotExist:
-            raise Http404("Not Found !!!")
-        except ProfessionalExperience.MultipleObjectsReturned:
-            qs = self.get_queryset().filter(slug__iexact=slug)
-            instance = qs.first()
-        except Exception:
-            raise Http404(_("Something went wrong !!!"))
-        return instance
-
-
 @autoslugWithFieldAndUUID(fieldname="company")
 class ProfessionalExperience(models.Model):
     """
@@ -146,7 +149,7 @@ class ProfessionalExperience(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     # custom model manager
-    objects = ProfessionalExperienceManager()
+    objects = CustomModelManager()
 
     class Meta:
         db_table = 'professional_experience'
@@ -170,36 +173,6 @@ class ProfessionalExperience(models.Model):
         return _('Not Specified')
 
 
-class ProfessionalExperienceMediaManager(models.Manager):
-
-    def all(self):
-        return self.get_queryset()
-
-    def get_by_id(self, id):
-        try:
-            instance = self.get_queryset().get(id=id)
-        except ProfessionalExperienceMedia.DoesNotExist:
-            raise Http404(_("Not Found !!!"))
-        except ProfessionalExperienceMedia.MultipleObjectsReturned:
-            qs = self.get_queryset().filter(id=id)
-            instance = qs.first()
-        except Exception:
-            raise Http404(_("Something went wrong !!!"))
-        return instance
-
-    def get_by_slug(self, slug):
-        try:
-            instance = self.get_queryset().get(slug__iexact=slug)
-        except ProfessionalExperienceMedia.DoesNotExist:
-            raise Http404(_("Not Found !!!"))
-        except ProfessionalExperienceMedia.MultipleObjectsReturned:
-            qs = self.get_queryset().filter(slug__iexact=slug)
-            instance = qs.first()
-        except Exception:
-            raise Http404(_("Something went wrong !!!"))
-        return instance
-
-
 @autoslugFromUUID()
 class ProfessionalExperienceMedia(models.Model):
     professional_experience = models.ForeignKey(
@@ -212,7 +185,7 @@ class ProfessionalExperienceMedia(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     # custom model manager
-    objects = ProfessionalExperienceMediaManager()
+    objects = CustomModelManager()
 
     class Meta:
         db_table = 'professional_experience_media'
@@ -244,6 +217,9 @@ class Education(models.Model):
     description = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    # custom model manager
+    objects = CustomModelManager()
 
     class Meta:
         db_table = 'education'
