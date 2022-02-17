@@ -158,6 +158,9 @@ class ProfessionalExperience(models.Model):
     def __str__(self):
         return self.company
 
+    def get_absolute_url(self):
+        return reverse('portfolios:professional_experience_detail', kwargs={'slug': self.slug})
+
     def get_end_date(self):
         if self.currently_working:
             return _('Present')

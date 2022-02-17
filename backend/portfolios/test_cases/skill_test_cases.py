@@ -12,7 +12,7 @@ class SkillTestCase(TestCase):
         cls.skill = create_skills_with_factory(num_of_data=1)[0]
 
     # test if skill is created sucessfully
-    def test_skill_create_sucessfully(self):
+    def test_skill_created_sucessfully(self):
         instance = self.__MODEL.objects.get(id=self.skill.id)
         self.assertEqual(instance.title, self.skill.title)
 
@@ -34,4 +34,4 @@ class SkillTestCase(TestCase):
 
     def test_skill_get_absolute_url(self):
         # This will also fail if the urlconf is not defined.
-        self.assertEqual(self.skill.get_absolute_url(), f'/portfolios/skills/{self.skill.slug}/detail/')
+        self.assertEqual(self.skill.get_absolute_url(), f'/portfolios/skill/{self.skill.slug}/detail/')
