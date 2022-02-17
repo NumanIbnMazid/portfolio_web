@@ -5,43 +5,11 @@ from django.contrib.auth import get_user_model
 from utils.snippets import autoslugFromUUID, autoslugWithFieldAndUUID
 from django.utils.translation import gettext_lazy as _
 from django.utils import dateformat
+from utils.helpers import CustomModelManager
 from portfolios.file_upload_helpers import (
     skill_icon_path, professional_experience_company_image_path, professional_experience_media_path,
     education_media_path, certification_media_path, project_media_path, interest_icon_path, testimonial_image_path
 )
-
-
-""" *************** Common Model Manager *************** """
-
-
-class CustomModelManager(models.Manager):
-    """
-    Common Model Manager
-    actions: all(), get_by_id(id), get_by_slug(slug)
-    """
-
-    def all(self):
-        return self.get_queryset()
-
-    def get_by_id(self, id):
-        try:
-            return self.get(id=id)
-        except self.model.DoesNotExist:
-            raise Http404(_("Not Found !!!"))
-        except self.model.MultipleObjectsReturned:
-            return self.get_queryset().filter(id=id).first()
-        except Exception:
-            raise Http404(_("Something went wrong !!!"))
-
-    def get_by_slug(self, slug):
-        try:
-            return self.get(slug=slug)
-        except self.model.DoesNotExist:
-            raise Http404(_("Not Found !!!"))
-        except self.model.MultipleObjectsReturned:
-            return self.get_queryset().filter(id=id).first()
-        except Exception:
-            raise Http404(_("Something went wrong !!!"))
 
 
 """ *************** Skill *************** """

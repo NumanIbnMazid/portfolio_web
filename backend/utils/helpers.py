@@ -2,6 +2,9 @@ from django.utils.text import slugify
 from django.conf import settings
 from django.utils import timezone
 import datetime
+from django.db import models
+from django.http import Http404
+from django.utils.translation import gettext_lazy as _
 
 
 def get_user_media_path(user):
@@ -51,10 +54,40 @@ def create_factory_data(factory=None, num_of_data=7, display_name="item", displa
 
     data = []
     print(f"Creating {display_name_plural}...")
-    for _ in range(num_of_data):
+    for _ in range(num_of_data):  # NOQA
         instance = factory()
         data.append(instance)
         print(f"Created {display_name}:", instance)
     print(f"Created {display_name_plural}...")
 
     return data
+
+
+class CustomModelManager(models.Manager):
+    """
+    Custom Model Manager
+    actions: all(), get_by_id(id), get_by_slug(slug)
+    """
+
+    def all(self):
+        return self.get_queryset()
+
+    def get_by_id(self, id):
+        try:
+            return self.get(id=id)
+        except self.model.DoesNotExist:
+            raise Http404(_("Not Found !!!"))
+        except self.model.MultipleObjectsReturned:
+            return self.get_queryset().filter(id=id).first()
+        except Exception:
+            raise Http404(_("Something went wrong !!!"))
+
+    def get_by_slug(self, slug):
+        try:
+            return self.get(slug=slug)
+        except self.model.DoesNotExist:
+            raise Http404(_("Not Found !!!"))
+        except self.model.MultipleObjectsReturned:
+            return self.get_queryset().filter(id=id).first()
+        except Exception:
+            raise Http404(_("Something went wrong !!!"))
