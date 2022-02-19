@@ -25,7 +25,8 @@
 
     <!-- modal header -->
     <div class="border-b px-4 py-2 flex justify-between items-center">
-      <h3 class="font-semibold text-lg dark:text-white">{% if page_title %}{{ page_title }}{% else %}Detail{% endif %}
+      <h3 class="font-semibold text-lg dark:text-white">
+        {% if page_title %}{{ page_title }}{% else %}{% trans "Detail" %}{% endif %}
       </h3>
     </div>
 
@@ -48,7 +49,15 @@
               {% if field.get_internal_type in "FileField" and object|getattribute:field.name is not None %}
               <img src="{{ object|getattribute:field.name }}" alt="{{ object|getattribute:field.name }}">
               {% else %}
-              <span>{{ object|getattribute:field.name|default:"---"|safe|linebreaks }}</span>
+              <span>
+                {% if object|getattribute:field.name == True %}
+                <i class="fas fa-check-circle text-success"> Yes</i>
+                {% elif object|getattribute:field.name == False %}
+                <i class="fas fa-times-circle text-danger"> No</i>
+                {% else %}
+                {{ object|getattribute:field.name|default:"---"|safe|linebreaks }}
+                {% endif %}
+              </span>
               {% endif %}
             </p>
           </div>

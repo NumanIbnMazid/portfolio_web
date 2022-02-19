@@ -5,3 +5,4 @@
 * Add Translation
 * pagination (lazy loading)
 * List Common -> Integrate detail modal field rendering
+* Create independent list template for educations

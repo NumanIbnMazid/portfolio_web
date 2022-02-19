@@ -1,3 +1,4 @@
+from multiprocessing import context
 from django.core.exceptions import ValidationError
 from django.views.generic.base import ContextMixin
 from django.views.generic import UpdateView, TemplateView, ListView
@@ -25,7 +26,7 @@ class ContextMixinView(ContextMixin):
 
         # Assuring if defined success_url as it has other dependencies
         if self.success_url is None:
-            raise ImproperlyConfigured(_("Requires either a definition of `success_url`"))
+            raise ImproperlyConfigured(_("Requires a definition of `success_url`"))
 
         try:
             context = super().get_context_data(**kwargs)
@@ -34,24 +35,29 @@ class ContextMixinView(ContextMixin):
 
         # display name for the current view
         display_name = _(
-            f"{getattr(self.model._meta, 'verbose_name_plural', f'{self.model.__name__} List')}" if
-            self.action and self.action == "list" else
-            f"{getattr(self.model._meta, 'verbose_name', f'{self.model.__name__}')} Detail" if
-            self.action and self.action == "detail" else
-            f"{self.action.title()} {getattr(self.model._meta, 'verbose_name', {self.model.__name__})}" if
-            self.action else "Home"
+            f"{getattr(self.model._meta, 'verbose_name_plural', f'{self.model.__name__} List')}"
+            if self.action and self.action == "list"
+            else f"{getattr(self.model._meta, 'verbose_name', f'{self.model.__name__}')} Detail"
+            if self.action and self.action == "detail"
+            else f"{self.action.title()} {getattr(self.model._meta, 'verbose_name', {self.model.__name__})}"
+            if self.action
+            else "Home"
         )
 
         # default app contexts
         default_app_contexts = {
             # meta description
-            "meta_description": _("numanibnmazid.com: Portfolio of Numan Ibn Mazid. A professional Software Engineer who \
+            "meta_description": _(
+                "numanibnmazid.com: Portfolio of Numan Ibn Mazid. A professional Software Engineer who \
                 enjoys developing innovative software solutions that are tailored to customer desirability and \
-                usability. Email: numanibnmazid@gmail.com"),
+                usability. Email: numanibnmazid@gmail.com"
+            ),
             # meta keywords
-            "meta_keywords": _("numan ibn mazid, portfolio, website, web application, software development, \
+            "meta_keywords": _(
+                "numan ibn mazid, portfolio, website, web application, software development, \
                 software developer, singer, musician, youtuber, django, django rest framework, python, data structure \
-                    and algorithms"),
+                    and algorithms"
+            ),
             # meta author
             "meta_author": _("Numan Ibn Mazid"),
             # meta copyright
@@ -61,10 +67,22 @@ class ContextMixinView(ContextMixin):
             # meta googlebot
             "meta_googlebot": "index, follow",
             # page contexts
-            "snippet_template": self.snippet_template if hasattr(self, "snippet_template") else None,
-            f"{self.model.__name__}_url_list": self.url_list if hasattr(self, "url_list") else [],
+            "model_verbose_name": self.model._meta.verbose_name,
+            "model_verbose_name_plural": self.model._meta.verbose_name_plural,
+            "snippet_template": self.snippet_template
+            if hasattr(self, "snippet_template")
+            else None,
+            f"{self.model.__name__}_url_list": self.url_list
+            if hasattr(self, "url_list")
+            else [],
             "url_list": self.url_list if hasattr(self, "url_list") else [],
-            "display_fields": self.model._meta.get_fields(),
+            "display_fields": [
+                field
+                for field in self.model._meta.get_fields()
+                if field.name in getattr(self, "display_fields", [])
+            ]
+            if hasattr(self, "display_fields")
+            else self.model._meta.get_fields(),
             "action": self.action if self.action else None,
             # head & page title
             "head_title": display_name,
@@ -85,7 +103,9 @@ class ContextMixinView(ContextMixin):
         # look up for custom action method's context data
         if self.action and hasattr(self, f"get_{self.action}_context_data"):
             # call action method
-            action_context_data = getattr(self, f"get_{self.action}_context_data")(**kwargs)
+            action_context_data = getattr(self, f"get_{self.action}_context_data")(
+                **kwargs
+            )
             for key, value in action_context_data.items():
                 context[key] = value
 
@@ -99,7 +119,7 @@ class ContextMixinView(ContextMixin):
 class CustomViewSetMixin(UpdateView, ListView, TemplateView, ContextMixinView):
 
     success_url = None
-    lookup_field = 'pk'
+    lookup_field = "pk"
 
     # default messages
     success_message = None
@@ -115,16 +135,45 @@ class CustomViewSetMixin(UpdateView, ListView, TemplateView, ContextMixinView):
     snippet_template = None
 
     def get_success_url(self):
-        look_up_field = self.look_up_field if hasattr(self, 'look_up_field') else None
+        look_up_field = self.look_up_field if hasattr(self, "look_up_field") else None
         URL = reverse(
-            self.success_url, kwargs={look_up_field: getattr(self.object, look_up_field)} if look_up_field else None
+            self.success_url,
+            kwargs={look_up_field: getattr(self.object, look_up_field)}
+            if look_up_field
+            else None,
         )
         # add pagination data with url if any
-        if 'page' in self.request.GET:
+        if "page" in self.request.GET:
             URL += f"?page={self.request.GET['page']}"
         return URL
 
     def get(self, request, *args, **kwargs):
+        # validate required stuffs
+
+        # using of 'list-common' template requires the definition of get_urls method in model class and
+        # create_url attribute in view class
+        if (
+            self.template_name is not None
+            and self.template_name == "snippets/list-common.html"
+        ):
+            # check if model has get_urls method and 'update', 'delete' url is defined in object
+            if (
+                hasattr(self.model, "get_urls")
+                and hasattr(self.model, "get_absolute_url")
+                and hasattr(self, "create_url")
+            ):
+                # add create_url to kwargs (It would be added to the context data)
+                kwargs["create_url"] = self.create_url
+            else:
+                raise ImproperlyConfigured(
+                    _(
+                        "Requires a definition of `get_urls` method (that should return object containing 'update' and "
+                        "'delete' url), `get_absolute_url` method (that should return details url) in model class and "
+                        "`create_url` attribute in view class"
+                    )
+                )
+            # check if create_url attribute is defined in view class
+
         try:
             self.object = self.get_object()
         except Exception:
@@ -139,14 +188,20 @@ class CustomViewSetMixin(UpdateView, ListView, TemplateView, ContextMixinView):
                 if "That page contains no results" in str(exception):
                     return HttpResponseRedirect(reverse(self.success_url))
 
-                print("**************************************** EXCEPTION ****************************************")
+                print(
+                    "**************************************** EXCEPTION ****************************************"
+                )
                 print(exception)
-                print("**************************************** EXCEPTION ****************************************")
+                print(
+                    "**************************************** EXCEPTION ****************************************"
+                )
 
                 messages.add_message(
-                    self.request, messages.ERROR, _("Something went wrong. Please try again later.")
+                    self.request,
+                    messages.ERROR,
+                    _("Something went wrong. Please try again later."),
                 )
-                return HttpResponseRedirect(reverse('home'))
+                return HttpResponseRedirect(reverse("home"))
 
     def post(self, request, *args, **kwargs):
         # handle actions
@@ -192,9 +247,7 @@ class CustomViewSetMixin(UpdateView, ListView, TemplateView, ContextMixinView):
             else:
                 raise Http404(_("Object not found!"))
         except Exception:
-            messages.add_message(
-                self.request, messages.ERROR, self.get_error_message()
-            )
+            messages.add_message(self.request, messages.ERROR, self.get_error_message())
         return HttpResponseRedirect(success_url)
 
     def form_valid(self, form):
@@ -212,9 +265,13 @@ class CustomViewSetMixin(UpdateView, ListView, TemplateView, ContextMixinView):
                 return super().form_valid(form)
 
         except Exception as exception:
-            print("**************************************** EXCEPTION ****************************************")
+            print(
+                "**************************************** EXCEPTION ****************************************"
+            )
             print(exception)
-            print("**************************************** EXCEPTION ****************************************")
+            print(
+                "**************************************** EXCEPTION ****************************************"
+            )
 
             # call custom exception message handler to generate message
             self.get_exception_message(form=form, exception=exception)
@@ -223,9 +280,7 @@ class CustomViewSetMixin(UpdateView, ListView, TemplateView, ContextMixinView):
         return super().form_invalid(form)
 
     def form_invalid(self, form):
-        messages.add_message(
-            self.request, messages.ERROR, self.get_error_message()
-        )
+        messages.add_message(self.request, messages.ERROR, self.get_error_message())
         return super().form_invalid(form)
 
     def get_exception_message(self, form, exception):
@@ -244,18 +299,12 @@ class CustomViewSetMixin(UpdateView, ListView, TemplateView, ContextMixinView):
                                 )
                                 return
                         else:
-                            messages.add_message(
-                                self.request, messages.ERROR, value
-                            )
+                            messages.add_message(self.request, messages.ERROR, value)
                             return
             else:
-                messages.add_message(
-                    self.request, messages.ERROR, exception.message
-                )
+                messages.add_message(self.request, messages.ERROR, exception.message)
                 return
-        messages.add_message(
-            self.request, messages.ERROR, self.get_error_message()
-        )
+        messages.add_message(self.request, messages.ERROR, self.get_error_message())
         return
 
     def get_success_message(self):
@@ -291,14 +340,16 @@ class CustomViewSetMixin(UpdateView, ListView, TemplateView, ContextMixinView):
 
 
 class CustomModelAdminMixin(object):
-    '''
+    """
     DOCSTRING for CustomModelAdminMixin:
     This model mixing automatically displays all fields of a model in admin panel following the criteria.
     code: @ Numan Ibn Mazid
-    '''
+    """
 
     def __init__(self, model, admin_site):
         self.list_display = [
-            field.name for field in model._meta.fields if field.get_internal_type() != 'TextField'
+            field.name
+            for field in model._meta.fields
+            if field.get_internal_type() != "TextField"
         ]
         super(CustomModelAdminMixin, self).__init__(model, admin_site)

@@ -155,10 +155,14 @@ class EducationView(CustomViewSetMixin):
     form_class = EducationWithMediaForm
     paginate_by = 4
     success_url = 'portfolios:educations'
+    create_url = 'portfolios:education_create'
     lookup_field = 'slug'
+    display_fields = [
+        'school', 'degree', 'address', 'field_of_study', 'start_date', 'end_date', 'currently_studying', 'grade',
+        'activities', 'description'
+    ]
     url_list = [
-        "educations", "education_create", "education_detail",
-        "education_update", "education_delete"
+        "educations", "education_create", "education_detail", "education_update", "education_delete"
     ]
 
     def get_queryset(self):
