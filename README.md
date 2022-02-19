@@ -22,6 +22,7 @@ Portfolio web application of [Numan Ibn Mazid](https://www.linkedin.com/in/numan
 - [x] Static File Compresson
 - [x] Factory Faker
 - [x] Testing with Django Test Framework and Pytest-Django
+- [x] Integrated Github Actions
 - [x] Argon2 Password Hashing
 
 ## Technologies
