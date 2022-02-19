@@ -148,14 +148,12 @@ class ProfessionalExperienceView(CustomViewSetMixin):
 
 @method_decorator(education_decorators, name='dispatch')
 class EducationView(CustomViewSetMixin):
-    # template_name = "portfolios/educations/educations.html"
-    template_name = "snippets/list-common.html"
+    template_name = "portfolios/educations/educations.html"
     snippet_template = "portfolios/educations/educations-snippet.html"
     model = Education
     form_class = EducationWithMediaForm
     paginate_by = 4
     success_url = 'portfolios:educations'
-    create_url = 'portfolios:education_create'
     lookup_field = 'slug'
     display_fields = [
         'school', 'degree', 'address', 'field_of_study', 'start_date', 'end_date', 'currently_studying', 'grade',

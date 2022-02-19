@@ -207,7 +207,7 @@ def autoslugFromUUID():
     return decorator
 
 
-def generate_unique_username_from_email(instance):
+def generate_unique_username_from_email(instance, is_exists=False):
     """[Generates unique username from email]
 
     Args:
@@ -227,7 +227,8 @@ def generate_unique_username_from_email(instance):
         raise ValueError("Invalid email!")
 
     def generate_username(email):
-        return email.split("@")[0][:15] + "__" + simple_random_string_with_timestamp(size=5)
+        username = email.split("@")[0][:15]
+        return username + "_" + simple_random_string_with_timestamp(size=5) if is_exists else username
 
     generated_username = generate_username(email=email)
 
@@ -235,7 +236,7 @@ def generate_unique_username_from_email(instance):
     qs_exists = Klass.objects.filter(username=generated_username).exists()
 
     if qs_exists:
-        # recursive call
-        generate_unique_username_from_email(instance=instance)
+        # recursive call with is_exists=True
+        generate_unique_username_from_email(instance=instance, is_exists=True)
 
     return generated_username

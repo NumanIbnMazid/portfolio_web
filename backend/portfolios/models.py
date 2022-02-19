@@ -202,12 +202,6 @@ class Education(models.Model):
     def get_absolute_url(self):
         return reverse('portfolios:education_detail', kwargs={'slug': self.slug})
 
-    def get_urls(self):
-        return {
-            "update": reverse('portfolios:education_update', kwargs={'slug': self.slug}),
-            "delete": reverse('portfolios:education_delete', kwargs={'slug': self.slug}),
-        }
-
     def get_end_date(self):
         if self.currently_studying:
             return _('Present')

@@ -23,10 +23,10 @@
           </div>
 
           <!-- Company Name -->
-          {% if object.get_user_last_professional_experience %}
+          {% if object.get_current_professional_experience_of_user %}
           <div class="text-center">
             <h3 class="font-lg text-semibold leading-6">
-              {{ object.get_user_last_professional_experience }}
+              {{ object.get_current_professional_experience_of_user }}
             </h3>
           </div>
           {% endif %}
@@ -169,7 +169,7 @@
                 <span class="tracking-wide">Experience</span>
               </div>
               <ul class="list-inside space-y-2">
-                {% for experience in object.user_professional_experiences.all|dictsort:"created_at" %}
+                {% for experience in object.user_professional_experiences.all %}
                 <li>
                   <div class="text-teal-600">{{ experience.company }}</div>
                   <div class="text-gray-500 text-xs">{{ experience.start_date|date:'F Y' }} -

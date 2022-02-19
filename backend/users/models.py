@@ -1,6 +1,7 @@
 from django.db import models
 from safedelete.models import SafeDeleteModel, SOFT_DELETE_CASCADE
 from django.db.models.signals import pre_save
+from django.urls import reverse
 from django.dispatch import receiver
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.utils import timezone
@@ -81,6 +82,7 @@ class UserManager(BaseUserManager):
 
 @autoslugFromUUID()
 class User(SafeDeleteModel, AbstractBaseUser, PermissionsMixin):
+
     # Define SafeDelete Policy
     _safedelete_policy = SOFT_DELETE_CASCADE
 
@@ -126,10 +128,7 @@ class User(SafeDeleteModel, AbstractBaseUser, PermissionsMixin):
         ordering = ["-date_joined"]
 
     def get_absolute_url(self):
-        return f"/users/{self.get_dynamic_username()}-{self.slug}/"
-
-    # def get_absolute_url(self):
-    #     return reverse("profile_details", kwargs={"slug": self.slug})
+        return reverse("users:user_profile")
 
     def __str__(self):
         return self.get_dynamic_username()
@@ -156,9 +155,9 @@ class User(SafeDeleteModel, AbstractBaseUser, PermissionsMixin):
                 return static("icons/user/avatar-female.png")
         return static("icons/user/avatar-default.png")
 
-    def get_user_last_professional_experience(self):
+    def get_current_professional_experience_of_user(self):
         if self.user_professional_experiences.exists():
-            return self.user_professional_experiences.last().company
+            return self.user_professional_experiences.all().order_by('-currently_working', '-start_date')[0]
         return None
 
     def get_contact_email(self):

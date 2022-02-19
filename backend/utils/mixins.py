@@ -1,4 +1,3 @@
-from multiprocessing import context
 from django.core.exceptions import ValidationError
 from django.views.generic.base import ContextMixin
 from django.views.generic import UpdateView, TemplateView, ListView
@@ -172,7 +171,6 @@ class CustomViewSetMixin(UpdateView, ListView, TemplateView, ContextMixinView):
                         "`create_url` attribute in view class"
                     )
                 )
-            # check if create_url attribute is defined in view class
 
         try:
             self.object = self.get_object()
