@@ -15,8 +15,10 @@
             "driver": "PostgreSQL",
             "name": "numanibnmazid_db",
             "database": "numanibnmazid_db",
-            "password": "postgres",
-            "username": "postgres"
+            "password": "debug",
+            "username": "debug"
         }
-    ]
+    ],
+    "python.defaultInterpreterPath": "/home/numan/POETRY_VENVS/numanibnmazid-z3enK1dq-py3.9/bin/python",
+    "python.formatting.provider": "black"
 }
