@@ -40,6 +40,7 @@ Portfolio web application of [Numan Ibn Mazid](https://www.linkedin.com/in/numan
 - [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 - [docker](https://docs.docker.com/engine/install/) (optional)
 - [docker-compose](https://docs.docker.com/compose/install/) (optional)
+- [memcached](https://www.cyberciti.biz/faq/install-and-configure-memcached-on-ubuntu-linux18-04/) (For Debian Based Distro) / [memcached](https://www.pontikis.net/blog/install-memcached-php-archlinux) (For Arch Based Distro)
 
 ### Setup Process
 
