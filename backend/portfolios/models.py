@@ -219,6 +219,9 @@ class EducationMedia(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    # custom model manager
+    objects = CustomModelManager()
+
     class Meta:
         db_table = 'education_media'
         verbose_name = _('Education Media')
@@ -233,7 +236,7 @@ class EducationMedia(models.Model):
 """ *************** Certification *************** """
 
 
-@autoslugWithFieldAndUUID(fieldname="organization")
+@autoslugWithFieldAndUUID(fieldname="name")
 class Certification(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="user_certifications")
     slug = models.SlugField(max_length=255, unique=True)
@@ -249,6 +252,9 @@ class Certification(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    # custom model manager
+    objects = CustomModelManager()
+
     class Meta:
         db_table = 'certification'
         verbose_name = _('Certification')
@@ -259,6 +265,16 @@ class Certification(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse('portfolios:certification_detail', kwargs={'slug': self.slug})
+
+    def get_expiration_date(self):
+        if self.does_not_expire:
+            return _('Does not expire')
+        elif self.expiration_date:
+            return self.expiration_date.strftime("%B %Y")
+        return _('Not Specified')
+
 
 @autoslugFromUUID()
 class CertificationMedia(models.Model):
@@ -268,6 +284,9 @@ class CertificationMedia(models.Model):
     description = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    # custom model manager
+    objects = CustomModelManager()
 
     class Meta:
         db_table = 'certification_media'
@@ -298,6 +317,9 @@ class Project(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    # custom model manager
+    objects = CustomModelManager()
+
     class Meta:
         db_table = 'project'
         verbose_name = _('Project')
@@ -317,6 +339,9 @@ class ProjectMedia(models.Model):
     description = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    # custom model manager
+    objects = CustomModelManager()
 
     class Meta:
         db_table = 'project_media'
@@ -342,6 +367,9 @@ class Interest(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    # custom model manager
+    objects = CustomModelManager()
+
     class Meta:
         db_table = 'interest'
         verbose_name = _('Interest')
@@ -366,6 +394,9 @@ class Testimonial(models.Model):
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    # custom model manager
+    objects = CustomModelManager()
 
     class Meta:
         db_table = 'testimonial'

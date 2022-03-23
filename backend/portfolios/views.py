@@ -254,6 +254,10 @@ class CertificationView(CustomViewSetMixin):
     paginate_by = 4
     success_url = 'portfolios:certifications'
     lookup_field = 'slug'
+    display_fields = [
+        'name', 'organization', 'address', 'issue_date', 'expiration_date', 'does_not_expire', 'credential_id',
+        'credential_url', 'description'
+    ]
     url_list = [
         "certifications", "certification_create", "certification_detail", "certification_update", "certification_delete"
     ]

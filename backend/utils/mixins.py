@@ -174,7 +174,7 @@ class CustomViewSetMixin(UpdateView, ListView, TemplateView, ContextMixinView):
 
         try:
             self.object = self.get_object()
-        except Exception:
+        except Exception as E:  # NOQA
             # pass except block
             pass
         # do the rest in finally block
