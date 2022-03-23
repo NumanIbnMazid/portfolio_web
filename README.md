@@ -52,7 +52,7 @@ Portfolio web application of [Numan Ibn Mazid](https://www.linkedin.com/in/numan
 #### 1. Using Traditional Approach
 
 1. Clone the git: `git clone https://github.com/NumanIbnMazid/numanibnmazid.com.git`
-2. Go into the new directory: `cd numanibnmazid.com`
+2. Go into the new directory: `cd numanibnmazid.com/backend`
 3. Install the required dependencies.
 
    - Install Dependencies Using Pip
