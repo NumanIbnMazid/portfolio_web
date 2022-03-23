@@ -3,11 +3,19 @@ from portfolios.models import (
     Skill,
     ProfessionalExperience, ProfessionalExperienceMedia,
     Education, EducationMedia,
+    Certification, CertificationMedia,
+    # Project, ProjectMedia,
+    # Interest,
+    # Testimonial
 )
 from portfolios.forms import (
     SkillForm,
     ProfessionalExperienceMediaForm, ProfessionalExperienceWithMediaForm,
     EducationWithMediaForm, EducationMediaForm,
+    CertificationWithMediaForm, CertificationMediaForm,
+    # ProjectWithMediaForm, ProjectMediaForm,
+    # InterestForm,
+    # TestimonialForm
 )
 from utils.mixins import CustomViewSetMixin
 from django.contrib.auth.decorators import login_required
@@ -17,7 +25,8 @@ from django.http import HttpResponseRedirect, Http404
 from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 
-skill_decorators = professional_experience_decorators = education_decorators = [login_required]
+skill_decorators = professional_experience_decorators = education_decorators = certification_decorators = \
+    [login_required]
 
 
 # ----------------------------------------------------
@@ -224,6 +233,92 @@ class EducationView(CustomViewSetMixin):
                     for file in files:
                         EducationMedia.objects.update_or_create(
                             education=self.object,
+                            file=file
+                        )
+
+            return super().form_valid(form)
+        return super().form_invalid(form)
+
+
+# ----------------------------------------------------
+# *** Certification ***
+# ----------------------------------------------------
+
+
+@method_decorator(certification_decorators, name='dispatch')
+class CertificationView(CustomViewSetMixin):
+    template_name = "portfolios/certifications/certifications.html"
+    snippet_template = "portfolios/certifications/certifications-snippet.html"
+    model = Certification
+    form_class = CertificationWithMediaForm
+    paginate_by = 4
+    success_url = 'portfolios:certifications'
+    lookup_field = 'slug'
+    url_list = [
+        "certifications", "certification_create", "certification_detail", "certification_update", "certification_delete"
+    ]
+
+    def get_queryset(self):
+        return Certification.objects.all()
+
+    def get_object(self, *args, **kwargs):
+        return Certification.objects.get_by_slug(self.kwargs.get('slug'))
+
+    def get_media_delete_context_data(self, **kwargs):
+        context = {}
+        context["page_title"] = context["head_title"] = _("Delete Certification Media")
+        context["action"] = "delete"
+        return context
+
+    def media_delete(self, request, *args, **kwargs):
+        qs = CertificationMedia.objects.filter(slug=self.kwargs.get('slug'))
+        if qs:
+            # delete object
+            qs.delete()
+            # add success message
+            messages.add_message(
+                self.request, messages.SUCCESS, _("Media Deleted Successfully!")
+            )
+            return HttpResponseRedirect(self.get_success_url())
+        else:
+            messages.add_message(
+                self.request, messages.ERROR, _("Media not found!")
+            )
+            raise Http404(_("Object not found!"))
+
+    def form_valid(self, form):
+        if form.is_valid():
+
+            # assign user to the form
+            form.instance.user = self.request.user
+
+            # validate unique name
+            qs = Certification.objects.filter(
+                user=self.request.user, name__iexact=form.cleaned_data.get('name')
+            ).exclude(slug__iexact=self.kwargs.get('slug'))
+
+            if qs:
+                form.add_error(
+                    "title", forms.ValidationError(
+                        _("This certification already exists!")
+                    )
+                )
+                return super().form_invalid(form)
+
+            # save the form
+            self.object = form.save()
+
+            # get files from form
+            files = self.request.FILES.getlist('file')
+
+            # save Certification media files to the database if any
+            certification_media_form = CertificationMediaForm(self.request.POST, self.request.FILES)
+            # check if the form is valid and form has files
+            if certification_media_form.is_valid() and len(files) >= 1:
+                with transaction.atomic():  # ensure that all objects are saved otherwise rollback
+                    for file in files:
+                        CertificationMedia.objects.update_or_create(
+                            certification=self.object,
                             file=file
                         )
 

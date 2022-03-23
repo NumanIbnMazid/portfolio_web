@@ -1,6 +1,6 @@
 from django.urls import path
 from portfolios.views import (
-    SkillView, ProfessionalExperienceView, EducationView
+    SkillView, ProfessionalExperienceView, EducationView, CertificationView
 )
 
 urlpatterns = [
@@ -47,4 +47,17 @@ urlpatterns = [
     path("education/<slug>/delete/", EducationView.as_view(action="delete"), name="education_delete"),
     # education media
     path("education-media/<slug>/delete/", EducationView.as_view(action="media_delete"), name="education_media_delete"),
+
+    # ----------------------------------------------------
+    # *** Certification ***
+    # ----------------------------------------------------
+    path("certifications/", CertificationView.as_view(action="list"), name="certifications"),
+    path("certification/create/", CertificationView.as_view(action="create"), name="certification_create"),
+    path("certification/<slug>/detail/", CertificationView.as_view(action="detail"), name="certification_detail"),
+    path("certification/<slug>/update/", CertificationView.as_view(action="update"), name="certification_update"),
+    path("certification/<slug>/delete/", CertificationView.as_view(action="delete"), name="certification_delete"),
+    # certification media
+    path("certification-media/<slug>/delete/",
+         CertificationView.as_view(action="media_delete"), name="certification_media_delete"
+         ),
 ]
