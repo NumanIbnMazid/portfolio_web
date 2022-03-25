@@ -4,7 +4,7 @@ from portfolios.models import (
     ProfessionalExperience, ProfessionalExperienceMedia,
     Education, EducationMedia,
     Certification, CertificationMedia,
-    # Project, ProjectMedia,
+    Project, ProjectMedia,
     # Interest,
     # Testimonial
 )
@@ -13,7 +13,7 @@ from portfolios.forms import (
     ProfessionalExperienceMediaForm, ProfessionalExperienceWithMediaForm,
     EducationWithMediaForm, EducationMediaForm,
     CertificationWithMediaForm, CertificationMediaForm,
-    # ProjectWithMediaForm, ProjectMediaForm,
+    ProjectWithMediaForm, ProjectMediaForm,
     # InterestForm,
     # TestimonialForm
 )
@@ -26,7 +26,7 @@ from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 
 skill_decorators = professional_experience_decorators = education_decorators = certification_decorators = \
-    [login_required]
+    project_decorators = [login_required]
 
 
 # ----------------------------------------------------
@@ -44,7 +44,7 @@ class SkillView(CustomViewSetMixin):
     url_list = ["skills", "skill_create", "skill_detail", "skill_update", "skill_delete"]
 
     def get_queryset(self):
-        return Skill.objects.all()
+        return Skill.objects.filter(user=self.request.user)
 
     def get_object(self, *args, **kwargs):
         return Skill.objects.get_by_slug(self.kwargs.get('slug'))
@@ -83,7 +83,7 @@ class ProfessionalExperienceView(CustomViewSetMixin):
     ]
 
     def get_queryset(self):
-        return ProfessionalExperience.objects.all()
+        return ProfessionalExperience.objects.filter(user=self.request.user)
 
     def get_object(self, *args, **kwargs):
         return ProfessionalExperience.objects.get_by_slug(self.kwargs.get('slug'))
@@ -173,7 +173,7 @@ class EducationView(CustomViewSetMixin):
     ]
 
     def get_queryset(self):
-        return Education.objects.all()
+        return Education.objects.filter(user=self.request.user)
 
     def get_object(self, *args, **kwargs):
         return Education.objects.get_by_slug(self.kwargs.get('slug'))
@@ -263,7 +263,7 @@ class CertificationView(CustomViewSetMixin):
     ]
 
     def get_queryset(self):
-        return Certification.objects.all()
+        return Certification.objects.filter(user=self.request.user)
 
     def get_object(self, *args, **kwargs):
         return Certification.objects.get_by_slug(self.kwargs.get('slug'))
@@ -323,6 +323,96 @@ class CertificationView(CustomViewSetMixin):
                     for file in files:
                         CertificationMedia.objects.update_or_create(
                             certification=self.object,
+                            file=file
+                        )
+
+            return super().form_valid(form)
+        return super().form_invalid(form)
+
+
+# ----------------------------------------------------
+# *** Project ***
+# ----------------------------------------------------
+
+
+@method_decorator(project_decorators, name='dispatch')
+class ProjectView(CustomViewSetMixin):
+    template_name = "portfolios/projects/projects.html"
+    snippet_template = "portfolios/projects/projects-snippet.html"
+    model = Project
+    form_class = ProjectWithMediaForm
+    paginate_by = 4
+    success_url = 'portfolios:projects'
+    lookup_field = 'slug'
+    display_fields = [
+        'name', 'organization', 'address', 'issue_date', 'expiration_date', 'does_not_expire', 'credential_id',
+        'credential_url', 'description'
+    ]
+    url_list = [
+        "projects", "project_create", "project_detail", "project_update", "project_delete"
+    ]
+
+    def get_queryset(self):
+        return Project.objects.filter(user=self.request.user)
+
+    def get_object(self, *args, **kwargs):
+        return Project.objects.get_by_slug(self.kwargs.get('slug'))
+
+    def get_media_delete_context_data(self, **kwargs):
+        context = {}
+        context["page_title"] = context["head_title"] = _("Delete Project Media")
+        context["action"] = "delete"
+        return context
+
+    def media_delete(self, request, *args, **kwargs):
+        qs = ProjectMedia.objects.filter(slug=self.kwargs.get('slug'))
+        if qs:
+            # delete object
+            qs.delete()
+            # add success message
+            messages.add_message(
+                self.request, messages.SUCCESS, _("Media Deleted Successfully!")
+            )
+            return HttpResponseRedirect(self.get_success_url())
+        else:
+            messages.add_message(
+                self.request, messages.ERROR, _("Media not found!")
+            )
+            raise Http404(_("Object not found!"))
+
+    def form_valid(self, form):
+        if form.is_valid():
+
+            # assign user to the form
+            form.instance.user = self.request.user
+
+            # validate unique title
+            qs = Project.objects.filter(
+                user=self.request.user, title__iexact=form.cleaned_data.get('title')
+            ).exclude(slug__iexact=self.kwargs.get('slug'))
+
+            if qs:
+                form.add_error(
+                    "title", forms.ValidationError(
+                        _("This project already exists!")
+                    )
+                )
+                return super().form_invalid(form)
+
+            # save the form
+            self.object = form.save()
+
+            # get files from form
+            files = self.request.FILES.getlist('file')
+
+            # save Project media files to the database if any
+            project_media_form = ProjectMediaForm(self.request.POST, self.request.FILES)
+            # check if the form is valid and form has files
+            if project_media_form.is_valid() and len(files) >= 1:
+                with transaction.atomic():  # ensure that all objects are saved otherwise rollback
+                    for file in files:
+                        ProjectMedia.objects.update_or_create(
+                            project=self.object,
                             file=file
                         )
 

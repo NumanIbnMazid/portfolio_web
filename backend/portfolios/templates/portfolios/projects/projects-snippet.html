@@ -1,0 +1,84 @@
+{% load static %}
+
+{% block extra_body %}
+
+{# Project Media File Data #}
+
+{% if object.project_media %}
+<div id="fileData" class="hidden p-4 mt-2">
+  {% for media in object.project_media.all %}
+  <li class="text-primary p-1" aria-hidden="true">
+    <a href="{{ media.file.url }}" target="_blank">{{ media.file.url }}</a>
+    <span class="ml-2">
+      <i class="fas fa-minus-circle text-danger text-xl cursor-pointer"
+        hx-get="{% url 'portfolios:project_media_delete' slug=media.slug %}?page={{ page_obj.number }}"
+        hx-trigger="click" hx-target="#main" hx-indicator="#htmxLoaderIndicator" hx-swap="outerHTML"></i>
+    </span>
+  </li>
+  {% endfor %}
+</div>
+{% endif %}
+
+{% endblock %}
+
+{% block additional_head_scripts %}
+
+<script>
+  // document ready function
+  $(function () {
+
+    // add custom styling for currently working select input
+    // remove current classes and add custom classes to currently_working_select_div
+    $('#div_id_currently_working').addClass('flex items-center justify-start -space-y-2 space-x-4')
+
+    // date picker for start date
+    $("#start_date").datepicker({
+      inline: true,
+      maxDate: new Date($.now()),
+      dateFormat: "yy-mm-dd",
+      onSelect: function (date) {
+
+        var selectedDate = new Date(date)
+        var msecsInADay = 86400000
+        var endDate = new Date(selectedDate.getTime() + msecsInADay)
+
+        //Set Minimum Date of EndDatePicker After Selected Date of StartDatePicker
+        $("#end_date").datepicker("option", "minDate", endDate)
+        // $("#end_date").datepicker("option", "maxDate", '+2y')
+
+      }
+    });
+
+    // date picker for end date
+    $("#end_date").datepicker({
+      inline: true,
+      maxDate: new Date($.now()),
+      dateFormat: "yy-mm-dd"
+    });
+
+    // project media populator function
+    function populateProjectMediaData() {
+      // media file input
+      let fileInputDiv = $('#div_id_file')
+
+      if (fileInputDiv.length) {
+        try {
+          // append html to file input div
+          fileInputDiv.append($("#fileData").html())
+
+          // NOTE: process htmx (Required for htmx tags to work)
+          htmx.process(document.querySelector('#div_id_file'))
+        } catch (error) {
+          console.log(error)
+        }
+      }
+    }
+
+    // populate project media file data
+    populateProjectMediaData()
+
+  })
+
+</script>
+
+{% endblock %}

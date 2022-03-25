@@ -137,8 +137,22 @@
                 </span>
               </a>
             </li>
+            <!-- Project -->
             <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-              <a class="w-full" href="#">{% trans "Project" %}</a>
+              {% if current_url in Project_url_list %}
+              <span class="relative inset-y-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg text-white mr-1"
+                aria-hidden="true"><span class="text-xs">|</span></span>
+              {% endif %}
+              <a class="w-full cursor-pointer" hx-trigger="click" hx-target="#main" hx-indicator="#htmxLoaderIndicator"
+                hx-swap="outerHTML" hx-get="{% url 'portfolios:projects' %}"
+                hx-push-url="true">
+                <span class="{% if current_url in Project_url_list %}font-extrabold text-gray-800
+                  dark:text-gray-200{% endif %} hover:text-gray-800
+                  dark:hover:text-gray-200">
+                  <i class="fas fa-file-certificate mr-1"></i>
+                  {% trans "Project" %}
+                </span>
+              </a>
             </li>
             <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
               <a class="w-full" href="#">{% trans "Interest" %}</a>

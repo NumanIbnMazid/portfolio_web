@@ -175,7 +175,7 @@ class Education(models.Model):
     slug = models.SlugField(max_length=255, unique=True)
     school = models.CharField(max_length=150)
     degree = models.CharField(max_length=150)
-    address = models.CharField(max_length=254)
+    address = models.CharField(max_length=254, blank=True, null=True)
     field_of_study = models.CharField(max_length=200)
     start_date = models.DateField()
     end_date = models.DateField(blank=True, null=True)
@@ -242,7 +242,7 @@ class Certification(models.Model):
     slug = models.SlugField(max_length=255, unique=True)
     name = models.CharField(max_length=150)
     organization = models.CharField(max_length=150)
-    address = models.CharField(max_length=254)
+    address = models.CharField(max_length=254, blank=True, null=True)
     issue_date = models.DateField()
     expiration_date = models.DateField(blank=True, null=True)
     does_not_expire = models.BooleanField(default=False)
@@ -329,6 +329,13 @@ class Project(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_end_date(self):
+        if self.currently_working:
+            return _('Present')
+        elif self.end_date:
+            return self.end_date.strftime("%B %Y")
+        return _('Not Specified')
 
 
 @autoslugFromUUID()
