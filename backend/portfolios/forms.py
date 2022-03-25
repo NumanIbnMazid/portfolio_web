@@ -292,16 +292,7 @@ class ProjectWithMediaForm(ProjectForm):
 class InterestForm(forms.ModelForm):
     class Meta:
         model = Interest
-        fields = ('title', 'icon', 'description')
-        widgets = {
-            'description': forms.Textarea(
-                attrs={
-                    'class': 'form-control',
-                    'rows': 3,
-                    'cols': 3,
-                }
-            ),
-        }
+        fields = ('title', 'icon')
 
     def clean_icon(self):
         icon = self.cleaned_data.get('icon')

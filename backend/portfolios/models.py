@@ -370,7 +370,6 @@ class Interest(models.Model):
     slug = models.SlugField(max_length=255, unique=True)
     title = models.CharField(max_length=200)
     icon = models.ImageField(upload_to=interest_icon_path, blank=True, null=True)
-    description = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

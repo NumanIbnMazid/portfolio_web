@@ -5,8 +5,8 @@ from portfolios.models import (
     Education, EducationMedia,
     Certification, CertificationMedia,
     Project, ProjectMedia,
-    # Interest,
-    # Testimonial
+    Interest,
+    Testimonial
 )
 from portfolios.forms import (
     SkillForm,
@@ -14,8 +14,8 @@ from portfolios.forms import (
     EducationWithMediaForm, EducationMediaForm,
     CertificationWithMediaForm, CertificationMediaForm,
     ProjectWithMediaForm, ProjectMediaForm,
-    # InterestForm,
-    # TestimonialForm
+    InterestForm,
+    TestimonialForm
 )
 from utils.mixins import CustomViewSetMixin
 from django.contrib.auth.decorators import login_required
@@ -26,7 +26,7 @@ from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 
 skill_decorators = professional_experience_decorators = education_decorators = certification_decorators = \
-    project_decorators = [login_required]
+    project_decorators = interest_decorators = testimonial_decorators = [login_required]
 
 
 # ----------------------------------------------------
@@ -345,8 +345,8 @@ class ProjectView(CustomViewSetMixin):
     success_url = 'portfolios:projects'
     lookup_field = 'slug'
     display_fields = [
-        'name', 'organization', 'address', 'issue_date', 'expiration_date', 'does_not_expire', 'credential_id',
-        'credential_url', 'description'
+        'title', 'short_description', 'technology', 'start_date', 'end_date', 'currently_working', 'url',
+        'description'
     ]
     url_list = [
         "projects", "project_create", "project_detail", "project_update", "project_delete"
@@ -418,3 +418,73 @@ class ProjectView(CustomViewSetMixin):
 
             return super().form_valid(form)
         return super().form_invalid(form)
+
+
+# ----------------------------------------------------
+# *** Interest ***
+# ----------------------------------------------------
+
+@method_decorator(interest_decorators, name='dispatch')
+class InterestView(CustomViewSetMixin):
+    template_name = "portfolios/interests/interests.html"
+    model = Interest
+    form_class = InterestForm
+    success_url = 'portfolios:interests'
+    lookup_field = 'slug'
+    update_success_message = _("Interest has been updated successfully.")
+    url_list = ["interests", "interest_create", "interest_detail", "interest_update", "interest_delete"]
+
+    def get_queryset(self):
+        return Interest.objects.filter(user=self.request.user)
+
+    def get_object(self, *args, **kwargs):
+        return Interest.objects.get_by_slug(self.kwargs.get('slug'))
+
+    def form_valid(self, form):
+        # assign user to the form
+        form.instance.user = self.request.user
+        # validate unique interest title
+        qs = Interest.objects.filter(user=self.request.user, title__iexact=form.cleaned_data.get('title')).\
+            exclude(slug__iexact=self.kwargs.get('slug'))
+        if qs:
+            form.add_error(
+                "title", forms.ValidationError(
+                    _("This interest already exists!")
+                )
+            )
+        return super().form_valid(form)
+
+
+# ----------------------------------------------------
+# *** Testimonial ***
+# ----------------------------------------------------
+
+@method_decorator(testimonial_decorators, name='dispatch')
+class TestimonialView(CustomViewSetMixin):
+    template_name = "portfolios/testimonials/testimonials.html"
+    model = Testimonial
+    form_class = TestimonialForm
+    success_url = 'portfolios:testimonials'
+    lookup_field = 'slug'
+    update_success_message = _("Testimonial has been updated successfully.")
+    url_list = ["testimonials", "testimonial_create", "testimonial_detail", "testimonial_update", "testimonial_delete"]
+
+    def get_queryset(self):
+        return Testimonial.objects.filter(user=self.request.user)
+
+    def get_object(self, *args, **kwargs):
+        return Testimonial.objects.get_by_slug(self.kwargs.get('slug'))
+
+    def form_valid(self, form):
+        # assign user to the form
+        form.instance.user = self.request.user
+        # validate unique testimonial name
+        qs = Testimonial.objects.filter(user=self.request.user, name__iexact=form.cleaned_data.get('name')).\
+            exclude(slug__iexact=self.kwargs.get('slug'))
+        if qs:
+            form.add_error(
+                "name", forms.ValidationError(
+                    _("This testimonial already exists!")
+                )
+            )
+        return super().form_valid(form)

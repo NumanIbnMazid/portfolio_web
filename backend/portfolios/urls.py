@@ -1,6 +1,6 @@
 from django.urls import path
 from portfolios.views import (
-    SkillView, ProfessionalExperienceView, EducationView, CertificationView, ProjectView
+    SkillView, ProfessionalExperienceView, EducationView, CertificationView, ProjectView, InterestView, TestimonialView,
 )
 
 urlpatterns = [
@@ -73,4 +73,22 @@ urlpatterns = [
     path("project-media/<slug>/delete/",
          ProjectView.as_view(action="media_delete"), name="project_media_delete"
          ),
+
+    # ----------------------------------------------------
+    # *** Interest ***
+    # ----------------------------------------------------
+    path("interests/", InterestView.as_view(action="list"), name="interests"),
+    path("interest/create/", InterestView.as_view(action="create"), name="interest_create"),
+    path("interest/<slug>/detail/", InterestView.as_view(action="detail"), name="interest_detail"),
+    path("interest/<slug>/update/", InterestView.as_view(action="update"), name="interest_update"),
+    path("interest/<slug>/delete/", InterestView.as_view(action="delete"), name="interest_delete"),
+
+    # ----------------------------------------------------
+    # *** Testimonial ***
+    # ----------------------------------------------------
+    path("testimonials/", TestimonialView.as_view(action="list"), name="testimonials"),
+    path("testimonial/create/", TestimonialView.as_view(action="create"), name="testimonial_create"),
+    path("testimonial/<slug>/detail/", TestimonialView.as_view(action="detail"), name="testimonial_detail"),
+    path("testimonial/<slug>/update/", TestimonialView.as_view(action="update"), name="testimonial_update"),
+    path("testimonial/<slug>/delete/", TestimonialView.as_view(action="delete"), name="testimonial_delete"),
 ]
