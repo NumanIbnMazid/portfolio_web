@@ -43,8 +43,8 @@
 
 #### 1. Using Traditional Approach
 
-1. Clone the git: `git clone https://github.com/NumanIbnMazid/numanibnmazid.com.git`
-2. Go into the new directory: `cd numanibnmazid.com/backend`
+1. Clone the git: `git clone https://github.com/NumanIbnMazid/portfolio_web.git`
+2. Go into the new directory: `cd portfolio_web/backend`
 3. Install the required dependencies.
 
    - Install Dependencies Using Pip
@@ -77,8 +77,8 @@
 
 #### 2. Using Docker
 
-1. Clone the git: `git clone https://github.com/NumanIbnMazid/numanibnmazid.com.git`
-2. Go into the new directory: `cd numanibnmazid.com`
+1. Clone the git: `git clone https://github.com/NumanIbnMazid/portfolio_web.git`
+2. Go into the new directory: `cd portfolio_web`
 3. Create a `.env` file and provide required environment variables using the template `.env.example`. Django SECRET_KEY can be generated from [djecrety.ir](https://djecrety.ir/)
 4. Run command `docker-compose up` to start the project.
 5. Open the app on browser by navigating the url `http://localhost:8000`
