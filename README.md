@@ -1,8 +1,4 @@
-# numanibnmazid.com
-
-```diff
-- [N:B: This site is under construction]
-```
+# Simple Portfolio Web Application
 
 ## Description
 
