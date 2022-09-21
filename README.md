@@ -1,9 +1,5 @@
 # Simple Portfolio Web Application
 
-## Description
-
-Portfolio web application of [Numan Ibn Mazid](https://www.linkedin.com/in/numanibnmazid/).
-
 ## Features
 
 - [x] Easy Installation
